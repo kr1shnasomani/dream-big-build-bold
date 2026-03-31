@@ -24,6 +24,10 @@ import ReportingExecutive from "./pages/ReportingExecutive.tsx";
 import ReportingScheduled from "./pages/ReportingScheduled.tsx";
 import ReportingOnDemand from "./pages/ReportingOnDemand.tsx";
 import ScanConsole from "./pages/ScanConsole.tsx";
+import SettingsLayout from "./pages/SettingsLayout.tsx";
+import SettingsScanConfig from "./pages/SettingsScanConfig.tsx";
+import SettingsNotifications from "./pages/SettingsNotifications.tsx";
+import SettingsIntegrations from "./pages/SettingsIntegrations.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -56,6 +60,12 @@ const App = () => (
             <Route path="reporting/scheduled" element={<ReportingScheduled />} />
             <Route path="reporting/on-demand" element={<ReportingOnDemand />} />
             <Route path="scan-console" element={<ScanConsole />} />
+            <Route path="settings" element={<SettingsLayout />}>
+              <Route index element={<SettingsScanConfig />} />
+              <Route path="scan-config" element={<SettingsScanConfig />} />
+              <Route path="notifications" element={<SettingsNotifications />} />
+              <Route path="integrations" element={<SettingsIntegrations />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
