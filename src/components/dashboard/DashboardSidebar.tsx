@@ -107,29 +107,36 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
     });
   };
 
-  const handleNavItemClick = (item: NavItem, event: ReactMouseEvent<HTMLButtonElement>) => {
+  const handleNavItemClick = (item: NavItem) => {
     onItemClick(item.id);
-
     if (!item.sub) {
       closeSubmenu();
-      return;
     }
-
-    setSubmenuAnchor(event.currentTarget, item.sub.length);
-    setOpenSubmenuId((previous) => (previous === item.id ? null : item.id));
   };
 
-  useEffect(() => {
-    if (!openSubmenuId) return;
+  const handleNavItemHover = (item: NavItem, event: ReactMouseEvent<HTMLButtonElement>) => {
+    if (item.sub) {
+      setSubmenuAnchor(event.currentTarget, item.sub.length);
+      setOpenSubmenuId(item.id);
+    } else {
+      closeSubmenu();
+    }
+  };
 
+  // Close sidebar + submenu when clicking outside
+  useEffect(() => {
     const handleOutsideClick = (event: globalThis.MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (target.closest('[data-sidebar-menu-button]') || target.closest('[data-sidebar-submenu]')) return;
+      if (target.closest('[data-sidebar-root]') || target.closest('[data-sidebar-submenu]')) return;
       closeSubmenu();
+      setIsCollapsed(true);
     };
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') closeSubmenu();
+      if (event.key === 'Escape') {
+        closeSubmenu();
+        setIsCollapsed(true);
+      }
     };
 
     window.addEventListener('mousedown', handleOutsideClick);
@@ -143,17 +150,18 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
       window.removeEventListener('resize', closeSubmenu);
       window.removeEventListener('scroll', closeSubmenu, true);
     };
-  }, [openSubmenuId]);
+  }, []);
 
   return (
     <motion.div
+      data-sidebar-root
       className="fixed left-0 top-0 h-screen z-[60] flex flex-col overflow-visible"
       variants={sidebarVariants}
       animate={isCollapsed ? 'closed' : 'open'}
       transition={transitionProps}
       onMouseEnter={() => setIsCollapsed(false)}
       onMouseLeave={() => {
-        if (openSubmenuId) return;
+        closeSubmenu();
         setIsCollapsed(true);
       }}
       style={{
@@ -194,7 +202,8 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
               <div key={item.id} className="relative">
                 <button
                   data-sidebar-menu-button
-                  onClick={(event) => handleNavItemClick(item, event)}
+                  onClick={() => handleNavItemClick(item)}
+                  onMouseEnter={(event) => handleNavItemHover(item, event)}
                   className={cn(
                     'w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-left transition-colors text-sm',
                     isActive
