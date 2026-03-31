@@ -17,6 +17,13 @@ import PQCQuantumDebt from "./pages/PQCQuantumDebt.tsx";
 import CyberRatingEnterprise from "./pages/CyberRatingEnterprise.tsx";
 import CyberRatingPerAsset from "./pages/CyberRatingPerAsset.tsx";
 import CyberRatingTiers from "./pages/CyberRatingTiers.tsx";
+import RemediationActionPlan from "./pages/RemediationActionPlan.tsx";
+import RemediationAIPatch from "./pages/RemediationAIPatch.tsx";
+import RemediationRoadmap from "./pages/RemediationRoadmap.tsx";
+import ReportingExecutive from "./pages/ReportingExecutive.tsx";
+import ReportingScheduled from "./pages/ReportingScheduled.tsx";
+import ReportingOnDemand from "./pages/ReportingOnDemand.tsx";
+import ScanConsole from "./pages/ScanConsole.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -42,6 +49,13 @@ const App = () => (
             <Route path="rating/enterprise" element={<CyberRatingEnterprise />} />
             <Route path="rating/per-asset" element={<CyberRatingPerAsset />} />
             <Route path="rating/tiers" element={<CyberRatingTiers />} />
+            <Route path="remediation/action-plan" element={<RemediationActionPlan />} />
+            <Route path="remediation/ai-patch" element={<RemediationAIPatch />} />
+            <Route path="remediation/roadmap" element={<RemediationRoadmap />} />
+            <Route path="reporting/executive" element={<ReportingExecutive />} />
+            <Route path="reporting/scheduled" element={<ReportingScheduled />} />
+            <Route path="reporting/on-demand" element={<ReportingOnDemand />} />
+            <Route path="scan-console" element={<ScanConsole />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
