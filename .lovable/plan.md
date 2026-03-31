@@ -1,117 +1,118 @@
 
 
-# Dashboard Modernization Plan
+# Implementation Plan — AEGIS Dashboard Pages (Phase 1)
 
-## Summary
-Major redesign of the `/dashboard` page with modern UI patterns: remove collaboration references, add Skiff-inspired top bar, replace old sidebar/topbar with modern components (glass tab bar, floating action menus, AI-style prompt box), and smart export placement.
+## What the Spec Contains
 
----
+The spec defines **9 major sections** with **25+ sub-pages**, all with detailed tables, charts, and interactions. Currently only the Dashboard home view exists. Every sidebar menu item and submenu needs a real page.
 
-## 1. Remove Collaboration References (3 files)
+## Approach
 
-- **TrustStrip.tsx**: Remove "In Collaboration With" label, remove "IIT Kanpur" and "Dept. of Financial Services" items. Keep only "Punjab National Bank" and NIST reference.
-- **FinalCTA.tsx**: Remove "IIT Kanpur" from the bottom compliance strip.
-- **Footer.tsx**: Remove "In collaboration with IIT Kanpur" line.
+Rather than building all 25+ pages at once, we'll implement in **3 phases** following the spec's priority order. This plan covers **Phase 1 (P0 pages)** — the most critical pages judges will evaluate.
 
 ---
 
-## 2. Skiff-Style Top Bar (Navbar for Dashboard)
+## Phase 1 Scope (This Implementation)
 
-Replace the current dark `DashboardTopBar` with a clean, minimal top bar inspired by the Skiff screenshot — dark rounded pill in center with navigation items, light background:
+### 1. Routing & Layout Architecture
+- Convert from single `Dashboard.tsx` state-switching to proper routes: `/dashboard`, `/dashboard/discovery/domains`, `/dashboard/inventory`, `/dashboard/cbom`, `/dashboard/pqc/compliance`, etc.
+- Create a shared `DashboardLayout.tsx` wrapper (sidebar + top-right actions + glass tab bar) used by all dashboard sub-routes
+- Update `App.tsx` with nested routes under `/dashboard/*`
+- Update sidebar `onItemClick` to use `react-router-dom` navigation instead of state
 
-- Light background (`bg-surface`), thin bottom border
-- Left: AEGIS logo + "Dashboard" breadcrumb
-- Center: A dark rounded pill container (like Skiff's `Product / Resources` bar) holding key nav shortcuts
-- Right: Minimal user actions
+### 2. Expanded Demo Data (`demoData.ts`)
+- Extend the `Asset` interface to match the spec's `AssetScanResult` (add certificate details, TLS versions array, cipher suites, HNDL break year, dimension scores, software detected, remediation actions)
+- Add domain discovery data (registration dates, registrars, WHOIS)
+- Add SSL certificate data (fingerprints, chain, CA, expiry)
+- Add IP/subnet data (ports, ASN, geolocation)
+- Add CBOM component data per asset
 
----
+### 3. Asset Discovery Page (4 tabs + Network Graph + Shadow IT)
 
-## 3. Dashboard Layout Overhaul
+**Route:** `/dashboard/discovery`
 
-### 3.1 Glass Bottom Tab Bar
-Move the tab strip (Overview, PQC Assessment, Remediation Plan, etc.) from top to **bottom** of the viewport. Implement as a frosted-glass floating bar:
-- Create `src/components/ui/liquid-glass.tsx` with the glass effect component (SVG filter blur, layered backgrounds)
-- Fixed to bottom, centered, `backdrop-blur`, translucent background, rounded-3xl
-- Tabs rendered as pills inside the glass bar
-- Active tab gets subtle glow/highlight
-- Add the `moveBackground` keyframe to `index.css`
+- **Domains tab:** Table with Detection Date, Domain Name, Registration/Expiry dates, Registrar, Status, Risk Score. Sub-filters (New/Confirmed/All). Smart Insights panel on right.
+- **SSL Certificates tab:** Table with fingerprint, CN, SANs, validity, days remaining (color-coded progress bar), signature algorithm (quantum-assessed), key length. Aggregate charts above (CA distribution donut, algo distribution bar).
+- **IP / Subnets tab:** Table with IP, open ports, subnet, ASN, geolocation, reverse DNS, risk. Intelligence callouts.
+- **Software & Services tab:** Table with product, version, type, EOL status, CVE count, PQC support indicator.
+- **Network Graph tab:** Already exists — wire it into the tabbed view.
+- **Shadow IT tab:** Table with discovery date, asset, type, detection method, risk, recommended actions. Action buttons per row.
 
-### 3.2 Floating Action Menu for Sidebar
-Replace the fixed 240px sidebar with a **floating action menu** (FAB):
-- Create `src/components/ui/floating-action-menu.tsx` with the motion-animated expanding menu
-- Position fixed bottom-left, above the glass tab bar
-- Contains the sidebar nav items (Dashboard, Discovery, Inventory, CBOM, PQC Posture, etc.)
-- Expands upward on click with staggered animation
-- Sub-items (CBOM > Overview/Per-Asset/Export, PQC > Compliance/HNDL/Quantum Debt) shown inline
+### 4. Asset Inventory Page
 
-### 3.3 Gradient Text Accents
-- Create `src/components/ui/gradient-text.tsx` for animated gradient text
-- Add CSS variables (`--color-1` through `--color-5`) and gradient keyframes to `tailwind.config.ts` and `index.css`
-- Apply to key dashboard headings: "Asset Discovery Network Graph", "Cyber Rating", section titles in KPI strip
+**Route:** `/dashboard/inventory`
 
-### 3.4 AI-Style Domain Scanner Prompt
-Replace the inline domain input with a centered, AI-landing-page-style prompt box:
-- Create `src/components/ui/ai-prompt-box.tsx` (adapted from the provided component — light theme, AEGIS-branded)
-- **Initial state**: Prompt box centered in the dashboard content area, large and prominent, with "Enter domain to scan" placeholder
-- **Post-scan state**: Prompt box collapses to a compact version in the bottom glass bar (next to tabs), acting as a quick-access scanner
-- Remove voice/canvas/think toggles — replace with "Scan Domain" and "Run Demo Scan" action buttons
-- Keep the attachment button for uploading domain lists
+- Summary bar (total assets, breakdown by type, filter chips)
+- Full inventory table with all columns from spec (asset name, URL, IPv4/6, type, owner, criticality, risk, PQC status, cert status, key length, cipher, TLS version)
+- Bulk actions toolbar
+- Add Asset side drawer (form with validation)
 
-### 3.5 Smart Export Placement
-Remove export buttons from the top bar. Instead:
-- Add a floating "Export" dropdown in the **top-right corner** of the dashboard content area
-- Appears only after scan data is loaded
-- Contains: Export PDF, Export CBOM (CycloneDX 1.7), Export CDXA
-- Styled as a clean dropdown with document-type icons
-- Each option shows a brief description (e.g., "Executive summary report", "Cryptographic Bill of Materials")
+### 5. CBOM Pages (3 sub-pages)
 
----
+**Route:** `/dashboard/cbom`, `/dashboard/cbom/per-asset`, `/dashboard/cbom/export`
 
-## 4. Updated Dashboard.tsx Structure
+- **Overview:** 6 KPI cards, Key Length Distribution bar chart, Cipher Usage horizontal bar, Top CAs bar chart, Encryption Protocols donut, Per-Application CBOM table
+- **Per-Asset CBOM:** Expandable rows showing full CBOM tree structure (TLS cert → Key Exchange → Cipher Suite → TLS Protocol) with quantum vulnerability annotations
+- **Export Center:** Export format cards (CycloneDX JSON/XML, CSV, PDF, HTML), filters, scheduled export config
 
-```text
-┌─────────────────────────────────────────────┐
-│  Top Bar (light, Skiff-style, minimal)      │
-├─────────────────────────────────────────────┤
-│                                             │
-│  [Export ▾]                    (top-right)   │
-│                                             │
-│  ┌─────────────────────────────────────┐    │
-│  │   Center: AI Prompt Box             │    │ ← Before scan
-│  │   "Enter domain to scan..."         │    │
-│  └─────────────────────────────────────┘    │
-│                                             │
-│  KPI Strip / Network Graph / etc.           │ ← After scan
-│                                             │
-│                                             │
-├─────────────────────────────────────────────┤
-│  [FAB]  ┃  ░░ Glass Tab Bar (bottom) ░░    │
-│         ┃  Overview · PQC · Remediation...  │
-└─────────────────────────────────────────────┘
-```
+### 6. PQC Posture Pages (3 sub-pages)
+
+**Route:** `/dashboard/pqc/compliance`, `/dashboard/pqc/hndl`, `/dashboard/pqc/quantum-debt`
+
+- **Compliance Dashboard:** Classification bar chart, Application Status pie, Risk Overview 3x3 heatmap, PQC Support table, Improvement Recommendations panel, Tier Criteria table
+- **HNDL Intelligence:** Explanatory header with timeline visualization, HNDL Risk by Asset table (with break year, countdown), HNDL Timeline area chart, Qubit Roadmap panel, HNDL Exposure heatmap
+- **Quantum Debt Tracker:** Hero metric (0-1000 gauge), Debt Breakdown stacked bar, Debt Reduction Simulator (slider + projection lines), Migration Progress tracker
+
+### 7. Cyber Rating Pages (3 sub-pages)
+
+**Route:** `/dashboard/rating/enterprise`, `/dashboard/rating/per-asset`, `/dashboard/rating/tiers`
+
+- **Enterprise Score:** Hero score display (755/1000), Tier badge, Score Breakdown radar chart (6 dimensions), Score History line chart, Tier Thresholds table, Benchmark comparison gauges
+- **Per-Asset Ratings:** Table with Q-Score, per-dimension scores, trend arrows, tier labels. Formula tooltip.
+- **Tier Classification:** 4 collapsible tier cards (Elite-PQC, Standard, Legacy, Critical) with criteria, actions, example configs, and asset lists
+
+### 8. Update Sidebar Navigation
+- Add missing submenu items: Discovery gets Software & Services, Network Graph, Shadow IT. Cyber Rating gets Enterprise Score, Per-Asset, Tier Classification. Remediation gets Action Plan, AI Patch, Migration Roadmap. Reporting gets Executive, Scheduled, On-Demand.
+- Settings gets Scan Config, Notifications, Integrations submenus.
 
 ---
 
-## 5. Files to Create/Modify
+## Files to Create
 
-**New files:**
-- `src/components/ui/liquid-glass.tsx` — Glass effect wrapper + SVG filter
-- `src/components/ui/floating-action-menu.tsx` — FAB with expanding menu
-- `src/components/ui/gradient-text.tsx` — Animated gradient text
-- `src/components/ui/ai-prompt-box.tsx` — Domain scanner prompt (adapted, light theme)
-- `src/components/dashboard/ExportDropdown.tsx` — Export button with dropdown
-- `src/components/dashboard/GlassTabBar.tsx` — Bottom glass tab strip
-- `src/components/dashboard/ScanPrompt.tsx` — Wrapper managing scan state transitions
+| File | Purpose |
+|------|---------|
+| `src/pages/DashboardLayout.tsx` | Shared layout wrapper with sidebar, top actions, glass bar |
+| `src/pages/AssetDiscovery.tsx` | 6-tab discovery page |
+| `src/pages/AssetInventory.tsx` | Full inventory with table + add drawer |
+| `src/pages/CBOMOverview.tsx` | CBOM overview with charts |
+| `src/pages/CBOMPerAsset.tsx` | Per-asset expandable CBOM |
+| `src/pages/CBOMExport.tsx` | Export center |
+| `src/pages/PQCCompliance.tsx` | Compliance dashboard |
+| `src/pages/PQCHndl.tsx` | HNDL intelligence |
+| `src/pages/PQCQuantumDebt.tsx` | Quantum debt tracker |
+| `src/pages/CyberRatingEnterprise.tsx` | Enterprise score page |
+| `src/pages/CyberRatingPerAsset.tsx` | Per-asset ratings |
+| `src/pages/CyberRatingTiers.tsx` | Tier classification |
+| `src/data/demoData.ts` | Expanded with full asset scan result data |
 
-**Modified files:**
-- `src/pages/Dashboard.tsx` — Remove sidebar, move tabs to bottom, add prompt + export
-- `src/components/dashboard/DashboardTopBar.tsx` — Redesign to Skiff-style light bar
-- `src/components/dashboard/DashboardSidebar.tsx` — Remove (replaced by FAB)
-- `src/components/landing/TrustStrip.tsx` — Remove collaboration references
-- `src/components/landing/FinalCTA.tsx` — Remove IIT Kanpur reference
-- `src/components/landing/Footer.tsx` — Remove collaboration reference
-- `src/index.css` — Add gradient color vars, moveBackground keyframe
-- `tailwind.config.ts` — Add gradient keyframes and color tokens
+## Files to Modify
 
-**Dependencies needed:** `motion` (already have `framer-motion`)
+| File | Change |
+|------|--------|
+| `src/App.tsx` | Add nested routes under `/dashboard/*` |
+| `src/components/dashboard/DashboardSidebar.tsx` | Add missing submenus, use router navigation |
+| `src/pages/Dashboard.tsx` | Refactor into layout + home view |
+
+---
+
+## Phase 2 (Next, not in this plan)
+- Remediation Center (Action Plan, AI Patch Generator, Migration Roadmap)
+- Reporting (Executive, Scheduled, On-Demand)
+- Scan Console (real-time terminal)
+
+## Phase 3 (Later)
+- Settings pages
+- Asset Detail slide-over panel
+- Global search (Cmd+K)
+- Certificate chain analyzer modals
 
