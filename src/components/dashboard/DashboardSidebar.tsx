@@ -181,10 +181,16 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
       variants={sidebarVariants}
       animate={isCollapsed ? 'closed' : 'open'}
       transition={transitionProps}
-      onMouseEnter={() => setIsCollapsed(false)}
+      onMouseEnter={() => {
+        cancelCloseTimeout();
+        setIsCollapsed(false);
+      }}
       onMouseLeave={() => {
-        closeSubmenu();
-        setIsCollapsed(true);
+        if (openSubmenuId) {
+          scheduleClose();
+        } else {
+          setIsCollapsed(true);
+        }
       }}
       style={{
         background: 'hsl(var(--bg-surface))',
