@@ -4,7 +4,19 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
-import Dashboard from "./pages/Dashboard.tsx";
+import DashboardLayout from "./pages/DashboardLayout.tsx";
+import DashboardHome from "./pages/DashboardHome.tsx";
+import AssetDiscovery from "./pages/AssetDiscovery.tsx";
+import AssetInventory from "./pages/AssetInventory.tsx";
+import CBOMOverview from "./pages/CBOMOverview.tsx";
+import CBOMPerAsset from "./pages/CBOMPerAsset.tsx";
+import CBOMExport from "./pages/CBOMExport.tsx";
+import PQCCompliance from "./pages/PQCCompliance.tsx";
+import PQCHndl from "./pages/PQCHndl.tsx";
+import PQCQuantumDebt from "./pages/PQCQuantumDebt.tsx";
+import CyberRatingEnterprise from "./pages/CyberRatingEnterprise.tsx";
+import CyberRatingPerAsset from "./pages/CyberRatingPerAsset.tsx";
+import CyberRatingTiers from "./pages/CyberRatingTiers.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -17,7 +29,20 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<DashboardHome />} />
+            <Route path="discovery" element={<AssetDiscovery />} />
+            <Route path="inventory" element={<AssetInventory />} />
+            <Route path="cbom" element={<CBOMOverview />} />
+            <Route path="cbom/per-asset" element={<CBOMPerAsset />} />
+            <Route path="cbom/export" element={<CBOMExport />} />
+            <Route path="pqc/compliance" element={<PQCCompliance />} />
+            <Route path="pqc/hndl" element={<PQCHndl />} />
+            <Route path="pqc/quantum-debt" element={<PQCQuantumDebt />} />
+            <Route path="rating/enterprise" element={<CyberRatingEnterprise />} />
+            <Route path="rating/per-asset" element={<CyberRatingPerAsset />} />
+            <Route path="rating/tiers" element={<CyberRatingTiers />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
