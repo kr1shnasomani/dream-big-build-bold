@@ -32,8 +32,8 @@ const GlassTabBar = ({ tabs, activeTab, onTabChange, hasScanned, onScan }: Glass
             className={cn(
               "px-3 py-1.5 rounded-xl text-xs font-body whitespace-nowrap transition-all duration-200",
               activeTab === tab
-                ? "bg-brand-primary/80 text-accent-amber font-medium shadow-[0_0_12px_rgba(232,160,32,0.2)]"
-                : "text-foreground/60 hover:text-foreground/90 hover:bg-black/[0.06]"
+                ? "bg-brand-primary/80 text-accent-amber font-semibold shadow-[0_0_12px_rgba(232,160,32,0.2)]"
+                : "text-foreground/80 hover:text-foreground font-medium hover:bg-black/[0.04]"
             )}
           >
             {tab}
