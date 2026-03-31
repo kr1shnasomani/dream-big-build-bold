@@ -54,8 +54,15 @@ const DashboardLayout = () => {
       'rating:enterprise score': '/dashboard/rating/enterprise',
       'rating:per-asset': '/dashboard/rating/per-asset',
       'rating:tier classification': '/dashboard/rating/tiers',
-      'remediation': '/dashboard/remediation',
-      'reporting': '/dashboard/reporting',
+      'remediation': '/dashboard/remediation/action-plan',
+      'remediation:action plan': '/dashboard/remediation/action-plan',
+      'remediation:ai patch generator': '/dashboard/remediation/ai-patch',
+      'remediation:migration roadmap': '/dashboard/remediation/roadmap',
+      'reporting': '/dashboard/reporting/executive',
+      'reporting:executive reports': '/dashboard/reporting/executive',
+      'reporting:scheduled reports': '/dashboard/reporting/scheduled',
+      'reporting:on-demand builder': '/dashboard/reporting/on-demand',
+      'scan-console': '/dashboard/scan-console',
       'settings': '/dashboard/settings',
     };
     const route = routeMap[item] || '/dashboard';
