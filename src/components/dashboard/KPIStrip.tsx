@@ -47,7 +47,7 @@ const KPIStrip = () => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
       {kpis.map((k) => (
-        <div key={k.label} className="bg-white rounded-xl border border-[hsl(var(--border-default))] p-5">
+        <div key={k.label} className="bg-surface rounded-xl border border-[hsl(var(--border-default))] p-5 shadow-[0_16px_36px_-28px_hsl(var(--brand-primary)/0.42)]">
           <div className="flex items-center gap-1.5 mb-2">
             {k.dotColor && (
               <span className={`w-2 h-2 rounded-full bg-status-critical ${k.dotColor}`} />
