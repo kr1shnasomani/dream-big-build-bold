@@ -1,0 +1,46 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FileJson, FileText, Table, FileCode, Globe } from 'lucide-react';
+
+const formats = [
+  { icon: FileJson, title: 'CycloneDX 1.6 JSON', desc: 'Standard CBOM format — interoperable with SBOMaaS tools', ext: '.json' },
+  { icon: FileCode, title: 'CycloneDX XML', desc: 'XML variant for legacy tool integration', ext: '.xml' },
+  { icon: Table, title: 'CSV Export', desc: 'Flat table for spreadsheet analysis', ext: '.csv' },
+  { icon: FileText, title: 'PDF Report', desc: 'Executive summary with charts and findings', ext: '.pdf' },
+  { icon: Globe, title: 'HTML Report', desc: 'Interactive shareable report — no software needed', ext: '.html' },
+];
+
+const CBOMExport = () => (
+  <div className="space-y-5">
+    <h1 className="font-display text-2xl italic text-brand-primary">CBOM Export Center</h1>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {formats.map(f => (
+        <Card key={f.title} className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)] hover:shadow-lg transition-shadow cursor-pointer group">
+          <CardContent className="p-5">
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-lg bg-[hsl(var(--bg-sunken))] group-hover:bg-brand-primary/10 transition-colors">
+                <f.icon className="w-5 h-5 text-brand-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-sm font-body font-semibold">{f.title}</h3>
+                <p className="text-[11px] text-muted-foreground mt-0.5">{f.desc}</p>
+                <Button size="sm" className="mt-3 h-7 text-xs">Generate {f.ext}</Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+
+    <Card className="shadow-sm">
+      <CardHeader><CardTitle className="text-sm font-body">Scheduled Exports</CardTitle></CardHeader>
+      <CardContent>
+        <p className="text-xs text-muted-foreground font-body">Configure recurring CBOM exports to email or storage. No scheduled exports configured yet.</p>
+        <Button variant="outline" size="sm" className="mt-3 text-xs">Configure Schedule</Button>
+      </CardContent>
+    </Card>
+  </div>
+);
+
+export default CBOMExport;
