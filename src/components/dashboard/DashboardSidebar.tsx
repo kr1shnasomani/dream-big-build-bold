@@ -216,14 +216,15 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
         </nav>
       </ScrollArea>
 
-      <AnimatePresence>
-        {openSubmenu && submenuPosition && typeof document !== 'undefined' && createPortal(
+      {openSubmenu && submenuPosition && createPortal(
+        <AnimatePresence>
           <motion.div
+            key={openSubmenuId}
             initial={{ opacity: 0, x: -8, scale: 0.96 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -8, scale: 0.96 }}
             transition={{ duration: 0.18 }}
-            className="fixed z-[120]"
+            className="fixed z-[9999]"
             style={{ top: submenuPosition.top, left: submenuPosition.left }}
           >
             <div
@@ -253,10 +254,10 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
                 );
               })}
             </div>
-          </motion.div>,
-          document.body,
-        )}
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>,
+        document.body,
+      )}
 
       <Separator className="mx-1" />
 
