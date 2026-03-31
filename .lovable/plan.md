@@ -1,119 +1,117 @@
 
 
-# AEGIS — Build Plan
-## Quantum Cryptographic Intelligence Platform
+# Dashboard Modernization Plan
 
-This is a large build: a polished landing page (10 sections) + a functional demo dashboard, all with a custom design system inspired by Skiff/Linear/Vercel aesthetics.
-
----
-
-## What Gets Built
-
-**Landing Page (`/`)** — 10 sections scrolling vertically:
-1. Fixed navbar with AEGIS branding + nav links + CTA buttons
-2. Split hero (dark left / light right with live "Risk Matrix" card)
-3. Trust/affiliation strip (PNB, IIT Kanpur, Govt of India)
-4. "Why This Matters" problem statement with stat callouts
-5. 5-Phase CBOM Pipeline horizontal timeline
-6. 6-card capabilities grid with hover effects
-7. Interactive mini-dashboard product preview
-8. NIST Standards reference (3 large cards)
-9. Final CTA section (dark, centered)
-10. Footer
-
-**Dashboard (`/dashboard`)** — Functional demo with simulated data:
-- Fixed sidebar (240px) + top bar with domain input
-- Tab strip (Overview active)
-- 6 KPI cards with count-up animation
-- Network graph (SVG force-directed approximation)
-- Cyber Rating panel with score gauge
-- Asset Inventory table (21 rows of demo data)
-- Slide-over detail panel on row click
-- Q-Score overview + Enterprise Intelligence panels
+## Summary
+Major redesign of the `/dashboard` page with modern UI patterns: remove collaboration references, add Skiff-inspired top bar, replace old sidebar/topbar with modern components (glass tab bar, floating action menus, AI-style prompt box), and smart export placement.
 
 ---
 
-## Technical Approach
+## 1. Remove Collaboration References (3 files)
 
-### Design System Setup
-- Add CSS variables for the full color palette (brand-primary `#1E1535`, accent-amber `#E8A020`, status colors, etc.)
-- Extend `tailwind.config.ts` with custom colors mapped to CSS vars
-- Import Google Fonts: **Instrument Serif**, **DM Sans**, **JetBrains Mono** via `index.html`
-- Define font-family utilities in Tailwind config
-- Add custom keyframe animations (fade-up, float, pulse-dot, count-up)
+- **TrustStrip.tsx**: Remove "In Collaboration With" label, remove "IIT Kanpur" and "Dept. of Financial Services" items. Keep only "Punjab National Bank" and NIST reference.
+- **FinalCTA.tsx**: Remove "IIT Kanpur" from the bottom compliance strip.
+- **Footer.tsx**: Remove "In collaboration with IIT Kanpur" line.
 
-### New Dependencies
-- `framer-motion` — subtle scroll animations and page transitions
+---
 
-### File Structure
+## 2. Skiff-Style Top Bar (Navbar for Dashboard)
+
+Replace the current dark `DashboardTopBar` with a clean, minimal top bar inspired by the Skiff screenshot — dark rounded pill in center with navigation items, light background:
+
+- Light background (`bg-surface`), thin bottom border
+- Left: AEGIS logo + "Dashboard" breadcrumb
+- Center: A dark rounded pill container (like Skiff's `Product / Resources` bar) holding key nav shortcuts
+- Right: Minimal user actions
+
+---
+
+## 3. Dashboard Layout Overhaul
+
+### 3.1 Glass Bottom Tab Bar
+Move the tab strip (Overview, PQC Assessment, Remediation Plan, etc.) from top to **bottom** of the viewport. Implement as a frosted-glass floating bar:
+- Create `src/components/ui/liquid-glass.tsx` with the glass effect component (SVG filter blur, layered backgrounds)
+- Fixed to bottom, centered, `backdrop-blur`, translucent background, rounded-3xl
+- Tabs rendered as pills inside the glass bar
+- Active tab gets subtle glow/highlight
+- Add the `moveBackground` keyframe to `index.css`
+
+### 3.2 Floating Action Menu for Sidebar
+Replace the fixed 240px sidebar with a **floating action menu** (FAB):
+- Create `src/components/ui/floating-action-menu.tsx` with the motion-animated expanding menu
+- Position fixed bottom-left, above the glass tab bar
+- Contains the sidebar nav items (Dashboard, Discovery, Inventory, CBOM, PQC Posture, etc.)
+- Expands upward on click with staggered animation
+- Sub-items (CBOM > Overview/Per-Asset/Export, PQC > Compliance/HNDL/Quantum Debt) shown inline
+
+### 3.3 Gradient Text Accents
+- Create `src/components/ui/gradient-text.tsx` for animated gradient text
+- Add CSS variables (`--color-1` through `--color-5`) and gradient keyframes to `tailwind.config.ts` and `index.css`
+- Apply to key dashboard headings: "Asset Discovery Network Graph", "Cyber Rating", section titles in KPI strip
+
+### 3.4 AI-Style Domain Scanner Prompt
+Replace the inline domain input with a centered, AI-landing-page-style prompt box:
+- Create `src/components/ui/ai-prompt-box.tsx` (adapted from the provided component — light theme, AEGIS-branded)
+- **Initial state**: Prompt box centered in the dashboard content area, large and prominent, with "Enter domain to scan" placeholder
+- **Post-scan state**: Prompt box collapses to a compact version in the bottom glass bar (next to tabs), acting as a quick-access scanner
+- Remove voice/canvas/think toggles — replace with "Scan Domain" and "Run Demo Scan" action buttons
+- Keep the attachment button for uploading domain lists
+
+### 3.5 Smart Export Placement
+Remove export buttons from the top bar. Instead:
+- Add a floating "Export" dropdown in the **top-right corner** of the dashboard content area
+- Appears only after scan data is loaded
+- Contains: Export PDF, Export CBOM (CycloneDX 1.7), Export CDXA
+- Styled as a clean dropdown with document-type icons
+- Each option shows a brief description (e.g., "Executive summary report", "Cryptographic Bill of Materials")
+
+---
+
+## 4. Updated Dashboard.tsx Structure
+
 ```text
-src/
-├── data/
-│   └── demoData.ts              # All 21 assets + scores + enterprise data
-├── components/
-│   ├── landing/
-│   │   ├── Navbar.tsx
-│   │   ├── Hero.tsx              # Split hero with LiveRiskMatrix
-│   │   ├── LiveRiskMatrix.tsx    # Interactive card in hero right
-│   │   ├── TrustStrip.tsx
-│   │   ├── ProblemSection.tsx
-│   │   ├── PipelineSection.tsx   # 5-phase horizontal timeline
-│   │   ├── CapabilitiesGrid.tsx
-│   │   ├── DashboardPreview.tsx  # Mini interactive dashboard
-│   │   ├── NistStandards.tsx
-│   │   ├── FinalCTA.tsx
-│   │   └── Footer.tsx
-│   └── dashboard/
-│       ├── DashboardLayout.tsx   # Sidebar + topbar shell
-│       ├── DashboardSidebar.tsx
-│       ├── DashboardTopBar.tsx
-│       ├── KPIStrip.tsx
-│       ├── NetworkGraph.tsx      # SVG force-directed approximation
-│       ├── CyberRating.tsx       # Score gauge + tier
-│       ├── AssetTable.tsx        # Full inventory table
-│       ├── AssetSlideOver.tsx    # Detail panel
-│       ├── QScoreOverview.tsx    # Circular gauge + bar breakdown
-│       └── EnterpriseIntel.tsx
-├── pages/
-│   ├── Index.tsx                 # Landing page (all sections composed)
-│   └── Dashboard.tsx             # Dashboard page
-└── App.tsx                       # Add /dashboard route
+┌─────────────────────────────────────────────┐
+│  Top Bar (light, Skiff-style, minimal)      │
+├─────────────────────────────────────────────┤
+│                                             │
+│  [Export ▾]                    (top-right)   │
+│                                             │
+│  ┌─────────────────────────────────────┐    │
+│  │   Center: AI Prompt Box             │    │ ← Before scan
+│  │   "Enter domain to scan..."         │    │
+│  └─────────────────────────────────────┘    │
+│                                             │
+│  KPI Strip / Network Graph / etc.           │ ← After scan
+│                                             │
+│                                             │
+├─────────────────────────────────────────────┤
+│  [FAB]  ┃  ░░ Glass Tab Bar (bottom) ░░    │
+│         ┃  Overview · PQC · Remediation...  │
+└─────────────────────────────────────────────┘
 ```
 
-### Key Implementation Details
-
-- **Split Hero**: CSS grid `grid-cols-[45%_55%]`, left column `bg-[#1E1535]`, right column `bg-[#F7F8FA]` with the LiveRiskMatrix floating card (white, `rounded-2xl`, large shadow, gentle float animation)
-- **Pipeline Timeline**: Horizontal flex with a 2px connecting line, alternating colored circle nodes, vertical connectors to content blocks below
-- **Network Graph**: Pure SVG with pre-positioned nodes (no D3 dependency needed). 15 nodes colored by status, edges as lines, labels on nodes
-- **Q-Score Gauge**: SVG circle with `stroke-dasharray` / `stroke-dashoffset`, color interpolated by score
-- **Asset Table**: Built on shadcn Table, sortable columns, status badges with tinted backgrounds
-- **Slide-over Panel**: shadcn Sheet component sliding from right, 400px wide
-- **Count-up Animation**: `useEffect` with `requestAnimationFrame` for KPI numbers
-- **Scroll Animations**: Framer Motion `whileInView` with `opacity: 0→1`, `y: 20→0`, staggered children
-
-### Build Sequence (13 steps)
-
-1. Design tokens + Tailwind config + font imports
-2. Landing: Navbar + Hero with LiveRiskMatrix
-3. Landing: Trust Strip + Problem Section
-4. Landing: Pipeline Section (5-phase timeline)
-5. Landing: Capabilities Grid
-6. Landing: Dashboard Preview (mini interactive dashboard)
-7. Landing: NIST Standards + Final CTA + Footer
-8. Demo data file (all 21 assets)
-9. Dashboard: Layout shell (sidebar + topbar)
-10. Dashboard: KPI strip + Network Graph + Cyber Rating
-11. Dashboard: Asset Inventory table + Slide-over
-12. Dashboard: Q-Score Overview + Enterprise Intelligence
-13. Routing, scroll behaviors, final polish
-
 ---
 
-## Design Priorities
+## 5. Files to Create/Modify
 
-- **Whitespace-heavy** — every section breathes, Skiff-style
-- **Editorial typography** — Instrument Serif italic creates unexpected elegance for a security product
-- **Light mode dominant** — `#F7F8FA` base, white cards, NOT dark/hacker aesthetic
-- **Status colors only on data elements** — badges, chart segments, progress fills — never as section backgrounds
-- **Subtle animations** — no bouncing, no dramatic reveals. Framer Motion with 0.4s duration, custom easing
+**New files:**
+- `src/components/ui/liquid-glass.tsx` — Glass effect wrapper + SVG filter
+- `src/components/ui/floating-action-menu.tsx` — FAB with expanding menu
+- `src/components/ui/gradient-text.tsx` — Animated gradient text
+- `src/components/ui/ai-prompt-box.tsx` — Domain scanner prompt (adapted, light theme)
+- `src/components/dashboard/ExportDropdown.tsx` — Export button with dropdown
+- `src/components/dashboard/GlassTabBar.tsx` — Bottom glass tab strip
+- `src/components/dashboard/ScanPrompt.tsx` — Wrapper managing scan state transitions
+
+**Modified files:**
+- `src/pages/Dashboard.tsx` — Remove sidebar, move tabs to bottom, add prompt + export
+- `src/components/dashboard/DashboardTopBar.tsx` — Redesign to Skiff-style light bar
+- `src/components/dashboard/DashboardSidebar.tsx` — Remove (replaced by FAB)
+- `src/components/landing/TrustStrip.tsx` — Remove collaboration references
+- `src/components/landing/FinalCTA.tsx` — Remove IIT Kanpur reference
+- `src/components/landing/Footer.tsx` — Remove collaboration reference
+- `src/index.css` — Add gradient color vars, moveBackground keyframe
+- `tailwind.config.ts` — Add gradient keyframes and color tokens
+
+**Dependencies needed:** `motion` (already have `framer-motion`)
 
