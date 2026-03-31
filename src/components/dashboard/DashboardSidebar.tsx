@@ -101,9 +101,10 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
     const rect = target.getBoundingClientRect();
     const estimatedHeight = subItemsCount * 40 + 34;
     const top = Math.max(10, Math.min(rect.top, window.innerHeight - estimatedHeight - 10));
+    // Always position to the right of the expanded sidebar (15rem = 240px) + gap
     setSubmenuPosition({
       top,
-      left: rect.right + 10,
+      left: 240 + 8,
     });
   };
 
