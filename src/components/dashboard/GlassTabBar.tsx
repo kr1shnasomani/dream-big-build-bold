@@ -18,11 +18,10 @@ const GlassTabBar = ({ tabs, activeTab, onTabChange, hasScanned, onScan }: Glass
       <div
         className="flex items-center gap-1 px-2 py-2 rounded-2xl"
         style={{
-          background: "transparent",
-          WebkitBackdropFilter: "blur(40px) saturate(1.8)",
-          backdropFilter: "blur(40px) saturate(1.8)",
-          boxShadow:
-            "0 8px 32px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.15), inset 0 1px 0 rgba(255,255,255,0.2)",
+          background: "rgba(255, 255, 255, 0.03)",
+          WebkitBackdropFilter: "blur(2px)",
+          backdropFilter: "blur(2px)",
+          boxShadow: "inset 0 0 0 0.5px rgba(255,255,255,0.08)",
           borderRadius: "1rem",
         }}
       >

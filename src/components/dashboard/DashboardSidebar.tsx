@@ -223,7 +223,10 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
           </AnimatePresence>
         </button>
 
-        <div className="flex items-center gap-3 px-2.5 py-2 rounded-lg">
+        <div className={cn(
+          "flex items-center gap-3 py-2 rounded-lg",
+          isCollapsed ? "justify-center px-0" : "px-2.5"
+        )}>
           <Avatar className="h-7 w-7 flex-shrink-0">
             <AvatarFallback className="bg-brand-primary text-accent-amber text-xs font-mono">
               A
