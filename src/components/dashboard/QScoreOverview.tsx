@@ -15,7 +15,7 @@ const QScoreOverview = () => {
   const maxCount = Math.max(...breakdown.map(b => b.count));
 
   return (
-    <div className="bg-white rounded-xl border border-[hsl(var(--border-default))] p-5">
+    <div className="bg-surface rounded-xl border border-[hsl(var(--border-default))] p-5 shadow-[0_18px_42px_-28px_hsl(var(--brand-primary)/0.45)]">
       <h3 className="font-body font-bold text-sm text-foreground mb-4">Q-Score Overview</h3>
 
       <div className="flex items-center gap-6 mb-6">
