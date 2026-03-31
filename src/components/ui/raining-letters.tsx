@@ -76,10 +76,10 @@ const RainingLetters = () => {
         }
 
         const isActive = activeRef.current.has(i);
-        const alpha = isActive ? 0.22 : 0.07;
+        const alpha = isActive ? 0.4 : 0.14;
 
         ctx.font = `${c.size}px "JetBrains Mono", monospace`;
-        ctx.fillStyle = `rgba(156, 163, 175, ${alpha})`;
+        ctx.fillStyle = `rgba(107, 114, 128, ${alpha})`;
         ctx.fillText(c.char, c.x * rect.width, c.y * rect.height);
       }
 
