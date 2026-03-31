@@ -55,7 +55,7 @@ const ScanPromptBox = React.forwardRef<HTMLDivElement, ScanPromptBoxProps>(
         <div
           ref={ref}
           className={cn(
-            "flex items-center gap-2 rounded-full bg-white/[0.08] border border-white/[0.15] backdrop-blur-xl px-3 py-1.5",
+            "flex items-center gap-2 rounded-full border border-[hsl(var(--border-default))] bg-white/80 backdrop-blur-xl px-3 py-1.5",
             className
           )}
         >
@@ -68,7 +68,7 @@ const ScanPromptBox = React.forwardRef<HTMLDivElement, ScanPromptBoxProps>(
               if (e.key === "Enter") handleSubmit();
             }}
             placeholder="Scan domain..."
-            className="flex-1 bg-transparent text-xs text-white placeholder:text-white/40 font-mono focus:outline-none min-w-[120px]"
+            className="flex-1 bg-transparent text-xs text-foreground placeholder:text-muted-foreground font-mono focus:outline-none min-w-[120px]"
           />
           <button
             onClick={handleSubmit}
@@ -76,8 +76,8 @@ const ScanPromptBox = React.forwardRef<HTMLDivElement, ScanPromptBoxProps>(
             className={cn(
               "h-6 w-6 rounded-full flex items-center justify-center transition-all",
               hasContent
-                ? "bg-accent-amber text-brand-primary"
-                : "bg-white/10 text-white/30"
+                ? "bg-brand-primary text-accent-amber"
+                : "bg-sunken text-muted-foreground"
             )}
           >
             <ArrowUp className="w-3 h-3" />
@@ -93,7 +93,7 @@ const ScanPromptBox = React.forwardRef<HTMLDivElement, ScanPromptBoxProps>(
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
         className={cn(
-          "w-full max-w-2xl rounded-3xl border border-[hsl(var(--border-default))] bg-white p-3 shadow-[0_8px_40px_rgba(0,0,0,0.08)] transition-all duration-300",
+          "w-full max-w-2xl rounded-3xl border border-[hsl(var(--border-default))] bg-surface p-3 shadow-[0_8px_40px_rgba(0,0,0,0.08)] transition-all duration-300",
           isLoading && "border-accent-amber/50",
           className
         )}
