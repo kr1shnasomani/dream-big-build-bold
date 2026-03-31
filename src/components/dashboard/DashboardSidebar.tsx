@@ -202,7 +202,8 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
               <div key={item.id} className="relative">
                 <button
                   data-sidebar-menu-button
-                  onClick={(event) => handleNavItemClick(item, event)}
+                  onClick={() => handleNavItemClick(item)}
+                  onMouseEnter={(event) => handleNavItemHover(item, event)}
                   className={cn(
                     'w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-left transition-colors text-sm',
                     isActive
