@@ -95,7 +95,7 @@ const DashboardLayout = () => {
                 <GradientText as="h1" className="font-body font-bold text-3xl lg:text-5xl mb-4">Quantum Readiness Scanner</GradientText>
                 <p className="font-body text-base text-muted-foreground max-w-md mx-auto">Enter any domain to generate a complete Cryptographic Bill of Materials and quantum risk assessment.</p>
               </motion.div>
-              <div className="relative z-10">
+              <div className="relative z-10 w-full max-w-2xl">
                 <ScanPromptBox onScan={handleScan} onDemoScan={handleDemoScan} placeholder="Enter domain to scan (e.g. pnb.co.in)" />
               </div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4">
