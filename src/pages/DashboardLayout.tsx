@@ -98,7 +98,7 @@ const DashboardLayout = () => {
               <div className="relative z-10">
                 <ScanPromptBox onScan={handleScan} onDemoScan={handleDemoScan} placeholder="Enter domain to scan (e.g. pnb.co.in)" />
               </div>
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4">
                 {['vpn.pnb.co.in', 'netbanking.pnb.co.in', 'auth.pnb.co.in'].map((domain) => (
                   <button key={domain} onClick={() => handleScan(domain)} className="font-mono text-xs text-muted-foreground px-3 py-1.5 rounded-lg border border-[hsl(var(--border-default))] hover:border-[hsl(var(--border-strong))] hover:text-foreground transition-colors">{domain}</button>
                 ))}
