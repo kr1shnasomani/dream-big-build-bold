@@ -273,6 +273,14 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
             transition={{ duration: 0.18 }}
             className="fixed z-[9999]"
             style={{ top: submenuPosition.top, left: submenuPosition.left }}
+            onMouseEnter={() => {
+              isOverSubmenuRef.current = true;
+              cancelCloseTimeout();
+            }}
+            onMouseLeave={() => {
+              isOverSubmenuRef.current = false;
+              scheduleClose();
+            }}
           >
             <div
               data-sidebar-submenu
