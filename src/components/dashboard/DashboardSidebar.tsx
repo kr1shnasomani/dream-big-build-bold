@@ -107,16 +107,20 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
     });
   };
 
-  const handleNavItemClick = (item: NavItem, event: ReactMouseEvent<HTMLButtonElement>) => {
+  const handleNavItemClick = (item: NavItem) => {
     onItemClick(item.id);
-
     if (!item.sub) {
       closeSubmenu();
-      return;
     }
+  };
 
-    setSubmenuAnchor(event.currentTarget, item.sub.length);
-    setOpenSubmenuId((previous) => (previous === item.id ? null : item.id));
+  const handleNavItemHover = (item: NavItem, event: ReactMouseEvent<HTMLButtonElement>) => {
+    if (item.sub) {
+      setSubmenuAnchor(event.currentTarget, item.sub.length);
+      setOpenSubmenuId(item.id);
+    } else {
+      closeSubmenu();
+    }
   };
 
   useEffect(() => {
