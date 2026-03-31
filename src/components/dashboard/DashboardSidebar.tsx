@@ -151,6 +151,19 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
       window.removeEventListener('scroll', closeSubmenu, true);
     };
   }, []);
+
+  return (
+    <motion.div
+      data-sidebar-root
+      className="fixed left-0 top-0 h-screen z-[60] flex flex-col overflow-visible"
+      variants={sidebarVariants}
+      animate={isCollapsed ? 'closed' : 'open'}
+      transition={transitionProps}
+      onMouseEnter={() => setIsCollapsed(false)}
+      onMouseLeave={() => {
+        closeSubmenu();
+        setIsCollapsed(true);
+      }}
       style={{
         background: 'hsl(var(--bg-surface))',
         borderRight: '1px solid hsl(var(--border-default))',
