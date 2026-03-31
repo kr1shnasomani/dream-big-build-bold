@@ -18,11 +18,10 @@ const GlassTabBar = ({ tabs, activeTab, onTabChange, hasScanned, onScan }: Glass
       <div
         className="flex items-center gap-1 px-2 py-2 rounded-2xl"
         style={{
-          background: "transparent",
-          WebkitBackdropFilter: "blur(40px) saturate(1.8)",
-          backdropFilter: "blur(40px) saturate(1.8)",
-          boxShadow:
-            "0 8px 32px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.15), inset 0 1px 0 rgba(255,255,255,0.2)",
+          background: "rgba(255, 255, 255, 0.03)",
+          WebkitBackdropFilter: "blur(2px)",
+          backdropFilter: "blur(2px)",
+          boxShadow: "inset 0 0 0 0.5px rgba(255,255,255,0.08)",
           borderRadius: "1rem",
         }}
       >
@@ -33,8 +32,8 @@ const GlassTabBar = ({ tabs, activeTab, onTabChange, hasScanned, onScan }: Glass
             className={cn(
               "px-3 py-1.5 rounded-xl text-xs font-body whitespace-nowrap transition-all duration-200",
               activeTab === tab
-                ? "bg-brand-primary/80 text-accent-amber font-medium shadow-[0_0_12px_rgba(232,160,32,0.2)]"
-                : "text-foreground/60 hover:text-foreground/90 hover:bg-black/[0.06]"
+                ? "bg-brand-primary/80 text-accent-amber font-semibold shadow-[0_0_12px_rgba(232,160,32,0.2)]"
+                : "text-foreground/80 hover:text-foreground font-medium hover:bg-black/[0.04]"
             )}
           >
             {tab}

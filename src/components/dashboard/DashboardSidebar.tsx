@@ -77,7 +77,7 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
 
   return (
     <motion.div
-      className="fixed left-0 top-0 h-screen z-40 flex flex-col"
+      className="fixed left-0 top-0 h-screen z-[60] flex flex-col overflow-visible"
       variants={sidebarVariants}
       animate={isCollapsed ? 'closed' : 'open'}
       transition={transitionProps}
@@ -111,8 +111,8 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
       <Separator className="mx-1" />
 
       {/* Nav items */}
-      <ScrollArea className="flex-1 py-2">
-        <nav className="px-1.5 space-y-0.5">
+      <ScrollArea className="flex-1 py-2 overflow-visible">
+        <nav className="px-1.5 space-y-0.5 overflow-visible">
           {navItems.map((item) => {
             const isActive = activeItem === item.id;
             const isHovered = hoveredItem === item.id;
@@ -161,7 +161,8 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       exit={{ opacity: 0, x: -8, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute left-full top-0 ml-1 z-50"
+                      className="absolute left-full top-0 ml-2 z-[9999]"
+                      style={{ pointerEvents: 'auto' }}
                     >
                       <div className="bg-popover rounded-xl shadow-xl border border-border overflow-hidden min-w-[180px] py-1">
                         <div className="px-3 py-1.5 text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
@@ -222,7 +223,10 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
           </AnimatePresence>
         </button>
 
-        <div className="flex items-center gap-3 px-2.5 py-2 rounded-lg">
+        <div className={cn(
+          "flex items-center gap-3 py-2 rounded-lg",
+          isCollapsed ? "justify-center px-0" : "px-2.5"
+        )}>
           <Avatar className="h-7 w-7 flex-shrink-0">
             <AvatarFallback className="bg-brand-primary text-accent-amber text-xs font-mono">
               A
