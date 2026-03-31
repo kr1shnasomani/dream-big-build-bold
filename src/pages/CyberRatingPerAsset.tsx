@@ -1,0 +1,70 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { assets, getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset } from '@/data/demoData';
+import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Info } from 'lucide-react';
+
+const CyberRatingPerAsset = () => (
+  <div className="space-y-5">
+    <div className="flex items-center gap-3">
+      <h1 className="font-display text-2xl italic text-brand-primary">Per-Asset Ratings</h1>
+      <Tooltip>
+        <TooltipTrigger><Info className="w-4 h-4 text-muted-foreground" /></TooltipTrigger>
+        <TooltipContent className="max-w-sm text-xs font-mono">
+          Q-Score = (TLS × 0.20) + (Cert × 0.20) + (KeyEx × 0.25) + (Cipher × 0.20) + (PQC × 0.15)
+        </TooltipContent>
+      </Tooltip>
+    </div>
+
+    <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
+      <CardContent className="p-0">
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs font-body">
+            <thead><tr className="border-b border-border bg-[hsl(var(--bg-sunken))]">
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Asset</th>
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Q-Score</th>
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">TLS</th>
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Cert</th>
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Key Ex.</th>
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Cipher</th>
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">PQC</th>
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Tier</th>
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Label</th>
+            </tr></thead>
+            <tbody>
+              {assets.map((a, i) => {
+                const dimColor = (v: number) => v >= 80 ? 'hsl(var(--status-safe))' : v >= 50 ? 'hsl(var(--accent-amber))' : 'hsl(var(--status-critical))';
+                const chip = (v: number) => (
+                  <span className="font-mono text-[10px] px-1.5 py-0.5 rounded" style={{ color: dimColor(v), backgroundColor: `${dimColor(v)}15` }}>{v}</span>
+                );
+                return (
+                  <tr key={a.id} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))]", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
+                    <td className="px-3 py-2 font-mono font-medium">{a.domain}</td>
+                    <td className="px-3 py-2">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-12 h-1.5 rounded-full bg-[hsl(var(--bg-sunken))]">
+                          <div className="h-full rounded-full" style={{ width: `${a.qScore}%`, backgroundColor: getQScoreColor(a.qScore) }} />
+                        </div>
+                        <span className="font-mono font-bold" style={{ color: getQScoreColor(a.qScore) }}>{a.qScore}</span>
+                      </div>
+                    </td>
+                    <td className="px-3 py-2">{chip(a.dimensionScores.tls_version)}</td>
+                    <td className="px-3 py-2">{chip(a.dimensionScores.certificate_algo)}</td>
+                    <td className="px-3 py-2">{chip(a.dimensionScores.key_exchange)}</td>
+                    <td className="px-3 py-2">{chip(a.dimensionScores.cipher_strength)}</td>
+                    <td className="px-3 py-2">{chip(a.dimensionScores.pqc_readiness)}</td>
+                    <td className="px-3 py-2"><Badge variant="outline" className="text-[10px]">{getTierFromAsset(a.tier)}</Badge></td>
+                    <td className="px-3 py-2"><span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded" style={{ color: getStatusColor(a.status), backgroundColor: `${getStatusColor(a.status)}15` }}>{getStatusLabel(a.status)}</span></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
+);
+
+export default CyberRatingPerAsset;

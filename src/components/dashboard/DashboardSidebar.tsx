@@ -30,8 +30,11 @@ const navItems: NavItem[] = [
     id: 'discovery', icon: Search, label: 'Asset Discovery',
     sub: [
       { label: 'Domains', icon: Globe },
-      { label: 'IP Subnets', icon: Server },
       { label: 'SSL Certificates', icon: Key },
+      { label: 'IP Subnets', icon: Server },
+      { label: 'Software & Services', icon: Cpu },
+      { label: 'Network Graph', icon: Globe },
+      { label: 'Shadow IT', icon: Shield },
     ],
   },
   { id: 'inventory', icon: Package, label: 'Asset Inventory' },
@@ -51,7 +54,14 @@ const navItems: NavItem[] = [
       { label: 'Quantum Debt', icon: BarChart3 },
     ],
   },
-  { id: 'rating', icon: Star, label: 'Cyber Rating' },
+  {
+    id: 'rating', icon: Star, label: 'Cyber Rating',
+    sub: [
+      { label: 'Enterprise Score', icon: Star },
+      { label: 'Per-Asset', icon: FileText },
+      { label: 'Tier Classification', icon: Shield },
+    ],
+  },
   { id: 'remediation', icon: Wrench, label: 'Remediation Center' },
   { id: 'reporting', icon: BarChart3, label: 'Reporting' },
 ];
