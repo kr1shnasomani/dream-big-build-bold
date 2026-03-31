@@ -77,7 +77,7 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
 
   return (
     <motion.div
-      className="fixed left-0 top-0 h-screen z-40 flex flex-col"
+      className="fixed left-0 top-0 h-screen z-[60] flex flex-col overflow-visible"
       variants={sidebarVariants}
       animate={isCollapsed ? 'closed' : 'open'}
       transition={transitionProps}
