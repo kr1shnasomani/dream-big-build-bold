@@ -72,8 +72,8 @@ const RainingLetters = () => {
           style={{
             left: `${char.x}%`,
             top: `${char.y}%`,
-            opacity: activeIndices.has(i) ? 0.18 : 0.06,
-            color: "hsl(var(--muted-foreground))",
+            opacity: activeIndices.has(i) ? 0.35 : 0.08,
+            color: "hsl(var(--border-strong))",
           }}
         >
           {char.char}
