@@ -5,6 +5,7 @@ import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import GlassTabBar from '@/components/dashboard/GlassTabBar';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ScanPromptBox } from '@/components/ui/ai-prompt-box';
+import RainingLetters from '@/components/ui/raining-letters';
 import { GradientText } from '@/components/ui/gradient-text';
 
 const tabs = ['Overview', 'PQC Assessment', 'Remediation Plan', 'NIST Matrix', 'Tri-Mode', 'History', 'Classification', 'Regression'];
