@@ -9,7 +9,7 @@ const Footer = () => {
             Quantum-Aware Cryptographic Intelligence for Indian Banking
           </p>
           <p className="font-mono text-[11px] text-white/30 mt-2">
-            PNB Cybersecurity Hackathon 2026 · In collaboration with IIT Kanpur
+            PNB Cybersecurity Hackathon 2026
           </p>
         </div>
 
