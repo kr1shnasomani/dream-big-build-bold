@@ -62,7 +62,7 @@ const sidebarVariants = {
 
 const transitionProps = {
   type: 'tween' as const,
-  ease: [0.25, 0.1, 0.25, 1] as number[],
+  ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
   duration: 0.25,
 };
 
