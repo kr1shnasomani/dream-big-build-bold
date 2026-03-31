@@ -86,16 +86,37 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
   const [submenuPosition, setSubmenuPosition] = useState<{ top: number; left: number } | null>(null);
+  const isOverSubmenuRef = useRef(false);
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const openSubmenu = useMemo(
     () => navItems.find((item) => item.id === openSubmenuId && item.sub),
     [openSubmenuId],
   );
 
-  const closeSubmenu = () => {
+  const cancelCloseTimeout = useCallback(() => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  }, []);
+
+  const closeSubmenu = useCallback(() => {
     setOpenSubmenuId(null);
     setSubmenuPosition(null);
-  };
+    isOverSubmenuRef.current = false;
+    cancelCloseTimeout();
+  }, [cancelCloseTimeout]);
+
+  const scheduleClose = useCallback(() => {
+    cancelCloseTimeout();
+    closeTimeoutRef.current = setTimeout(() => {
+      if (!isOverSubmenuRef.current) {
+        closeSubmenu();
+        setIsCollapsed(true);
+      }
+    }, 150);
+  }, [closeSubmenu, cancelCloseTimeout]);
 
   const setSubmenuAnchor = (target: HTMLButtonElement, subItemsCount: number) => {
     const rect = target.getBoundingClientRect();
