@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Home, Search, Package, ClipboardList, ShieldCheck, Star, Wrench, BarChart3, Settings } from 'lucide-react';
 import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
+import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import GlassTabBar from '@/components/dashboard/GlassTabBar';
-import FloatingActionMenu from '@/components/ui/floating-action-menu';
 import { ScanPromptBox } from '@/components/ui/ai-prompt-box';
 import { GradientText } from '@/components/ui/gradient-text';
 import KPIStrip from '@/components/dashboard/KPIStrip';
@@ -15,20 +14,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const tabs = ['Overview', 'PQC Assessment', 'Remediation Plan', 'NIST Matrix', 'Tri-Mode', 'History', 'Classification', 'Regression'];
 
-const navItems = [
-  { id: 'dashboard', icon: <Home className="w-4 h-4" />, label: 'Dashboard' },
-  { id: 'discovery', icon: <Search className="w-4 h-4" />, label: 'Asset Discovery' },
-  { id: 'inventory', icon: <Package className="w-4 h-4" />, label: 'Asset Inventory' },
-  { id: 'cbom', icon: <ClipboardList className="w-4 h-4" />, label: 'CBOM' },
-  { id: 'pqc', icon: <ShieldCheck className="w-4 h-4" />, label: 'PQC Posture' },
-  { id: 'rating', icon: <Star className="w-4 h-4" />, label: 'Cyber Rating' },
-  { id: 'remediation', icon: <Wrench className="w-4 h-4" />, label: 'Remediation' },
-  { id: 'reporting', icon: <BarChart3 className="w-4 h-4" />, label: 'Reporting' },
-  { id: 'settings', icon: <Settings className="w-4 h-4" />, label: 'Settings' },
-];
-
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('Overview');
+  const [activeNav, setActiveNav] = useState('dashboard');
   const [hasScanned, setHasScanned] = useState(false);
 
   const handleScan = (domain: string) => {
@@ -44,8 +32,11 @@ const Dashboard = () => {
     <div className="flex flex-col min-h-screen bg-background">
       <DashboardTopBar hasScanned={hasScanned} />
 
-      {/* Main content */}
-      <div className="flex-1 overflow-y-auto pb-24">
+      {/* Sidebar */}
+      <DashboardSidebar activeItem={activeNav} onItemClick={setActiveNav} />
+
+      {/* Main content - offset for collapsed sidebar */}
+      <div className="flex-1 overflow-y-auto pb-24 ml-[3.05rem]">
         <AnimatePresence mode="wait">
           {!hasScanned ? (
             /* Pre-scan: centered prompt */
@@ -125,18 +116,7 @@ const Dashboard = () => {
         </AnimatePresence>
       </div>
 
-      {/* Floating action menu (bottom-left) */}
-      <div className="fixed bottom-6 left-6 z-50">
-        <FloatingActionMenu
-          options={navItems.map((item) => ({
-            label: item.label,
-            Icon: item.icon,
-            onClick: () => console.log(`Navigate to ${item.id}`),
-          }))}
-        />
-      </div>
-
-      {/* Glass tab bar (bottom center) */}
+      {/* Glass tab bar (bottom center) - only after scan */}
       <GlassTabBar
         tabs={tabs}
         activeTab={activeTab}
