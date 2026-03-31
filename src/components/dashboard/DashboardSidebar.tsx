@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import {
   Shield, Home, Search, Package, ClipboardList, ShieldCheck,
-  Star, Wrench, BarChart3, Settings, Plus, LogOut, User,
+  Star, Wrench, BarChart3, Settings, LogOut,
   Globe, Key, FileText, Server, Cpu, Lock, ChevronRight,
 } from 'lucide-react';
 
@@ -62,8 +62,8 @@ const sidebarVariants = {
 
 const transitionProps = {
   type: 'tween' as const,
-  ease: 'easeOut' as const,
-  duration: 0.2,
+  ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+  duration: 0.25,
 };
 
 interface DashboardSidebarProps {
@@ -153,7 +153,7 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
                   )}
                 </button>
 
-                {/* Submenu pop-out (sideways) */}
+                {/* Submenu pop-out (sideways, floating-action style) */}
                 <AnimatePresence>
                   {item.sub && isHovered && (
                     <motion.div
@@ -163,21 +163,24 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
                       transition={{ duration: 0.15 }}
                       className="absolute left-full top-0 ml-1 z-50"
                     >
-                      <div className="bg-white rounded-xl shadow-xl border border-[hsl(var(--border-default))] overflow-hidden min-w-[180px] py-1">
+                      <div className="bg-popover rounded-xl shadow-xl border border-border overflow-hidden min-w-[180px] py-1">
                         <div className="px-3 py-1.5 text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
                           {item.label}
                         </div>
-                        {item.sub.map((sub) => {
+                        {item.sub.map((sub, index) => {
                           const SubIcon = sub.icon;
                           return (
-                            <button
+                            <motion.button
                               key={sub.label}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.03, duration: 0.15 }}
                               onClick={() => onItemClick(`${item.id}:${sub.label.toLowerCase()}`)}
                               className="w-full flex items-center gap-2.5 px-3 py-2 text-sm font-body text-foreground/80 hover:bg-sunken hover:text-foreground transition-colors text-left"
                             >
                               <SubIcon className="w-3.5 h-3.5 text-muted-foreground" />
                               {sub.label}
-                            </button>
+                            </motion.button>
                           );
                         })}
                       </div>
