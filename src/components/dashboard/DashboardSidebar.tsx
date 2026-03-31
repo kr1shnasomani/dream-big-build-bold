@@ -63,8 +63,23 @@ const navItems: NavItem[] = [
       { label: 'Tier Classification', icon: Shield },
     ],
   },
-  { id: 'remediation', icon: Wrench, label: 'Remediation Center' },
-  { id: 'reporting', icon: BarChart3, label: 'Reporting' },
+  {
+    id: 'remediation', icon: Wrench, label: 'Remediation Center',
+    sub: [
+      { label: 'Action Plan', icon: ClipboardList },
+      { label: 'AI Patch Generator', icon: Sparkles },
+      { label: 'Migration Roadmap', icon: Map },
+    ],
+  },
+  {
+    id: 'reporting', icon: BarChart3, label: 'Reporting',
+    sub: [
+      { label: 'Executive Reports', icon: FileText },
+      { label: 'Scheduled Reports', icon: Calendar },
+      { label: 'On-Demand Builder', icon: PenTool },
+    ],
+  },
+  { id: 'scan-console', icon: Terminal, label: 'Scan Console' },
 ];
 
 const sidebarVariants = {
