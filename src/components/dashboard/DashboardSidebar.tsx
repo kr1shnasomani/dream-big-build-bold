@@ -111,8 +111,8 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
       <Separator className="mx-1" />
 
       {/* Nav items */}
-      <ScrollArea className="flex-1 py-2">
-        <nav className="px-1.5 space-y-0.5">
+      <ScrollArea className="flex-1 py-2 overflow-visible">
+        <nav className="px-1.5 space-y-0.5 overflow-visible">
           {navItems.map((item) => {
             const isActive = activeItem === item.id;
             const isHovered = hoveredItem === item.id;
