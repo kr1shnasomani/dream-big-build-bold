@@ -161,7 +161,8 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
                       animate={{ opacity: 1, x: 0, scale: 1 }}
                       exit={{ opacity: 0, x: -8, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute left-full top-0 ml-1 z-50"
+                      className="absolute left-full top-0 ml-2 z-[9999]"
+                      style={{ pointerEvents: 'auto' }}
                     >
                       <div className="bg-popover rounded-xl shadow-xl border border-border overflow-hidden min-w-[180px] py-1">
                         <div className="px-3 py-1.5 text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
