@@ -97,7 +97,7 @@ const RainingLetters = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none select-none"
+      className="absolute inset-0 w-full h-full pointer-events-none select-none z-0"
     />
   );
 };
