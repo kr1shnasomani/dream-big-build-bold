@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { assets, getStatusLabel, getQScoreColor } from '@/data/demoData';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import AssetDetailPanel from '@/components/dashboard/AssetDetailPanel';
 import type { Asset } from '@/data/demoData';
 
 const AssetTable = () => {
@@ -80,93 +80,7 @@ const AssetTable = () => {
         </div>
       </div>
 
-      {/* Slide-over */}
-      <Sheet open={!!selected} onOpenChange={() => setSelected(null)}>
-        <SheetContent className="w-[400px] sm:max-w-[400px] overflow-y-auto">
-          {selected && (
-            <>
-              <SheetHeader>
-                <SheetTitle className="font-mono text-sm">{selected.domain}</SheetTitle>
-              </SheetHeader>
-
-              <div className="mt-6 space-y-6">
-                {/* Certification badge */}
-                <div className="flex justify-center">
-                  <div
-                    className="w-24 h-28 rounded-xl flex flex-col items-center justify-center border-2"
-                    style={{
-                      borderColor: getQScoreColor(selected.qScore),
-                      backgroundColor: `${getQScoreColor(selected.qScore)}10`,
-                    }}
-                  >
-                    <span className="text-2xl">🛡</span>
-                    <span className="font-mono text-xs font-bold mt-1" style={{ color: getQScoreColor(selected.qScore) }}>
-                      {getStatusLabel(selected.status)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Details */}
-                <div className="space-y-3">
-                  {[
-                    { label: 'URL', value: `https://${selected.domain}:${selected.port}` },
-                    { label: 'IP Address', value: selected.ip },
-                    { label: 'Type', value: selected.type.toUpperCase() },
-                    { label: 'TLS Version', value: selected.tls },
-                    { label: 'Cipher Suite', value: selected.cipher },
-                    { label: 'Key Exchange', value: selected.keyExchange },
-                    { label: 'Certificate', value: selected.certificate },
-                  ].map(d => (
-                    <div key={d.label} className="flex justify-between items-start">
-                      <span className="font-mono text-[10px] text-muted-foreground uppercase">{d.label}</span>
-                      <span className="font-mono text-xs text-foreground text-right max-w-[200px]">{d.value}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Q-Score gauge */}
-                <div className="flex flex-col items-center">
-                  <svg width="100" height="100" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" fill="none" stroke="hsl(var(--border-default))" strokeWidth="6" />
-                    <circle
-                      cx="50" cy="50" r="40" fill="none"
-                      stroke={getQScoreColor(selected.qScore)}
-                      strokeWidth="6"
-                      strokeDasharray={`${(selected.qScore / 100) * 251.3} 251.3`}
-                      strokeLinecap="round"
-                      transform="rotate(-90 50 50)"
-                    />
-                    <text x="50" y="54" textAnchor="middle" className="font-mono text-xl font-bold" fill={getQScoreColor(selected.qScore)}>
-                      {selected.qScore}
-                    </text>
-                  </svg>
-                  <span className="font-mono text-xs text-muted-foreground mt-1">Q-Score</span>
-                </div>
-
-                {/* HNDL */}
-                {selected.hndlYears !== null && (
-                  <div className="bg-sunken rounded-lg p-4">
-                    <span className="font-mono text-[10px] text-muted-foreground uppercase">HNDL Timeline</span>
-                    <p className="font-body text-sm text-foreground mt-1">
-                      Estimated decryptable in <strong className="font-mono text-status-critical">{selected.hndlYears} years</strong>
-                    </p>
-                  </div>
-                )}
-
-                {/* Actions */}
-                <div className="space-y-2">
-                  <button className="w-full font-body text-sm font-bold bg-accent-amber text-brand-primary py-2.5 rounded-lg">
-                    Generate Remediation
-                  </button>
-                  <button className="w-full font-body text-sm text-brand-primary border border-[hsl(var(--border-default))] py-2.5 rounded-lg">
-                    View Full CBOM
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-        </SheetContent>
-      </Sheet>
+      <AssetDetailPanel asset={selected} open={!!selected} onClose={() => setSelected(null)} />
     </>
   );
 };

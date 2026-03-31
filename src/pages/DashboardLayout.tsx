@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import GlassTabBar from '@/components/dashboard/GlassTabBar';
+import CommandPalette from '@/components/dashboard/CommandPalette';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ScanPromptBox } from '@/components/ui/ai-prompt-box';
 import RainingLetters from '@/components/ui/raining-letters';
@@ -16,7 +17,6 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Derive active nav from URL
   const pathname = location.pathname;
   const getActiveNav = () => {
     if (pathname.includes('/discovery')) return 'discovery';
@@ -32,7 +32,6 @@ const DashboardLayout = () => {
   };
 
   const handleNavClick = (item: string) => {
-    // Map sidebar item IDs to routes
     const routeMap: Record<string, string> = {
       'dashboard': '/dashboard',
       'discovery': '/dashboard/discovery',
@@ -64,7 +63,7 @@ const DashboardLayout = () => {
       'reporting:scheduled reports': '/dashboard/reporting/scheduled',
       'reporting:on-demand builder': '/dashboard/reporting/on-demand',
       'scan-console': '/dashboard/scan-console',
-      'settings': '/dashboard/settings',
+      'settings': '/dashboard/settings/scan-config',
     };
     const route = routeMap[item] || '/dashboard';
     navigate(route);
@@ -79,7 +78,6 @@ const DashboardLayout = () => {
     setHasScanned(true);
   };
 
-  // Show prompt only on /dashboard root and not scanned
   const isHome = pathname === '/dashboard';
   const showPrompt = isHome && !hasScanned;
 
@@ -87,6 +85,7 @@ const DashboardLayout = () => {
     <div className="flex flex-col min-h-screen bg-background relative">
       <DashboardTopBar hasScanned={hasScanned || !isHome} />
       <DashboardSidebar activeItem={getActiveNav()} onItemClick={handleNavClick} />
+      <CommandPalette />
 
       <div className="flex-1 overflow-y-auto pb-24 ml-[3.05rem]">
         <AnimatePresence mode="wait">
