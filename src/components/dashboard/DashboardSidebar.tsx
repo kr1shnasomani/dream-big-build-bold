@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
@@ -86,16 +86,37 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
   const [submenuPosition, setSubmenuPosition] = useState<{ top: number; left: number } | null>(null);
+  const isOverSubmenuRef = useRef(false);
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const openSubmenu = useMemo(
     () => navItems.find((item) => item.id === openSubmenuId && item.sub),
     [openSubmenuId],
   );
 
-  const closeSubmenu = () => {
+  const cancelCloseTimeout = useCallback(() => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  }, []);
+
+  const closeSubmenu = useCallback(() => {
     setOpenSubmenuId(null);
     setSubmenuPosition(null);
-  };
+    isOverSubmenuRef.current = false;
+    cancelCloseTimeout();
+  }, [cancelCloseTimeout]);
+
+  const scheduleClose = useCallback(() => {
+    cancelCloseTimeout();
+    closeTimeoutRef.current = setTimeout(() => {
+      if (!isOverSubmenuRef.current) {
+        closeSubmenu();
+        setIsCollapsed(true);
+      }
+    }, 150);
+  }, [closeSubmenu, cancelCloseTimeout]);
 
   const setSubmenuAnchor = (target: HTMLButtonElement, subItemsCount: number) => {
     const rect = target.getBoundingClientRect();
@@ -160,10 +181,16 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
       variants={sidebarVariants}
       animate={isCollapsed ? 'closed' : 'open'}
       transition={transitionProps}
-      onMouseEnter={() => setIsCollapsed(false)}
+      onMouseEnter={() => {
+        cancelCloseTimeout();
+        setIsCollapsed(false);
+      }}
       onMouseLeave={() => {
-        closeSubmenu();
-        setIsCollapsed(true);
+        if (openSubmenuId) {
+          scheduleClose();
+        } else {
+          setIsCollapsed(true);
+        }
       }}
       style={{
         background: 'hsl(var(--bg-surface))',
@@ -246,6 +273,14 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
             transition={{ duration: 0.18 }}
             className="fixed z-[9999]"
             style={{ top: submenuPosition.top, left: submenuPosition.left }}
+            onMouseEnter={() => {
+              isOverSubmenuRef.current = true;
+              cancelCloseTimeout();
+            }}
+            onMouseLeave={() => {
+              isOverSubmenuRef.current = false;
+              scheduleClose();
+            }}
           >
             <div
               data-sidebar-submenu
