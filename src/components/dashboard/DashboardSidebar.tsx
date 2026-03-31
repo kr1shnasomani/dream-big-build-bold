@@ -123,17 +123,20 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
     }
   };
 
+  // Close sidebar + submenu when clicking outside
   useEffect(() => {
-    if (!openSubmenuId) return;
-
     const handleOutsideClick = (event: globalThis.MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (target.closest('[data-sidebar-menu-button]') || target.closest('[data-sidebar-submenu]')) return;
+      if (target.closest('[data-sidebar-root]') || target.closest('[data-sidebar-submenu]')) return;
       closeSubmenu();
+      setIsCollapsed(true);
     };
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') closeSubmenu();
+      if (event.key === 'Escape') {
+        closeSubmenu();
+        setIsCollapsed(true);
+      }
     };
 
     window.addEventListener('mousedown', handleOutsideClick);
@@ -147,19 +150,7 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
       window.removeEventListener('resize', closeSubmenu);
       window.removeEventListener('scroll', closeSubmenu, true);
     };
-  }, [openSubmenuId]);
-
-  return (
-    <motion.div
-      className="fixed left-0 top-0 h-screen z-[60] flex flex-col overflow-visible"
-      variants={sidebarVariants}
-      animate={isCollapsed ? 'closed' : 'open'}
-      transition={transitionProps}
-      onMouseEnter={() => setIsCollapsed(false)}
-      onMouseLeave={() => {
-        if (openSubmenuId) return;
-        setIsCollapsed(true);
-      }}
+  }, []);
       style={{
         background: 'hsl(var(--bg-surface))',
         borderRight: '1px solid hsl(var(--border-default))',
