@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
@@ -97,7 +97,7 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
     });
   };
 
-  const handleNavItemClick = (item: NavItem, event: MouseEvent<HTMLButtonElement>) => {
+  const handleNavItemClick = (item: NavItem, event: ReactMouseEvent<HTMLButtonElement>) => {
     onItemClick(item.id);
 
     if (!item.sub) {
@@ -112,7 +112,7 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
   useEffect(() => {
     if (!openSubmenuId) return;
 
-    const handleOutsideClick = (event: MouseEvent) => {
+    const handleOutsideClick = (event: globalThis.MouseEvent) => {
       const target = event.target as HTMLElement;
       if (target.closest('[data-sidebar-menu-button]') || target.closest('[data-sidebar-submenu]')) return;
       closeSubmenu();
