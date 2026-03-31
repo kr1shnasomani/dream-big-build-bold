@@ -5,6 +5,7 @@ import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import GlassTabBar from '@/components/dashboard/GlassTabBar';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ScanPromptBox } from '@/components/ui/ai-prompt-box';
+import RainingLetters from '@/components/ui/raining-letters';
 import { GradientText } from '@/components/ui/gradient-text';
 
 const tabs = ['Overview', 'PQC Assessment', 'Remediation Plan', 'NIST Matrix', 'Tri-Mode', 'History', 'Classification', 'Regression'];
@@ -87,8 +88,9 @@ const DashboardLayout = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, y: -20 }}
-              className="flex flex-col items-center justify-center min-h-screen px-6"
+              className="relative flex flex-col items-center justify-center min-h-screen px-6"
             >
+              <RainingLetters />
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-center mb-8">
                 <GradientText as="h1" className="font-body font-bold text-3xl lg:text-5xl mb-4">Quantum Readiness Scanner</GradientText>
                 <p className="font-body text-base text-muted-foreground max-w-md mx-auto">Enter any domain to generate a complete Cryptographic Bill of Materials and quantum risk assessment.</p>
