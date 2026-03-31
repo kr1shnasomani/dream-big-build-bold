@@ -115,7 +115,7 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
         closeSubmenu();
         setIsCollapsed(true);
       }
-    }, 150);
+    }, 400);
   }, [closeSubmenu, cancelCloseTimeout]);
 
   const setSubmenuAnchor = (target: HTMLButtonElement, subItemsCount: number) => {
