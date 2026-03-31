@@ -16,13 +16,14 @@ const GlassTabBar = ({ tabs, activeTab, onTabChange, hasScanned, onScan }: Glass
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3">
       {/* True transparent glass bar */}
       <div
-        className="flex items-center gap-1 px-2 py-2 rounded-2xl backdrop-blur-2xl border border-white/[0.25]"
+        className="flex items-center gap-1 px-2 py-2 rounded-2xl"
         style={{
-          background: "rgba(255, 255, 255, 0.08)",
+          background: "transparent",
+          WebkitBackdropFilter: "blur(40px) saturate(1.8)",
+          backdropFilter: "blur(40px) saturate(1.8)",
           boxShadow:
-            "0 8px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(255,255,255,0.05)",
-          WebkitBackdropFilter: "blur(24px) saturate(1.8)",
-          backdropFilter: "blur(24px) saturate(1.8)",
+            "0 8px 32px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.15), inset 0 1px 0 rgba(255,255,255,0.2)",
+          borderRadius: "1rem",
         }}
       >
         {tabs.map((tab) => (

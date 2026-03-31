@@ -29,7 +29,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background relative">
+      {/* Floating top-right actions */}
       <DashboardTopBar hasScanned={hasScanned} />
 
       {/* Sidebar */}
@@ -45,7 +46,7 @@ const Dashboard = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, y: -20 }}
-              className="flex flex-col items-center justify-center min-h-[calc(100vh-56px)] px-6"
+              className="flex flex-col items-center justify-center min-h-screen px-6"
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -94,7 +95,7 @@ const Dashboard = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="p-5"
+              className="p-5 pt-14"
             >
               <KPIStrip />
 
