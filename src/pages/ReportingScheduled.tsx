@@ -46,6 +46,7 @@ const ReportingScheduled = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+      <SectionTabBar tabs={reportingTabs} />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-body text-2xl font-bold text-foreground">Scheduled Reports</h1>
