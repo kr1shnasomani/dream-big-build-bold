@@ -41,6 +41,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScanProvider>
+          <PinnedPagesProvider>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/dashboard" element={<DashboardLayout />}>
