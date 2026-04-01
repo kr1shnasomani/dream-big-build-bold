@@ -105,7 +105,7 @@ const AssetDiscovery = () => {
               </div>
               <div className="p-2.5 rounded-lg bg-[hsl(var(--status-critical)/0.08)] border border-[hsl(var(--status-critical)/0.2)]">
                 <p className="font-medium text-[hsl(var(--status-critical))]">2 domains expiring soon</p>
-                <p className="text-muted-foreground mt-0.5">staging.pnb.co.in, test-portal.pnb.co.in</p>
+                <p className="text-muted-foreground mt-0.5">staging.{d}, test-portal.{d}</p>
               </div>
               <div className="p-2.5 rounded-lg bg-[hsl(var(--status-safe)/0.08)] border border-[hsl(var(--status-safe)/0.2)]">
                 <p className="font-medium text-[hsl(var(--status-safe))]">9 domains confirmed safe</p>
