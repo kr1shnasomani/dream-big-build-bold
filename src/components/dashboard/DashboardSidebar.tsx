@@ -100,6 +100,7 @@ interface DashboardSidebarProps {
 }
 
 const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) => {
+  const { rootDomain } = useScanContext();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
   const [submenuPosition, setSubmenuPosition] = useState<{ top: number; left: number } | null>(null);
