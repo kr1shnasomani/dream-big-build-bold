@@ -3,10 +3,17 @@ import { Badge } from '@/components/ui/badge';
 import { assets } from '@/data/demoData';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { cn } from '@/lib/utils';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import { FileText, Lock, BarChart3 } from 'lucide-react';
+
+const pqcTabs = [
+  { id: 'compliance', label: 'Compliance', icon: FileText, route: '/dashboard/pqc/compliance' },
+  { id: 'hndl', label: 'HNDL Intel', icon: Lock, route: '/dashboard/pqc/hndl' },
+  { id: 'quantum-debt', label: 'Quantum Debt', icon: BarChart3, route: '/dashboard/pqc/quantum-debt' },
+];
 
 const hndlAssets = assets.filter(a => a.hndlBreakYear !== null).sort((a, b) => (a.hndlBreakYear || 0) - (b.hndlBreakYear || 0));
 
-// Timeline data
 const timelineData = Array.from({ length: 11 }, (_, i) => {
   const year = 2026 + i;
   return {
@@ -26,6 +33,7 @@ const riskColors: Record<string, string> = {
 const PQCHndl = () => (
   <div className="space-y-5">
     <h1 className="font-display text-2xl italic text-brand-primary">HNDL Intelligence</h1>
+    <SectionTabBar tabs={pqcTabs} />
 
     {/* Explanatory header */}
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)] border-l-4 border-l-[hsl(var(--status-critical))]">

@@ -41,6 +41,7 @@ const PQCQuantumDebt = () => {
   return (
     <div className="space-y-5">
       <h1 className="font-display text-2xl italic text-brand-primary">Quantum Debt Tracker</h1>
+      <SectionTabBar tabs={pqcTabs} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Hero gauge */}
