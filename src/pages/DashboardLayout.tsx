@@ -78,6 +78,7 @@ const DashboardLayout = () => {
   };
 
   const handleDemoScan = () => {
+    setScannedDomain('pnb.co.in');
     setHasScanned(true);
   };
 

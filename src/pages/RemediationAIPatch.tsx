@@ -139,7 +139,7 @@ const RemediationAIPatch = () => {
             <Terminal className="w-5 h-5 text-accent-amber" />
             <div>
               <p className="font-body text-sm font-medium text-foreground">Configuration patches are generated based on your scan results</p>
-              <p className="font-body text-xs text-muted-foreground">These patches are tailored to the vulnerabilities found in your PNB infrastructure. Review carefully before applying.</p>
+              <p className="font-body text-xs text-muted-foreground">These patches are tailored to the vulnerabilities found in your scanned infrastructure. Review carefully before applying.</p>
             </div>
           </div>
         </CardContent>
