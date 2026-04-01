@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Clock, Mail, Calendar, Trash2, Plus, CheckCircle2 } from 'lucide-react';
+import { useScanContext } from '@/contexts/ScanContext';
 
 interface ScheduledReport {
   id: string;
