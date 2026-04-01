@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Terminal, Play, RotateCcw, CheckCircle2, Loader2, Clock } from 'lucide-react';
+import { useScanContext } from '@/contexts/ScanContext';
 
 interface ScanPhase {
   id: number;
