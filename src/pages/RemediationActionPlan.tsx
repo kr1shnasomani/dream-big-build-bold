@@ -63,6 +63,7 @@ const RemediationActionPlan = () => {
         <h1 className="font-body text-2xl font-bold text-foreground">Remediation Action Plan</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions to improve your quantum readiness posture</p>
       </div>
+      <SectionTabBar tabs={remediationTabs} />
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
