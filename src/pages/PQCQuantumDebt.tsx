@@ -3,6 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { assets } from '@/data/demoData';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, Cell } from 'recharts';
 import { Slider } from '@/components/ui/slider';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import { FileText, Lock, BarChart3 } from 'lucide-react';
+
+const pqcTabs = [
+  { id: 'compliance', label: 'Compliance', icon: FileText, route: '/dashboard/pqc/compliance' },
+  { id: 'hndl', label: 'HNDL Intel', icon: Lock, route: '/dashboard/pqc/hndl' },
+  { id: 'quantum-debt', label: 'Quantum Debt', icon: BarChart3, route: '/dashboard/pqc/quantum-debt' },
+];
 
 const quantumDebtScore = 742;
 const monthlyGrowth = 42;
