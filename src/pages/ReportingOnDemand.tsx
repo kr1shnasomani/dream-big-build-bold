@@ -5,7 +5,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ChevronRight, ChevronLeft, FileText, Download, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, FileText, Download, CheckCircle2, TrendingUp, Clock, PenTool } from 'lucide-react';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const reportingTabs = [
+  { id: 'executive', label: 'Executive Reports', icon: TrendingUp, route: '/dashboard/reporting/executive' },
+  { id: 'scheduled', label: 'Scheduled Reports', icon: Clock, route: '/dashboard/reporting/scheduled' },
+  { id: 'on-demand', label: 'On-Demand Builder', icon: PenTool, route: '/dashboard/reporting/on-demand' },
+];
 
 const steps = ['Select Template', 'Choose Scope', 'Configure Options', 'Generate'];
 
