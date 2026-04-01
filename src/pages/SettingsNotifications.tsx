@@ -12,10 +12,12 @@ interface NotificationChannel {
 }
 
 const SettingsNotifications = () => {
+  const { rootDomain } = useScanContext();
+  const d = rootDomain || 'target.com';
   const [channels, setChannels] = useState<NotificationChannel[]>([
-    { id: 'email', label: 'Email', icon: Mail, enabled: true, target: 'admin@pnb.co.in' },
+    { id: 'email', label: 'Email', icon: Mail, enabled: true, target: `admin@${d}` },
     { id: 'slack', label: 'Slack', icon: MessageSquare, enabled: true, target: '#aegis-alerts' },
-    { id: 'webhook', label: 'Webhook', icon: Bell, enabled: false, target: 'https://hooks.pnb.co.in/aegis' },
+    { id: 'webhook', label: 'Webhook', icon: Bell, enabled: false, target: `https://hooks.${d}/aegis` },
   ]);
 
   const [criticalAlerts, setCriticalAlerts] = useState(true);
