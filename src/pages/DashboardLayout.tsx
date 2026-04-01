@@ -17,6 +17,7 @@ const DashboardLayout = () => {
   const [hasScanned, setHasScanned] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { setScannedDomain } = useScanContext();
 
   const pathname = location.pathname;
   const getActiveNav = () => {
