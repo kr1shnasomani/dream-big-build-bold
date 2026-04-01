@@ -31,8 +31,24 @@ const AssetInventory = () => {
 
   return (
     <div className="space-y-5">
+      <h1 className="font-display text-2xl italic text-brand-primary">Asset Inventory</h1>
+
+      {/* Filters + search/add on same row */}
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl italic text-brand-primary">Asset Inventory</h1>
+        <div className="flex items-center gap-4">
+          <div className="text-sm font-body"><span className="font-semibold text-foreground">{assets.length}</span> <span className="text-muted-foreground">total assets</span></div>
+          <div className="h-4 w-px bg-border" />
+          <div className="flex gap-1.5">
+            {filters.map(f => (
+              <button key={f.id} onClick={() => setFilter(f.id)} className={cn(
+                "px-2.5 py-1 rounded-full text-[11px] font-body transition-all",
+                filter === f.id ? "bg-brand-primary text-white" : "bg-[hsl(var(--bg-sunken))] text-muted-foreground hover:text-foreground"
+              )}>
+                {f.label} ({f.count})
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="flex items-center gap-2">
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
@@ -54,22 +70,6 @@ const AssetInventory = () => {
               </div>
             </SheetContent>
           </Sheet>
-        </div>
-      </div>
-
-      {/* Summary + filters */}
-      <div className="flex items-center gap-4">
-        <div className="text-sm font-body"><span className="font-semibold text-foreground">{assets.length}</span> <span className="text-muted-foreground">total assets</span></div>
-        <div className="h-4 w-px bg-border" />
-        <div className="flex gap-1.5">
-          {filters.map(f => (
-            <button key={f.id} onClick={() => setFilter(f.id)} className={cn(
-              "px-2.5 py-1 rounded-full text-[11px] font-body transition-all",
-              filter === f.id ? "bg-brand-primary text-white" : "bg-[hsl(var(--bg-sunken))] text-muted-foreground hover:text-foreground"
-            )}>
-              {f.label} ({f.count})
-            </button>
-          ))}
         </div>
       </div>
 

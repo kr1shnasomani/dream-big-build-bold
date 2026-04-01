@@ -60,11 +60,11 @@ const ReportingOnDemand = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
-      <SectionTabBar tabs={reportingTabs} />
       <div>
         <h1 className="font-body text-2xl font-bold text-foreground">On-Demand Report Builder</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Create custom reports by selecting templates, sections, and output format</p>
       </div>
+      <SectionTabBar tabs={reportingTabs} />
 
       {/* Stepper */}
       <div className="flex items-center gap-2">

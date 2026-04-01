@@ -106,11 +106,11 @@ const RemediationRoadmap = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
-      <SectionTabBar tabs={remediationTabs} />
       <div>
         <h1 className="font-body text-2xl font-bold text-foreground">Migration Roadmap</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">5-phase quantum-safe migration plan for {rootDomain || 'target'} infrastructure</p>
       </div>
+      <SectionTabBar tabs={remediationTabs} />
 
       {/* Overall Progress */}
       <Card className="bg-surface border-border">
