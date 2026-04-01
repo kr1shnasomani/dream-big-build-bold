@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useScanContext } from '@/contexts/ScanContext';
 import { Globe, Key, Server, Cpu, Share2, AlertTriangle, Search, Filter, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
