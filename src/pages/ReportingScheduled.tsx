@@ -46,12 +46,12 @@ const ReportingScheduled = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+      <div>
+        <h1 className="font-body text-2xl font-bold text-foreground">Scheduled Reports</h1>
+        <p className="font-body text-sm text-muted-foreground mt-1">Configure automated report generation and delivery</p>
+      </div>
       <SectionTabBar tabs={reportingTabs} />
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-body text-2xl font-bold text-foreground">Scheduled Reports</h1>
-          <p className="font-body text-sm text-muted-foreground mt-1">Configure automated report generation and delivery</p>
-        </div>
         <Button className="gap-1.5 text-xs bg-accent-amber text-brand-primary hover:brightness-105">
           <Plus className="w-3.5 h-3.5" /> New Schedule
         </Button>
