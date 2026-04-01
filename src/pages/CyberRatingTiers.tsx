@@ -47,6 +47,7 @@ const CyberRatingTiers = () => {
   return (
     <div className="space-y-5">
       <h1 className="font-display text-2xl italic text-brand-primary">Tier Classification</h1>
+      <SectionTabBar tabs={ratingTabs} />
 
       <div className="space-y-3">
         {tiers.map(t => {
