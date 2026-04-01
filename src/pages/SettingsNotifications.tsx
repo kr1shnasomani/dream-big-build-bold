@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useScanContext } from '@/contexts/ScanContext';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Bell, Mail, MessageSquare, AlertTriangle, Save } from 'lucide-react';

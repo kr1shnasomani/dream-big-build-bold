@@ -45,7 +45,7 @@ const AssetInventory = () => {
             <SheetContent>
               <SheetHeader><SheetTitle>Add New Asset</SheetTitle></SheetHeader>
               <div className="mt-6 space-y-4">
-                <div><label className="text-xs font-body font-medium text-muted-foreground">Asset Name</label><Input className="mt-1 text-xs" placeholder="e.g. portal.pnb.co.in" /></div>
+                <div><label className="text-xs font-body font-medium text-muted-foreground">Asset Name</label><Input className="mt-1 text-xs" placeholder="e.g. portal.example.com" /></div>
                 <div><label className="text-xs font-body font-medium text-muted-foreground">URL / Domain</label><Input className="mt-1 text-xs" placeholder="https://..." /></div>
                 <div><label className="text-xs font-body font-medium text-muted-foreground">Asset Type</label><select className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-xs"><option>Web App</option><option>API</option><option>VPN</option><option>Mail</option><option>Server</option></select></div>
                 <div><label className="text-xs font-body font-medium text-muted-foreground">Owner Team</label><Input className="mt-1 text-xs" placeholder="e.g. Digital Banking" /></div>

@@ -162,8 +162,8 @@ const AssetDiscovery = () => {
       {activeTab === 'ip' && (
         <div className="space-y-4">
           <div className="flex gap-3">
-            <Card className="flex-1 p-3 shadow-sm"><p className="text-[10px] text-muted-foreground font-body">CRITICAL FINDING</p><p className="text-xs font-body font-medium text-[hsl(var(--status-critical))] mt-1">Port 3389 open on staging.pnb.co.in — RDP accessible from internet</p></Card>
-            <Card className="flex-1 p-3 shadow-sm"><p className="text-[10px] text-muted-foreground font-body">ALERT</p><p className="text-xs font-body font-medium text-[hsl(var(--status-warn))] mt-1">Port 22 open on vpn.pnb.co.in — SSH exposure on internet-facing asset</p></Card>
+            <Card className="flex-1 p-3 shadow-sm"><p className="text-[10px] text-muted-foreground font-body">CRITICAL FINDING</p><p className="text-xs font-body font-medium text-[hsl(var(--status-critical))] mt-1">Port 3389 open on staging.{d} — RDP accessible from internet</p></Card>
+            <Card className="flex-1 p-3 shadow-sm"><p className="text-[10px] text-muted-foreground font-body">ALERT</p><p className="text-xs font-body font-medium text-[hsl(var(--status-warn))] mt-1">Port 22 open on vpn.{d} — SSH exposure on internet-facing asset</p></Card>
           </div>
           <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
             <CardContent className="p-0">
