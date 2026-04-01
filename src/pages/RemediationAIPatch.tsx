@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Copy, Check, Terminal, Server, Globe, Shield } from 'lucide-react';
+import { useScanContext } from '@/contexts/ScanContext';
 
 const patchConfigs: Record<string, { title: string; icon: React.ElementType; patches: { label: string; description: string; code: string }[] }> = {
   nginx: {
