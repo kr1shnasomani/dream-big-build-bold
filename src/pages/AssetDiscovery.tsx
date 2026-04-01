@@ -30,6 +30,9 @@ const AssetDiscovery = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'domains';
   const [search, setSearch] = useState('');
+  const { rootDomain } = useScanContext();
+  const d = rootDomain || 'target.com';
+  const [search, setSearch] = useState('');
 
   const setTab = (tab: string) => setSearchParams({ tab });
 
