@@ -148,7 +148,7 @@ const GlassTabBar = ({ hasScanned, onScan }: GlassTabBarProps) => {
                   }}
                   className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-foreground/10 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover/pin:opacity-100 transition-opacity hover:bg-foreground/20"
                 >
-                  <X className="w-2 h-2 text-foreground/20" />
+                  <X className="w-2 h-2 text-foreground/120" />
                 </button>
               </motion.div>
             );
