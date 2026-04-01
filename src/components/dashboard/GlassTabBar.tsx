@@ -88,12 +88,12 @@ const GlassTabBar = ({ hasScanned, onScan }: GlassTabBarProps) => {
                   className={cn(
                     "relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-body whitespace-nowrap transition-all duration-300",
                     isActive
-                      ? "text-accent-amber font-semibold"
-                      : "text-foreground/70 hover:text-foreground font-medium"
+                      ? "text-brand-primary font-semibold"
+                      : "text-foreground/60 hover:text-foreground font-medium"
                   )}
                   style={isActive ? {
-                    background: "linear-gradient(135deg, rgba(232,160,32,0.15) 0%, rgba(232,160,32,0.08) 100%)",
-                    boxShadow: "0 0 16px rgba(232,160,32,0.15), inset 0 0.5px 0 rgba(255,255,255,0.15)",
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.35) 100%)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5)",
                   } : {
                     background: "transparent",
                   }}
