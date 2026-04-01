@@ -4,7 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { FileText, Download, Calendar, Shield, TrendingUp, AlertTriangle } from 'lucide-react';
+import { FileText, Download, Calendar, Shield, TrendingUp, AlertTriangle, Clock, PenTool } from 'lucide-react';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const reportingTabs = [
+  { id: 'executive', label: 'Executive Reports', icon: TrendingUp, route: '/dashboard/reporting/executive' },
+  { id: 'scheduled', label: 'Scheduled Reports', icon: Clock, route: '/dashboard/reporting/scheduled' },
+  { id: 'on-demand', label: 'On-Demand Builder', icon: PenTool, route: '/dashboard/reporting/on-demand' },
+];
 
 const reportTemplates = [
   {
