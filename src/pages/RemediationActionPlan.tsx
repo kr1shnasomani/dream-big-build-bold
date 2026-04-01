@@ -6,8 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, Clock, AlertTriangle, ArrowUpRight, Filter } from 'lucide-react';
+import { CheckCircle2, Clock, AlertTriangle, ArrowUpRight, Filter, ClipboardList, Sparkles, Map } from 'lucide-react';
 import { assets } from '@/data/demoData';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const remediationTabs = [
+  { id: 'action-plan', label: 'Action Plan', icon: ClipboardList, route: '/dashboard/remediation/action-plan' },
+  { id: 'ai-patch', label: 'AI Patch Generator', icon: Sparkles, route: '/dashboard/remediation/ai-patch' },
+  { id: 'roadmap', label: 'Migration Roadmap', icon: Map, route: '/dashboard/remediation/roadmap' },
+];
 
 const priorityColor: Record<string, string> = {
   P1: 'bg-status-critical text-white',
