@@ -6,8 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2, Clock, AlertTriangle, ArrowUpRight, Filter } from 'lucide-react';
+import { CheckCircle2, Clock, AlertTriangle, ArrowUpRight, Filter, ClipboardList, Sparkles, Map } from 'lucide-react';
 import { assets } from '@/data/demoData';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const remediationTabs = [
+  { id: 'action-plan', label: 'Action Plan', icon: ClipboardList, route: '/dashboard/remediation/action-plan' },
+  { id: 'ai-patch', label: 'AI Patch Generator', icon: Sparkles, route: '/dashboard/remediation/ai-patch' },
+  { id: 'roadmap', label: 'Migration Roadmap', icon: Map, route: '/dashboard/remediation/roadmap' },
+];
 
 const priorityColor: Record<string, string> = {
   P1: 'bg-status-critical text-white',
@@ -52,6 +59,7 @@ const RemediationActionPlan = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+      <SectionTabBar tabs={remediationTabs} />
       <div>
         <h1 className="font-body text-2xl font-bold text-foreground">Remediation Action Plan</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions to improve your quantum readiness posture</p>

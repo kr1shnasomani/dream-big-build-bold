@@ -5,8 +5,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Copy, Check, Terminal, Server, Globe, Shield } from 'lucide-react';
+import { Copy, Check, Terminal, Server, Globe, Shield, ClipboardList, Sparkles, Map } from 'lucide-react';
 import { useScanContext } from '@/contexts/ScanContext';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const remediationTabs = [
+  { id: 'action-plan', label: 'Action Plan', icon: ClipboardList, route: '/dashboard/remediation/action-plan' },
+  { id: 'ai-patch', label: 'AI Patch Generator', icon: Sparkles, route: '/dashboard/remediation/ai-patch' },
+  { id: 'roadmap', label: 'Migration Roadmap', icon: Map, route: '/dashboard/remediation/roadmap' },
+];
 
 const patchConfigs: Record<string, { title: string; icon: React.ElementType; patches: { label: string; description: string; code: string }[] }> = {
   nginx: {
@@ -128,6 +135,7 @@ const RemediationAIPatch = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+      <SectionTabBar tabs={remediationTabs} />
       <div>
         <h1 className="font-body text-2xl font-bold text-foreground">AI Patch Generator</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Auto-generated configuration patches for PQC migration across your infrastructure</p>

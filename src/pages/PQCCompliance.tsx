@@ -1,6 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { assets, getStatusColor, getTierFromAsset } from '@/data/demoData';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import { FileText, Lock, BarChart3 } from 'lucide-react';
+
+const pqcTabs = [
+  { id: 'compliance', label: 'Compliance', icon: FileText, route: '/dashboard/pqc/compliance' },
+  { id: 'hndl', label: 'HNDL Intel', icon: Lock, route: '/dashboard/pqc/hndl' },
+  { id: 'quantum-debt', label: 'Quantum Debt', icon: BarChart3, route: '/dashboard/pqc/quantum-debt' },
+];
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { cn } from '@/lib/utils';
 
@@ -44,6 +52,7 @@ const tierCriteria = [
 const PQCCompliance = () => (
   <div className="space-y-5">
     <h1 className="font-display text-2xl italic text-brand-primary">PQC Compliance Dashboard</h1>
+    <SectionTabBar tabs={pqcTabs} />
 
     {/* Top bar */}
     <div className="flex gap-3">

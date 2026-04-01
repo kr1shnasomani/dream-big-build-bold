@@ -34,36 +34,37 @@ const GlassTabBar = ({ hasScanned, onScan }: GlassTabBarProps) => {
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3">
       <div
-        className="relative flex items-center gap-1 px-2.5 py-2.5 rounded-[1.25rem]"
+        className="relative flex items-center gap-1 px-3 py-2.5 rounded-[1.5rem]"
         style={{
-          /* Frosted glass base */
-          background: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%)",
-          WebkitBackdropFilter: "blur(40px) saturate(1.8)",
-          backdropFilter: "blur(40px) saturate(1.8)",
-          /* Multi-layer glass border for refraction effect */
+          /* Apple-style frosted glass — lighter, more translucent */
+          background: "linear-gradient(135deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.20) 40%, rgba(255,255,255,0.30) 100%)",
+          WebkitBackdropFilter: "blur(60px) saturate(2.0) brightness(1.1)",
+          backdropFilter: "blur(60px) saturate(2.0) brightness(1.1)",
+          /* Soft outer glow + inner light edges */
           boxShadow: `
-            inset 0 0.5px 0 0 rgba(255,255,255,0.25),
-            inset 0 -0.5px 0 0 rgba(255,255,255,0.05),
-            inset 0.5px 0 0 0 rgba(255,255,255,0.12),
-            inset -0.5px 0 0 0 rgba(255,255,255,0.12),
-            0 8px 32px -8px rgba(0,0,0,0.25),
-            0 2px 8px -2px rgba(0,0,0,0.15),
-            0 0 0 0.5px rgba(255,255,255,0.1)
+            inset 0 1px 0 0 rgba(255,255,255,0.6),
+            inset 0 -0.5px 0 0 rgba(255,255,255,0.1),
+            inset 1px 0 0 0 rgba(255,255,255,0.25),
+            inset -1px 0 0 0 rgba(255,255,255,0.25),
+            0 8px 40px -8px rgba(0,0,0,0.12),
+            0 2px 12px -4px rgba(0,0,0,0.08),
+            0 0 0 0.5px rgba(255,255,255,0.35)
           `,
+          border: "0.5px solid rgba(255,255,255,0.35)",
         }}
       >
-        {/* Top highlight for light refraction */}
+        {/* Top edge highlight — Apple-style light refraction */}
         <div
-          className="absolute inset-x-3 top-0 h-px rounded-full pointer-events-none"
+          className="absolute inset-x-4 top-0 h-[0.5px] rounded-full pointer-events-none"
           style={{
-            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.4) 70%, transparent)",
+            background: "linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.7) 25%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.7) 75%, transparent 95%)",
           }}
         />
-        {/* Specular highlight blob */}
+        {/* Soft inner glow at top */}
         <div
-          className="absolute top-1 left-1/4 w-1/2 h-3 rounded-full pointer-events-none opacity-30"
+          className="absolute top-0 left-1/4 w-1/2 h-6 rounded-full pointer-events-none opacity-20"
           style={{
-            background: "radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse at center top, rgba(255,255,255,0.8) 0%, transparent 70%)",
           }}
         />
 
@@ -87,12 +88,12 @@ const GlassTabBar = ({ hasScanned, onScan }: GlassTabBarProps) => {
                   className={cn(
                     "relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-body whitespace-nowrap transition-all duration-300",
                     isActive
-                      ? "text-accent-amber font-semibold"
-                      : "text-foreground/70 hover:text-foreground font-medium"
+                      ? "text-brand-primary font-semibold"
+                      : "text-foreground/60 hover:text-foreground font-medium"
                   )}
                   style={isActive ? {
-                    background: "linear-gradient(135deg, rgba(232,160,32,0.15) 0%, rgba(232,160,32,0.08) 100%)",
-                    boxShadow: "0 0 16px rgba(232,160,32,0.15), inset 0 0.5px 0 rgba(255,255,255,0.15)",
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.35) 100%)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5)",
                   } : {
                     background: "transparent",
                   }}
@@ -113,7 +114,7 @@ const GlassTabBar = ({ hasScanned, onScan }: GlassTabBarProps) => {
         </AnimatePresence>
 
         {pinnedPages.length > 0 && (
-          <div className="mx-1 w-px h-5 rounded-full" style={{ background: "rgba(255,255,255,0.12)" }} />
+          <div className="mx-1.5 w-px h-5 rounded-full" style={{ background: "rgba(0,0,0,0.08)" }} />
         )}
 
         <ScanPromptBox compact onScan={onScan} />

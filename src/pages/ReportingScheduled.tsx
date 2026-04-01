@@ -6,8 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Clock, Mail, Calendar, Trash2, Plus, CheckCircle2 } from 'lucide-react';
+import { Clock, Mail, Calendar, Trash2, Plus, CheckCircle2, TrendingUp, PenTool } from 'lucide-react';
 import { useScanContext } from '@/contexts/ScanContext';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const reportingTabs = [
+  { id: 'executive', label: 'Executive Reports', icon: TrendingUp, route: '/dashboard/reporting/executive' },
+  { id: 'scheduled', label: 'Scheduled Reports', icon: Clock, route: '/dashboard/reporting/scheduled' },
+  { id: 'on-demand', label: 'On-Demand Builder', icon: PenTool, route: '/dashboard/reporting/on-demand' },
+];
 
 interface ScheduledReport {
   id: string;
@@ -39,6 +46,7 @@ const ReportingScheduled = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+      <SectionTabBar tabs={reportingTabs} />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-body text-2xl font-bold text-foreground">Scheduled Reports</h1>

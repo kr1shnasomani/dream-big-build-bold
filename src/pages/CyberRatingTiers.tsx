@@ -2,9 +2,16 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, ChevronRight, Shield, AlertTriangle, XCircle } from 'lucide-react';
+import { ChevronDown, ChevronRight, Shield, AlertTriangle, XCircle, Star, FileText } from 'lucide-react';
 import { assets, getTierFromAsset } from '@/data/demoData';
 import { cn } from '@/lib/utils';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const ratingTabs = [
+  { id: 'enterprise', label: 'Enterprise Score', icon: Star, route: '/dashboard/rating/enterprise' },
+  { id: 'per-asset', label: 'Per-Asset', icon: FileText, route: '/dashboard/rating/per-asset' },
+  { id: 'tiers', label: 'Tier Classification', icon: Shield, route: '/dashboard/rating/tiers' },
+];
 
 const tiers = [
   {
@@ -40,6 +47,7 @@ const CyberRatingTiers = () => {
   return (
     <div className="space-y-5">
       <h1 className="font-display text-2xl italic text-brand-primary">Tier Classification</h1>
+      <SectionTabBar tabs={ratingTabs} />
 
       <div className="space-y-3">
         {tiers.map(t => {

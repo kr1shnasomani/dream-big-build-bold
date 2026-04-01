@@ -3,10 +3,18 @@ import { Badge } from '@/components/ui/badge';
 import { assets, getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset } from '@/data/demoData';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Info } from 'lucide-react';
+import { Info, Star, FileText, Shield } from 'lucide-react';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const ratingTabs = [
+  { id: 'enterprise', label: 'Enterprise Score', icon: Star, route: '/dashboard/rating/enterprise' },
+  { id: 'per-asset', label: 'Per-Asset', icon: FileText, route: '/dashboard/rating/per-asset' },
+  { id: 'tiers', label: 'Tier Classification', icon: Shield, route: '/dashboard/rating/tiers' },
+];
 
 const CyberRatingPerAsset = () => (
   <div className="space-y-5">
+    <SectionTabBar tabs={ratingTabs} />
     <div className="flex items-center gap-3">
       <h1 className="font-display text-2xl italic text-brand-primary">Per-Asset Ratings</h1>
       <Tooltip>

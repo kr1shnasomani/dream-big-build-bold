@@ -5,7 +5,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ChevronRight, ChevronLeft, FileText, Download, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, FileText, Download, CheckCircle2, TrendingUp, Clock, PenTool } from 'lucide-react';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const reportingTabs = [
+  { id: 'executive', label: 'Executive Reports', icon: TrendingUp, route: '/dashboard/reporting/executive' },
+  { id: 'scheduled', label: 'Scheduled Reports', icon: Clock, route: '/dashboard/reporting/scheduled' },
+  { id: 'on-demand', label: 'On-Demand Builder', icon: PenTool, route: '/dashboard/reporting/on-demand' },
+];
 
 const steps = ['Select Template', 'Choose Scope', 'Configure Options', 'Generate'];
 
@@ -53,6 +60,7 @@ const ReportingOnDemand = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+      <SectionTabBar tabs={reportingTabs} />
       <div>
         <h1 className="font-body text-2xl font-bold text-foreground">On-Demand Report Builder</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Create custom reports by selecting templates, sections, and output format</p>

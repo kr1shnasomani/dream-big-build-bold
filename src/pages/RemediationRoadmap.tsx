@@ -1,8 +1,15 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, Circle, Clock, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Circle, Clock, ArrowRight, ClipboardList, Sparkles, Map } from 'lucide-react';
 import { useScanContext } from '@/contexts/ScanContext';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+
+const remediationTabs = [
+  { id: 'action-plan', label: 'Action Plan', icon: ClipboardList, route: '/dashboard/remediation/action-plan' },
+  { id: 'ai-patch', label: 'AI Patch Generator', icon: Sparkles, route: '/dashboard/remediation/ai-patch' },
+  { id: 'roadmap', label: 'Migration Roadmap', icon: Map, route: '/dashboard/remediation/roadmap' },
+];
 
 interface Phase {
   id: number;
@@ -99,6 +106,7 @@ const RemediationRoadmap = () => {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+      <SectionTabBar tabs={remediationTabs} />
       <div>
         <h1 className="font-body text-2xl font-bold text-foreground">Migration Roadmap</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">5-phase quantum-safe migration plan for {rootDomain || 'target'} infrastructure</p>

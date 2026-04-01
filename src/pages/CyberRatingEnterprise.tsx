@@ -2,6 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { assets, enterpriseScore, maxScore, getTierLabel } from '@/data/demoData';
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import { Star, FileText, Shield } from 'lucide-react';
+
+const ratingTabs = [
+  { id: 'enterprise', label: 'Enterprise Score', icon: Star, route: '/dashboard/rating/enterprise' },
+  { id: 'per-asset', label: 'Per-Asset', icon: FileText, route: '/dashboard/rating/per-asset' },
+  { id: 'tiers', label: 'Tier Classification', icon: Shield, route: '/dashboard/rating/tiers' },
+];
 
 const avgDims = {
   'TLS Version': Math.round(assets.reduce((s, a) => s + a.dimensionScores.tls_version, 0) / assets.length),
@@ -33,6 +41,7 @@ const tierColor = enterpriseScore >= 700 ? 'hsl(var(--status-safe))' : enterpris
 const CyberRatingEnterprise = () => (
   <div className="space-y-5">
     <h1 className="font-display text-2xl italic text-brand-primary">Enterprise Cyber Rating</h1>
+    <SectionTabBar tabs={ratingTabs} />
 
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-5">
       {/* Hero score */}
