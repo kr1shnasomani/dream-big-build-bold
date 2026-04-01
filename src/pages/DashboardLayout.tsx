@@ -10,10 +10,7 @@ import { ScanPromptBox } from '@/components/ui/ai-prompt-box';
 import RainingLetters from '@/components/ui/raining-letters';
 import { GradientText } from '@/components/ui/gradient-text';
 
-const tabs = ['Overview', 'PQC Assessment', 'Remediation Plan', 'NIST Matrix', 'Tri-Mode', 'History', 'Classification', 'Regression'];
-
 const DashboardLayout = () => {
-  const [activeTab, setActiveTab] = useState('Overview');
   const [hasScanned, setHasScanned] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -123,7 +120,7 @@ const DashboardLayout = () => {
         </AnimatePresence>
       </div>
 
-      <GlassTabBar tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} hasScanned={hasScanned || !isHome} onScan={handleScan} />
+      <GlassTabBar hasScanned={hasScanned || !isHome} onScan={handleScan} />
     </div>
   );
 };

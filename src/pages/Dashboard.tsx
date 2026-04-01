@@ -119,9 +119,6 @@ const Dashboard = () => {
 
       {/* Glass tab bar (bottom center) - only after scan */}
       <GlassTabBar
-        tabs={tabs}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
         hasScanned={hasScanned}
         onScan={handleScan}
       />

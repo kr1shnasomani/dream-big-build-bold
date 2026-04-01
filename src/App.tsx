@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScanProvider } from "@/contexts/ScanContext";
+import { PinnedPagesProvider } from "@/contexts/PinnedPagesContext";
 import Index from "./pages/Index.tsx";
 import DashboardLayout from "./pages/DashboardLayout.tsx";
 import DashboardHome from "./pages/DashboardHome.tsx";
@@ -40,6 +41,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScanProvider>
+          <PinnedPagesProvider>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/dashboard" element={<DashboardLayout />}>
@@ -71,6 +73,7 @@ const App = () => (
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
+        </PinnedPagesProvider>
         </ScanProvider>
       </BrowserRouter>
     </TooltipProvider>
