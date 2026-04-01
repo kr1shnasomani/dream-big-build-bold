@@ -73,6 +73,7 @@ const DashboardLayout = () => {
 
   const handleScan = (domain: string) => {
     console.log('Scanning:', domain);
+    setScannedDomain(domain);
     setHasScanned(true);
   };
 
