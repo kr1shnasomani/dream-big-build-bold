@@ -52,6 +52,7 @@ const tierCriteria = [
 const PQCCompliance = () => (
   <div className="space-y-5">
     <h1 className="font-display text-2xl italic text-brand-primary">PQC Compliance Dashboard</h1>
+    <SectionTabBar tabs={pqcTabs} />
 
     {/* Top bar */}
     <div className="flex gap-3">
