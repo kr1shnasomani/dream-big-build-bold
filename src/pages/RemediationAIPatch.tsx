@@ -136,7 +136,7 @@ const RemediationAIPatch = () => {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
       <div>
-        <h1 className="font-body text-2xl font-bold text-foreground">AI Patch Generator</h1>
+        <h1 className="font-display text-2xl italic text-brand-primary">AI Patch Generator</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Auto-generated configuration patches for PQC migration across your infrastructure</p>
       </div>
       <SectionTabBar tabs={remediationTabs} />
