@@ -1,80 +1,122 @@
 import { cn } from "@/lib/utils";
 import { ScanPromptBox } from "@/components/ui/ai-prompt-box";
 import { useNavigate, useLocation } from "react-router-dom";
+import { usePinnedPages } from "@/contexts/PinnedPagesContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+import {
+  Home, Search, Package, ClipboardList, ShieldCheck,
+  Star, Wrench, BarChart3, Settings,
+  Globe, Key, FileText, Server, Cpu, Lock,
+  Sparkles, Map, Calendar, PenTool, Terminal, Shield,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+const iconMap: Record<string, LucideIcon> = {
+  Home, Search, Package, ClipboardList, ShieldCheck,
+  Star, Wrench, BarChart3, Settings,
+  Globe, Key, FileText, Server, Cpu, Lock,
+  Sparkles, Map, Calendar, PenTool, Terminal, Shield,
+};
 
 interface GlassTabBarProps {
-  tabs: string[];
-  activeTab: string;
-  onTabChange: (tab: string) => void;
   hasScanned: boolean;
   onScan?: (domain: string) => void;
 }
 
-const tabRouteMap: Record<string, string> = {
-  'Overview': '/dashboard',
-  'PQC Assessment': '/dashboard/pqc/compliance',
-  'Remediation Plan': '/dashboard/remediation/action-plan',
-  'NIST Matrix': '/dashboard/cbom',
-  'Tri-Mode': '/dashboard/rating/enterprise',
-  'History': '/dashboard/reporting/executive',
-  'Classification': '/dashboard/rating/tiers',
-  'Regression': '/dashboard/pqc/quantum-debt',
-};
-
-const GlassTabBar = ({ tabs, activeTab, onTabChange, hasScanned, onScan }: GlassTabBarProps) => {
+const GlassTabBar = ({ hasScanned, onScan }: GlassTabBarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { pinnedPages, removePin } = usePinnedPages();
 
   if (!hasScanned) return null;
-
-  // Derive active tab from current route
-  const routeTabMap = Object.entries(tabRouteMap).reduce((acc, [tab, route]) => {
-    acc[route] = tab;
-    return acc;
-  }, {} as Record<string, string>);
-
-  const currentTab = routeTabMap[location.pathname] || activeTab;
-
-  const handleTabClick = (tab: string) => {
-    onTabChange(tab);
-    const route = tabRouteMap[tab];
-    if (route) {
-      navigate(route);
-    }
-  };
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3">
       <div
-        className="flex items-center gap-1 px-2 py-2 rounded-2xl"
+        className="relative flex items-center gap-1 px-2.5 py-2.5 rounded-[1.25rem]"
         style={{
-          background: "rgba(255, 255, 255, 0.03)",
-          WebkitBackdropFilter: "blur(2px)",
-          backdropFilter: "blur(2px)",
-          boxShadow: "inset 0 0 0 0.5px rgba(255,255,255,0.08)",
-          borderRadius: "1rem",
+          /* Frosted glass base */
+          background: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%)",
+          WebkitBackdropFilter: "blur(40px) saturate(1.8)",
+          backdropFilter: "blur(40px) saturate(1.8)",
+          /* Multi-layer glass border for refraction effect */
+          boxShadow: `
+            inset 0 0.5px 0 0 rgba(255,255,255,0.25),
+            inset 0 -0.5px 0 0 rgba(255,255,255,0.05),
+            inset 0.5px 0 0 0 rgba(255,255,255,0.12),
+            inset -0.5px 0 0 0 rgba(255,255,255,0.12),
+            0 8px 32px -8px rgba(0,0,0,0.25),
+            0 2px 8px -2px rgba(0,0,0,0.15),
+            0 0 0 0.5px rgba(255,255,255,0.1)
+          `,
         }}
       >
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => handleTabClick(tab)}
-            className={cn(
-              "px-3 py-1.5 rounded-xl text-xs font-body whitespace-nowrap transition-all duration-200",
-              currentTab === tab
-                ? "bg-brand-primary/80 text-accent-amber font-semibold shadow-[0_0_12px_rgba(232,160,32,0.2)]"
-                : "text-foreground/80 hover:text-foreground font-medium hover:bg-black/[0.04]"
-            )}
-          >
-            {tab}
-          </button>
-        ))}
+        {/* Top highlight for light refraction */}
+        <div
+          className="absolute inset-x-3 top-0 h-px rounded-full pointer-events-none"
+          style={{
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.4) 70%, transparent)",
+          }}
+        />
+        {/* Specular highlight blob */}
+        <div
+          className="absolute top-1 left-1/4 w-1/2 h-3 rounded-full pointer-events-none opacity-30"
+          style={{
+            background: "radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 70%)",
+          }}
+        />
 
-        {hasScanned && (
-          <div className="ml-1 border-l border-black/10 pl-2">
-            <ScanPromptBox compact onScan={onScan} />
-          </div>
+        <AnimatePresence mode="popLayout">
+          {pinnedPages.map((page) => {
+            const isActive = location.pathname === page.route || location.pathname.startsWith(page.route + '/');
+            const IconComponent = iconMap[page.icon] || Home;
+
+            return (
+              <motion.div
+                key={page.id}
+                layout
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.7 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                className="relative group/pin"
+              >
+                <button
+                  onClick={() => navigate(page.route)}
+                  className={cn(
+                    "relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-body whitespace-nowrap transition-all duration-300",
+                    isActive
+                      ? "text-accent-amber font-semibold"
+                      : "text-foreground/70 hover:text-foreground font-medium"
+                  )}
+                  style={isActive ? {
+                    background: "linear-gradient(135deg, rgba(232,160,32,0.15) 0%, rgba(232,160,32,0.08) 100%)",
+                    boxShadow: "0 0 16px rgba(232,160,32,0.15), inset 0 0.5px 0 rgba(255,255,255,0.15)",
+                  } : {
+                    background: "transparent",
+                  }}
+                >
+                  <IconComponent className="w-3.5 h-3.5" />
+                  {page.label}
+                </button>
+                {/* Remove pin button */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); removePin(page.id); }}
+                  className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-foreground/10 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover/pin:opacity-100 transition-opacity hover:bg-foreground/20"
+                >
+                  <X className="w-2 h-2 text-foreground/60" />
+                </button>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+
+        {pinnedPages.length > 0 && (
+          <div className="mx-1 w-px h-5 rounded-full" style={{ background: "rgba(255,255,255,0.12)" }} />
         )}
+
+        <ScanPromptBox compact onScan={onScan} />
       </div>
     </div>
   );
