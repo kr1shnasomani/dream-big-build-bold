@@ -19,9 +19,19 @@ const tlsData = Object.entries(tlsVersionDistribution).map(([k, v]) => ({ name: 
 
 const COLORS = ['hsl(var(--status-safe))', 'hsl(var(--accent-amber))', 'hsl(var(--status-critical))', 'hsl(210, 70%, 50%)'];
 
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import { FileText, Cpu, Package } from 'lucide-react';
+
+const cbomTabs = [
+  { id: 'overview', label: 'Overview', icon: FileText, route: '/dashboard/cbom' },
+  { id: 'per-asset', label: 'Per-Asset', icon: Cpu, route: '/dashboard/cbom/per-asset' },
+  { id: 'export', label: 'Export Center', icon: Package, route: '/dashboard/cbom/export' },
+];
+
 const CBOMOverview = () => (
   <div className="space-y-5">
     <h1 className="font-display text-2xl italic text-brand-primary">Cryptographic Bill of Materials</h1>
+    <SectionTabBar tabs={cbomTabs} />
 
     {/* KPI cards */}
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">

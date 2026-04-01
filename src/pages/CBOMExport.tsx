@@ -10,8 +10,18 @@ const formats = [
   { icon: Globe, title: 'HTML Report', desc: 'Interactive shareable report — no software needed', ext: '.html' },
 ];
 
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import { FileText as FileTextIcon, Cpu, Package } from 'lucide-react';
+
+const cbomTabs = [
+  { id: 'overview', label: 'Overview', icon: FileTextIcon, route: '/dashboard/cbom' },
+  { id: 'per-asset', label: 'Per-Asset', icon: Cpu, route: '/dashboard/cbom/per-asset' },
+  { id: 'export', label: 'Export Center', icon: Package, route: '/dashboard/cbom/export' },
+];
+
 const CBOMExport = () => (
   <div className="space-y-5">
+    <SectionTabBar tabs={cbomTabs} />
     <h1 className="font-display text-2xl italic text-brand-primary">CBOM Export Center</h1>
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

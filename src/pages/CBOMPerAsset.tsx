@@ -6,12 +6,22 @@ import { ChevronDown, ChevronRight, AlertTriangle, Shield, Check } from 'lucide-
 import { assets } from '@/data/demoData';
 import { cn } from '@/lib/utils';
 
+import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import { FileText, Cpu, Package } from 'lucide-react';
+
+const cbomTabs = [
+  { id: 'overview', label: 'Overview', icon: FileText, route: '/dashboard/cbom' },
+  { id: 'per-asset', label: 'Per-Asset', icon: Cpu, route: '/dashboard/cbom/per-asset' },
+  { id: 'export', label: 'Export Center', icon: Package, route: '/dashboard/cbom/export' },
+];
+
 const CBOMPerAsset = () => {
   const [expanded, setExpanded] = useState<string[]>([]);
   const toggle = (id: string) => setExpanded(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
   return (
     <div className="space-y-5">
+      <SectionTabBar tabs={cbomTabs} />
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl italic text-brand-primary">Per-Asset CBOM</h1>
         <Button variant="outline" size="sm" className="text-xs">Export All CycloneDX</Button>
