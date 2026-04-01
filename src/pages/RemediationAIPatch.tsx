@@ -45,14 +45,14 @@ ssl_ecdh_curve X25519MLKEM768:X25519:secp384r1;
         label: 'Certificate Upgrade to ECDSA',
         description: 'Replace RSA-2048 certificates with ECDSA P-384',
         code: `# Generate ECDSA P-384 key and CSR
-openssl ecparam -genkey -name secp384r1 -out /etc/ssl/private/pnb-ecdsa.key
-openssl req -new -key /etc/ssl/private/pnb-ecdsa.key \\
-  -out /etc/ssl/certs/pnb-ecdsa.csr \\
-  -subj "/CN=*.pnb.co.in/O=Punjab National Bank/C=IN"
+openssl ecparam -genkey -name secp384r1 -out /etc/ssl/private/target-ecdsa.key
+openssl req -new -key /etc/ssl/private/target-ecdsa.key \\
+  -out /etc/ssl/certs/target-ecdsa.csr \\
+  -subj "/CN=*.{DOMAIN}/O={ORG}/C=XX"
 
 # nginx config
-ssl_certificate /etc/ssl/certs/pnb-ecdsa-fullchain.pem;
-ssl_certificate_key /etc/ssl/private/pnb-ecdsa.key;`,
+ssl_certificate /etc/ssl/certs/target-ecdsa-fullchain.pem;
+ssl_certificate_key /etc/ssl/private/target-ecdsa.key;`,
       },
     ],
   },
