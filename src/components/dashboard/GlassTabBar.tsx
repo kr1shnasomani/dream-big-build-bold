@@ -114,7 +114,7 @@ const GlassTabBar = ({ hasScanned, onScan }: GlassTabBarProps) => {
         </AnimatePresence>
 
         {pinnedPages.length > 0 && (
-          <div className="mx-1 w-px h-5 rounded-full" style={{ background: "rgba(255,255,255,0.12)" }} />
+          <div className="mx-1.5 w-px h-5 rounded-full" style={{ background: "rgba(0,0,0,0.08)" }} />
         )}
 
         <ScanPromptBox compact onScan={onScan} />
