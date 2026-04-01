@@ -73,8 +73,8 @@ const GlassTabBar = ({ hasScanned, onScan }: GlassTabBarProps) => {
           /* Frosted glass base */
           background:
             "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.08) 100%)",
-          WebkitBackdropFilter: "blur(40px) saturate(1.8)",
-          backdropFilter: "blur(10px) saturate(1.8)",
+          WebkitBackdropFilter: "blur(1px) saturate(1.8)",
+          backdropFilter: "blur(1px) saturate(1.8)",
           /* Multi-layer glass border for refraction effect */
           boxShadow: `
             inset 0 0.5px 0 0 rgba(255,255,255,0.25),
