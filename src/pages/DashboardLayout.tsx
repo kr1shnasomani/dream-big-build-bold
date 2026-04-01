@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useScanContext } from '@/contexts/ScanContext';
 import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import GlassTabBar from '@/components/dashboard/GlassTabBar';
@@ -16,6 +17,7 @@ const DashboardLayout = () => {
   const [hasScanned, setHasScanned] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { setScannedDomain } = useScanContext();
 
   const pathname = location.pathname;
   const getActiveNav = () => {
@@ -71,10 +73,12 @@ const DashboardLayout = () => {
 
   const handleScan = (domain: string) => {
     console.log('Scanning:', domain);
+    setScannedDomain(domain);
     setHasScanned(true);
   };
 
   const handleDemoScan = () => {
+    setScannedDomain('pnb.co.in');
     setHasScanned(true);
   };
 

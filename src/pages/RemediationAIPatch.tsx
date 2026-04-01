@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Copy, Check, Terminal, Server, Globe, Shield } from 'lucide-react';
+import { useScanContext } from '@/contexts/ScanContext';
 
 const patchConfigs: Record<string, { title: string; icon: React.ElementType; patches: { label: string; description: string; code: string }[] }> = {
   nginx: {
@@ -44,14 +45,14 @@ ssl_ecdh_curve X25519MLKEM768:X25519:secp384r1;
         label: 'Certificate Upgrade to ECDSA',
         description: 'Replace RSA-2048 certificates with ECDSA P-384',
         code: `# Generate ECDSA P-384 key and CSR
-openssl ecparam -genkey -name secp384r1 -out /etc/ssl/private/pnb-ecdsa.key
-openssl req -new -key /etc/ssl/private/pnb-ecdsa.key \\
-  -out /etc/ssl/certs/pnb-ecdsa.csr \\
-  -subj "/CN=*.pnb.co.in/O=Punjab National Bank/C=IN"
+openssl ecparam -genkey -name secp384r1 -out /etc/ssl/private/target-ecdsa.key
+openssl req -new -key /etc/ssl/private/target-ecdsa.key \\
+  -out /etc/ssl/certs/target-ecdsa.csr \\
+  -subj "/CN=*.{DOMAIN}/O={ORG}/C=XX"
 
 # nginx config
-ssl_certificate /etc/ssl/certs/pnb-ecdsa-fullchain.pem;
-ssl_certificate_key /etc/ssl/private/pnb-ecdsa.key;`,
+ssl_certificate /etc/ssl/certs/target-ecdsa-fullchain.pem;
+ssl_certificate_key /etc/ssl/private/target-ecdsa.key;`,
       },
     ],
   },
@@ -138,7 +139,7 @@ const RemediationAIPatch = () => {
             <Terminal className="w-5 h-5 text-accent-amber" />
             <div>
               <p className="font-body text-sm font-medium text-foreground">Configuration patches are generated based on your scan results</p>
-              <p className="font-body text-xs text-muted-foreground">These patches are tailored to the vulnerabilities found in your PNB infrastructure. Review carefully before applying.</p>
+              <p className="font-body text-xs text-muted-foreground">These patches are tailored to the vulnerabilities found in your scanned infrastructure. Review carefully before applying.</p>
             </div>
           </div>
         </CardContent>

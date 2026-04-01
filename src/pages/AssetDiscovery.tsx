@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useScanContext } from '@/contexts/ScanContext';
 import { Globe, Key, Server, Cpu, Share2, AlertTriangle, Search, Filter, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -29,6 +30,8 @@ const AssetDiscovery = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'domains';
   const [search, setSearch] = useState('');
+  const { rootDomain } = useScanContext();
+  const d = rootDomain || 'target.com';
 
   const setTab = (tab: string) => setSearchParams({ tab });
 
@@ -101,7 +104,7 @@ const AssetDiscovery = () => {
               </div>
               <div className="p-2.5 rounded-lg bg-[hsl(var(--status-critical)/0.08)] border border-[hsl(var(--status-critical)/0.2)]">
                 <p className="font-medium text-[hsl(var(--status-critical))]">2 domains expiring soon</p>
-                <p className="text-muted-foreground mt-0.5">staging.pnb.co.in, test-portal.pnb.co.in</p>
+                <p className="text-muted-foreground mt-0.5">staging.{d}, test-portal.{d}</p>
               </div>
               <div className="p-2.5 rounded-lg bg-[hsl(var(--status-safe)/0.08)] border border-[hsl(var(--status-safe)/0.2)]">
                 <p className="font-medium text-[hsl(var(--status-safe))]">9 domains confirmed safe</p>
@@ -158,8 +161,8 @@ const AssetDiscovery = () => {
       {activeTab === 'ip' && (
         <div className="space-y-4">
           <div className="flex gap-3">
-            <Card className="flex-1 p-3 shadow-sm"><p className="text-[10px] text-muted-foreground font-body">CRITICAL FINDING</p><p className="text-xs font-body font-medium text-[hsl(var(--status-critical))] mt-1">Port 3389 open on staging.pnb.co.in — RDP accessible from internet</p></Card>
-            <Card className="flex-1 p-3 shadow-sm"><p className="text-[10px] text-muted-foreground font-body">ALERT</p><p className="text-xs font-body font-medium text-[hsl(var(--status-warn))] mt-1">Port 22 open on vpn.pnb.co.in — SSH exposure on internet-facing asset</p></Card>
+            <Card className="flex-1 p-3 shadow-sm"><p className="text-[10px] text-muted-foreground font-body">CRITICAL FINDING</p><p className="text-xs font-body font-medium text-[hsl(var(--status-critical))] mt-1">Port 3389 open on staging.{d} — RDP accessible from internet</p></Card>
+            <Card className="flex-1 p-3 shadow-sm"><p className="text-[10px] text-muted-foreground font-body">ALERT</p><p className="text-xs font-body font-medium text-[hsl(var(--status-warn))] mt-1">Port 22 open on vpn.{d} — SSH exposure on internet-facing asset</p></Card>
           </div>
           <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
             <CardContent className="p-0">

@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Clock, Mail, Calendar, Trash2, Plus, CheckCircle2 } from 'lucide-react';
+import { useScanContext } from '@/contexts/ScanContext';
 
 interface ScheduledReport {
   id: string;
@@ -18,15 +19,19 @@ interface ScheduledReport {
   enabled: boolean;
 }
 
-const initialSchedules: ScheduledReport[] = [
-  { id: 's1', name: 'Weekly Executive Summary', template: 'Executive Summary', frequency: 'Weekly', nextRun: '2026-04-07', recipients: ['ciso@pnb.co.in', 'cto@pnb.co.in'], enabled: true },
-  { id: 's2', name: 'Monthly NIST Compliance', template: 'NIST Compliance Report', frequency: 'Monthly', nextRun: '2026-04-30', recipients: ['compliance@pnb.co.in'], enabled: true },
-  { id: 's3', name: 'Daily Risk Alert', template: 'Quantum Risk Assessment', frequency: 'Daily', nextRun: '2026-04-01', recipients: ['soc@pnb.co.in'], enabled: false },
-  { id: 's4', name: 'Bi-Weekly CBOM Export', template: 'CBOM Inventory Report', frequency: 'Bi-Weekly', nextRun: '2026-04-14', recipients: ['audit@pnb.co.in', 'crypto-team@pnb.co.in'], enabled: true },
-];
+function buildSchedules(domain: string): ScheduledReport[] {
+  const d = domain || 'target.com';
+  return [
+    { id: 's1', name: 'Weekly Executive Summary', template: 'Executive Summary', frequency: 'Weekly', nextRun: '2026-04-07', recipients: [`ciso@${d}`, `cto@${d}`], enabled: true },
+    { id: 's2', name: 'Monthly NIST Compliance', template: 'NIST Compliance Report', frequency: 'Monthly', nextRun: '2026-04-30', recipients: [`compliance@${d}`], enabled: true },
+    { id: 's3', name: 'Daily Risk Alert', template: 'Quantum Risk Assessment', frequency: 'Daily', nextRun: '2026-04-01', recipients: [`soc@${d}`], enabled: false },
+    { id: 's4', name: 'Bi-Weekly CBOM Export', template: 'CBOM Inventory Report', frequency: 'Bi-Weekly', nextRun: '2026-04-14', recipients: [`audit@${d}`, `crypto-team@${d}`], enabled: true },
+  ];
+}
 
 const ReportingScheduled = () => {
-  const [schedules, setSchedules] = useState(initialSchedules);
+  const { rootDomain } = useScanContext();
+  const [schedules, setSchedules] = useState(() => buildSchedules(rootDomain));
 
   const toggleSchedule = (id: string) => {
     setSchedules(prev => prev.map(s => s.id === id ? { ...s, enabled: !s.enabled } : s));

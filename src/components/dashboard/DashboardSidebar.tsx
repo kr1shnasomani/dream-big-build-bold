@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
+import { useScanContext } from '@/contexts/ScanContext';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
@@ -99,6 +100,7 @@ interface DashboardSidebarProps {
 }
 
 const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) => {
+  const { rootDomain } = useScanContext();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
   const [submenuPosition, setSubmenuPosition] = useState<{ top: number; left: number } | null>(null);
@@ -378,7 +380,7 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
                 className="flex-1 min-w-0"
               >
                 <p className="text-xs font-body font-medium text-foreground truncate">Admin</p>
-                <p className="text-[10px] font-body text-muted-foreground truncate">admin@pnb.co.in</p>
+                <p className="text-[10px] font-body text-muted-foreground truncate">admin@{rootDomain || 'target.com'}</p>
               </motion.div>
             )}
           </AnimatePresence>

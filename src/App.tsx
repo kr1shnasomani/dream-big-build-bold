@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ScanProvider } from "@/contexts/ScanContext";
 import Index from "./pages/Index.tsx";
 import DashboardLayout from "./pages/DashboardLayout.tsx";
 import DashboardHome from "./pages/DashboardHome.tsx";
@@ -38,37 +39,39 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<DashboardHome />} />
-            <Route path="discovery" element={<AssetDiscovery />} />
-            <Route path="inventory" element={<AssetInventory />} />
-            <Route path="cbom" element={<CBOMOverview />} />
-            <Route path="cbom/per-asset" element={<CBOMPerAsset />} />
-            <Route path="cbom/export" element={<CBOMExport />} />
-            <Route path="pqc/compliance" element={<PQCCompliance />} />
-            <Route path="pqc/hndl" element={<PQCHndl />} />
-            <Route path="pqc/quantum-debt" element={<PQCQuantumDebt />} />
-            <Route path="rating/enterprise" element={<CyberRatingEnterprise />} />
-            <Route path="rating/per-asset" element={<CyberRatingPerAsset />} />
-            <Route path="rating/tiers" element={<CyberRatingTiers />} />
-            <Route path="remediation/action-plan" element={<RemediationActionPlan />} />
-            <Route path="remediation/ai-patch" element={<RemediationAIPatch />} />
-            <Route path="remediation/roadmap" element={<RemediationRoadmap />} />
-            <Route path="reporting/executive" element={<ReportingExecutive />} />
-            <Route path="reporting/scheduled" element={<ReportingScheduled />} />
-            <Route path="reporting/on-demand" element={<ReportingOnDemand />} />
-            <Route path="scan-console" element={<ScanConsole />} />
-            <Route path="settings" element={<SettingsLayout />}>
-              <Route index element={<SettingsScanConfig />} />
-              <Route path="scan-config" element={<SettingsScanConfig />} />
-              <Route path="notifications" element={<SettingsNotifications />} />
-              <Route path="integrations" element={<SettingsIntegrations />} />
+        <ScanProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route index element={<DashboardHome />} />
+              <Route path="discovery" element={<AssetDiscovery />} />
+              <Route path="inventory" element={<AssetInventory />} />
+              <Route path="cbom" element={<CBOMOverview />} />
+              <Route path="cbom/per-asset" element={<CBOMPerAsset />} />
+              <Route path="cbom/export" element={<CBOMExport />} />
+              <Route path="pqc/compliance" element={<PQCCompliance />} />
+              <Route path="pqc/hndl" element={<PQCHndl />} />
+              <Route path="pqc/quantum-debt" element={<PQCQuantumDebt />} />
+              <Route path="rating/enterprise" element={<CyberRatingEnterprise />} />
+              <Route path="rating/per-asset" element={<CyberRatingPerAsset />} />
+              <Route path="rating/tiers" element={<CyberRatingTiers />} />
+              <Route path="remediation/action-plan" element={<RemediationActionPlan />} />
+              <Route path="remediation/ai-patch" element={<RemediationAIPatch />} />
+              <Route path="remediation/roadmap" element={<RemediationRoadmap />} />
+              <Route path="reporting/executive" element={<ReportingExecutive />} />
+              <Route path="reporting/scheduled" element={<ReportingScheduled />} />
+              <Route path="reporting/on-demand" element={<ReportingOnDemand />} />
+              <Route path="scan-console" element={<ScanConsole />} />
+              <Route path="settings" element={<SettingsLayout />}>
+                <Route index element={<SettingsScanConfig />} />
+                <Route path="scan-config" element={<SettingsScanConfig />} />
+                <Route path="notifications" element={<SettingsNotifications />} />
+                <Route path="integrations" element={<SettingsIntegrations />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ScanProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
