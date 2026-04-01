@@ -120,7 +120,7 @@ const DashboardLayout = () => {
         </AnimatePresence>
       </div>
 
-      <GlassTabBar tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} hasScanned={hasScanned || !isHome} onScan={handleScan} />
+      <GlassTabBar hasScanned={hasScanned || !isHome} onScan={handleScan} />
     </div>
   );
 };
