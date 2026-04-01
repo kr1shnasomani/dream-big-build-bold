@@ -379,7 +379,7 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
                 className="flex-1 min-w-0"
               >
                 <p className="text-xs font-body font-medium text-foreground truncate">Admin</p>
-                <p className="text-[10px] font-body text-muted-foreground truncate">admin@pnb.co.in</p>
+                <p className="text-[10px] font-body text-muted-foreground truncate">admin@{rootDomain || 'target.com'}</p>
               </motion.div>
             )}
           </AnimatePresence>
