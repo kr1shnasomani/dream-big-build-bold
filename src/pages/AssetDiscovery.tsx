@@ -37,8 +37,20 @@ const AssetDiscovery = () => {
 
   return (
     <div className="space-y-5">
+      <h1 className="font-display text-2xl italic text-brand-primary">Asset Discovery</h1>
+
+      {/* Tab strip + search/filter on same row */}
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl italic text-brand-primary">Asset Discovery</h1>
+        <div className="flex gap-1 p-1 rounded-xl bg-[hsl(var(--bg-sunken))] w-fit">
+          {tabDefs.map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} className={cn(
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body transition-all",
+              activeTab === t.id ? "bg-white shadow-sm text-brand-primary font-semibold" : "text-muted-foreground hover:text-foreground"
+            )}>
+              <t.icon className="w-3.5 h-3.5" />{t.label}
+            </button>
+          ))}
+        </div>
         <div className="flex items-center gap-2">
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
@@ -46,18 +58,6 @@ const AssetDiscovery = () => {
           </div>
           <Button variant="outline" size="sm" className="h-8 text-xs gap-1"><Filter className="w-3 h-3" />Filters</Button>
         </div>
-      </div>
-
-      {/* Tab strip */}
-      <div className="flex gap-1 p-1 rounded-xl bg-[hsl(var(--bg-sunken))] w-fit">
-        {tabDefs.map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body transition-all",
-            activeTab === t.id ? "bg-white shadow-sm text-brand-primary font-semibold" : "text-muted-foreground hover:text-foreground"
-          )}>
-            <t.icon className="w-3.5 h-3.5" />{t.label}
-          </button>
-        ))}
       </div>
 
       {/* Tab content */}
