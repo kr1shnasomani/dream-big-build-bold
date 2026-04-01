@@ -30,7 +30,8 @@ function buildSchedules(domain: string): ScheduledReport[] {
 }
 
 const ReportingScheduled = () => {
-  const [schedules, setSchedules] = useState(initialSchedules);
+  const { rootDomain } = useScanContext();
+  const [schedules, setSchedules] = useState(() => buildSchedules(rootDomain));
 
   const toggleSchedule = (id: string) => {
     setSchedules(prev => prev.map(s => s.id === id ? { ...s, enabled: !s.enabled } : s));

@@ -115,6 +115,8 @@ function generateScanPhases(domain: string): ScanPhase[] {
 }
 
 const ScanConsole = () => {
+  const { rootDomain } = useScanContext();
+  const scanPhases = generateScanPhases(rootDomain);
   const [isRunning, setIsRunning] = useState(false);
   const [currentPhase, setCurrentPhase] = useState(-1);
   const [logOutput, setLogOutput] = useState<string[]>([]);
@@ -128,8 +130,8 @@ const ScanConsole = () => {
     setCurrentPhase(0);
     setLogOutput([
       '╔═══════════════════════════════════════════════╗',
-      '║   AEGIS Quantum Readiness Scanner v2.1.0      ║',
-      '║   Target: *.pnb.co.in                         ║',
+      `║   AEGIS Quantum Readiness Scanner v2.1.0      ║`,
+      `║   Target: *.${rootDomain || 'target.com'}`,
       '║   Scan ID: AEGIS-2026-0331-001                ║',
       '╚═══════════════════════════════════════════════╝',
       '',
