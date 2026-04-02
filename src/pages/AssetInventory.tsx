@@ -13,6 +13,7 @@ const typeIcons: Record<string, React.ElementType> = { vpn: Key, web: Globe, api
 import { Cpu } from 'lucide-react';
 
 const AssetInventory = () => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const filtered = assets.filter(a => {
