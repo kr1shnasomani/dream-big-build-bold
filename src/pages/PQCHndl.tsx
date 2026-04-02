@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { assets } from '@/data/demoData';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 import { FileText, Lock, BarChart3 } from 'lucide-react';
@@ -19,15 +20,32 @@ const timelineData = Array.from({ length: 11 }, (_, i) => {
   return {
     year: year.toString(),
     decryptable: hndlAssets.filter(a => (a.hndlBreakYear || 9999) <= year).length,
-    ibmQubits: year <= 2029 ? Math.round(1000 * Math.pow(2, (year - 2025) * 0.8)) : year <= 2033 ? Math.round(100000 * Math.pow(2, (year - 2029) * 0.6)) : 1000000,
   };
 });
 
 const riskColors: Record<string, string> = {
-  critical: 'hsl(var(--status-critical))',
-  high: 'hsl(var(--status-vuln))',
-  medium: 'hsl(var(--accent-amber))',
-  low: 'hsl(var(--status-safe))',
+  critical: 'hsl(var(--status-critical))', high: 'hsl(var(--status-vuln))', medium: 'hsl(var(--accent-amber))', low: 'hsl(var(--status-safe))',
+};
+
+// Heatmap data: rows=sensitivity, cols=vulnerability
+const heatmapData = [
+  { label: 'PII/Auth', values: [0, 1, 2, 3] },
+  { label: 'Financial', values: [0, 1, 3, 2] },
+  { label: 'Internal', values: [2, 3, 1, 0] },
+  { label: 'Public', values: [3, 2, 0, 0] },
+];
+const heatmapCols = ['Low Risk', 'Medium Risk', 'High Risk', 'Critical'];
+
+const cellColor = (val: number) => {
+  if (val === 0) return 'bg-[hsl(var(--bg-sunken))]';
+  if (val === 1) return 'bg-[hsl(var(--status-critical)/0.15)]';
+  if (val === 2) return 'bg-[hsl(var(--status-critical)/0.3)]';
+  return 'bg-[hsl(var(--status-critical)/0.5)]';
+};
+
+const cellTooltip = (sensitivity: string, vulnerability: string, count: number) => {
+  if (count === 0) return 'No assets at this intersection';
+  return `${count} asset${count > 1 ? 's' : ''}: ${sensitivity} sensitivity + ${vulnerability} — ${vulnerability === 'Critical' ? 'Immediate PQC migration required' : 'Monitor and plan migration'}`;
 };
 
 const PQCHndl = () => (
@@ -35,12 +53,11 @@ const PQCHndl = () => (
     <h1 className="font-display text-2xl italic text-brand-primary">HNDL Intelligence</h1>
     <SectionTabBar tabs={pqcTabs} />
 
-    {/* Explanatory header */}
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)] border-l-4 border-l-[hsl(var(--status-critical))]">
       <CardContent className="p-5">
         <h2 className="text-sm font-body font-bold text-foreground">Harvest Now, Decrypt Later (HNDL)</h2>
         <p className="text-xs text-muted-foreground mt-2 leading-relaxed font-body">
-          Adversaries are archiving your encrypted traffic <strong className="text-foreground">TODAY</strong>. When cryptographically-relevant quantum computers (CRQC) arrive, all intercepted data encrypted with classical algorithms becomes readable. This page shows per-asset exposure and estimated break years based on IBM and Google qubit roadmaps.
+          Adversaries are archiving your encrypted traffic <strong className="text-foreground">TODAY</strong>. When cryptographically-relevant quantum computers arrive, all intercepted data encrypted with classical algorithms becomes readable.
         </p>
         <div className="flex gap-6 mt-4 text-[10px] font-mono">
           <div><span className="text-muted-foreground">IBM Target:</span> <span className="text-foreground font-semibold">100K qubits by 2029</span></div>
@@ -50,21 +67,15 @@ const PQCHndl = () => (
       </CardContent>
     </Card>
 
-    {/* HNDL Timeline */}
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
       <CardHeader className="pb-2"><CardTitle className="text-sm font-body">HNDL Timeline — Assets Becoming Decryptable</CardTitle></CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={250}>
           <AreaChart data={timelineData}>
-            <defs>
-              <linearGradient id="decryptGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="hsl(var(--status-critical))" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="hsl(var(--status-critical))" stopOpacity={0} />
-              </linearGradient>
-            </defs>
+            <defs><linearGradient id="decryptGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="hsl(var(--status-critical))" stopOpacity={0.3} /><stop offset="95%" stopColor="hsl(var(--status-critical))" stopOpacity={0} /></linearGradient></defs>
             <XAxis dataKey="year" tick={{ fontSize: 10 }} />
             <YAxis tick={{ fontSize: 10 }} />
-            <Tooltip />
+            <RechartsTooltip />
             <ReferenceLine x="2031" stroke="hsl(var(--status-critical))" strokeDasharray="3 3" label={{ value: 'RSA-2048 break', position: 'top', fontSize: 9, fill: 'hsl(var(--status-critical))' }} />
             <Area type="monotone" dataKey="decryptable" stroke="hsl(var(--status-critical))" fill="url(#decryptGrad)" strokeWidth={2} />
           </AreaChart>
@@ -72,7 +83,6 @@ const PQCHndl = () => (
       </CardContent>
     </Card>
 
-    {/* HNDL risk table */}
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
       <CardHeader className="pb-2"><CardTitle className="text-sm font-body">HNDL Risk by Asset</CardTitle></CardHeader>
       <CardContent className="p-0">
@@ -108,7 +118,43 @@ const PQCHndl = () => (
       </CardContent>
     </Card>
 
-    {/* Qubit Roadmap */}
+    {/* Exposure Heatmap */}
+    <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-sm font-body">HNDL Exposure by Sensitivity × Vulnerability</CardTitle>
+        <p className="text-xs text-muted-foreground font-body">Cell color intensity represents the number of assets at each intersection.</p>
+      </CardHeader>
+      <CardContent>
+        <div className="overflow-x-auto">
+          <table className="text-xs font-body">
+            <thead><tr>
+              <th className="px-3 py-2 w-24"></th>
+              {heatmapCols.map(c => <th key={c} className="px-3 py-2 text-center font-medium text-muted-foreground">{c}</th>)}
+            </tr></thead>
+            <tbody>
+              {heatmapData.map((row) => (
+                <tr key={row.label}>
+                  <td className="px-3 py-2 font-medium text-muted-foreground whitespace-nowrap">{row.label}</td>
+                  {row.values.map((val, ci) => (
+                    <td key={ci} className="px-1.5 py-1.5">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className={cn("w-16 h-12 rounded-lg flex items-center justify-center font-mono font-bold cursor-default", cellColor(val))}>
+                            {val}
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs text-xs font-body">{cellTooltip(row.label, heatmapCols[ci], val)}</TooltipContent>
+                      </Tooltip>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </CardContent>
+    </Card>
+
     <Card className="shadow-sm">
       <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Qubit Roadmap Sources</CardTitle></CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
