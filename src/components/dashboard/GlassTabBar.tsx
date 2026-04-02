@@ -16,9 +16,6 @@ const iconMap: Record<string, LucideIcon> = {
   BarChart3, Settings, Globe, Key, FileText, Server, Cpu, Lock,
   Sparkles, Map, Calendar, PenTool, Terminal, Shield, Clock,
 };
-import type { LucideIcon } from "lucide-react";
-
-// iconMap already defined above
 
 interface GlassTabBarProps {
   hasScanned: boolean;
