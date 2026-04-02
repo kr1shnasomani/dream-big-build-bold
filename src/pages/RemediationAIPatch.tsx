@@ -63,11 +63,17 @@ const RemediationAIPatch = () => {
   }, [asset]);
 
   const relevantPatches = useMemo(() => {
-    const patches: typeof patchTemplates[string] = [];
+    const patches: { finding: string; label: string; code: string; impact: number; nistRef: string }[] = [];
     const findings = selectedFinding === 'all' ? assetFindings : [selectedFinding];
     findings.forEach(f => {
-      // Match finding to template keys
       Object.entries(patchTemplates).forEach(([key, templates]) => {
+        const fLower = f.toLowerCase();
+        const kLower = key.toLowerCase();
+        if (fLower.includes(kLower.split(' ')[0]) || kLower.includes(fLower.split(' ')[0])) {
+          patches.push(...templates);
+        }
+      });
+    });
         if (f.toLowerCase().includes(key.toLowerCase().split(' ')[0]) || key.toLowerCase().includes(f.toLowerCase().split(' ')[0])) {
           patches.push(...templates);
         }
