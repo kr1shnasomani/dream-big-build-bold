@@ -27,6 +27,7 @@ const DashboardLayout = () => {
     if (pathname.includes('/reporting')) return 'reporting';
     if (pathname.includes('/settings')) return 'settings';
     if (pathname.includes('/scan-console')) return 'scan-console';
+    if (pathname.includes('/history')) return 'history';
     return 'dashboard';
   };
 
