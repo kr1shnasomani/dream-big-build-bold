@@ -18,29 +18,7 @@ const iconMap: Record<string, LucideIcon> = {
 };
 import type { LucideIcon } from "lucide-react";
 
-const iconMap: Record<string, LucideIcon> = {
-  Home,
-  Search,
-  Package,
-  ClipboardList,
-  ShieldCheck,
-  Star,
-  Wrench,
-  BarChart3,
-  Settings,
-  Globe,
-  Key,
-  FileText,
-  Server,
-  Cpu,
-  Lock,
-  Sparkles,
-  Map,
-  Calendar,
-  PenTool,
-  Terminal,
-  Shield,
-};
+// iconMap already defined above
 
 interface GlassTabBarProps {
   hasScanned: boolean;
