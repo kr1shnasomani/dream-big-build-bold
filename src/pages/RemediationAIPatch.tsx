@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Copy, Check, Terminal, Server, Globe, Shield, ClipboardList, Sparkles, Map, CheckCircle2 } from 'lucide-react';
+import { Copy, Check, Terminal, Server, Globe, Shield, ClipboardList, Sparkles, Map as MapIcon, CheckCircle2 } from 'lucide-react';
 import { useScanContext } from '@/contexts/ScanContext';
 import { assets } from '@/data/demoData';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
@@ -12,7 +12,7 @@ import SectionTabBar from '@/components/dashboard/SectionTabBar';
 const remediationTabs = [
   { id: 'action-plan', label: 'Action Plan', icon: ClipboardList, route: '/dashboard/remediation/action-plan' },
   { id: 'ai-patch', label: 'AI Patch Generator', icon: Sparkles, route: '/dashboard/remediation/ai-patch' },
-  { id: 'roadmap', label: 'Migration Roadmap', icon: Map, route: '/dashboard/remediation/roadmap' },
+  { id: 'roadmap', label: 'Migration Roadmap', icon: MapIcon, route: '/dashboard/remediation/roadmap' },
 ];
 
 const serverTypes = ['nginx', 'Apache', 'IIS', 'HAProxy'];
