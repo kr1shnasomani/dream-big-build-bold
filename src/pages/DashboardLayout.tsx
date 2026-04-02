@@ -63,6 +63,7 @@ const DashboardLayout = () => {
       'reporting:scheduled reports': '/dashboard/reporting/scheduled',
       'reporting:on-demand builder': '/dashboard/reporting/on-demand',
       'scan-console': '/dashboard/scan-console',
+      'history': '/dashboard/history',
       'settings': '/dashboard/settings/scan-config',
     };
     const route = routeMap[item] || '/dashboard';

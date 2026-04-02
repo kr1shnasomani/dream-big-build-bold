@@ -12,7 +12,7 @@ import {
   Shield, Home, Search, Package, ClipboardList, ShieldCheck,
   Star, Wrench, BarChart3, Settings,
   Globe, Key, FileText, Server, Cpu, Lock, ChevronRight,
-  Sparkles, Map, Calendar, PenTool, Terminal, Pin,
+  Sparkles, Map, Calendar, PenTool, Terminal, Pin, Clock,
 } from 'lucide-react';
 
 interface SubMenuItem {

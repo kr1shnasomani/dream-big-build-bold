@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { AlertTriangle } from 'lucide-react';
 
 interface CountUpProps {
   end: number;
@@ -42,16 +43,19 @@ const KPIStrip = () => {
     { label: 'Quantum Vulnerable', value: 11, color: 'text-status-vuln', dotColor: '' },
     { label: 'Critically Vulnerable', value: 3, color: 'text-status-critical', dotColor: 'animate-pulse-dot' },
     { label: 'Unknown', value: 1, color: 'text-status-unknown', dotColor: '' },
+    { label: 'Expiring Certs (≤30d)', value: 2, color: 'text-accent-amber', dotColor: '', icon: 'warn' },
+    { label: 'High Risk Assets', value: 5, color: 'text-status-critical', dotColor: 'animate-pulse-dot', icon: 'risk' },
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-6">
       {kpis.map((k) => (
         <div key={k.label} className="bg-surface rounded-xl border border-[hsl(var(--border-default))] p-5 shadow-[0_16px_36px_-28px_hsl(var(--brand-primary)/0.42)]">
           <div className="flex items-center gap-1.5 mb-2">
             {k.dotColor && (
               <span className={`w-2 h-2 rounded-full bg-status-critical ${k.dotColor}`} />
             )}
+            {(k as any).icon === 'warn' && <AlertTriangle className="w-3 h-3 text-accent-amber" />}
             <span className="font-body text-xs font-medium text-muted-foreground uppercase">{k.label}</span>
           </div>
           <CountUp end={k.value} className={`font-mono text-3xl font-bold ${k.color}`} />
