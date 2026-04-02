@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { assets, getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset } from '@/data/demoData';
+import { assets, getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset, assetTrends } from '@/data/demoData';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Info, Star, FileText, Shield } from 'lucide-react';
+import { Info, Star, FileText, Shield, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 
 const ratingTabs = [
@@ -32,6 +32,7 @@ const CyberRatingPerAsset = () => (
             <thead><tr className="border-b border-border bg-[hsl(var(--bg-sunken))]">
               <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Asset</th>
               <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Q-Score</th>
+              <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">7d Trend</th>
               <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">TLS</th>
               <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Cert</th>
               <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Key Ex.</th>
@@ -46,6 +47,7 @@ const CyberRatingPerAsset = () => (
                 const chip = (v: number) => (
                   <span className="font-mono text-[10px] px-1.5 py-0.5 rounded" style={{ color: dimColor(v), backgroundColor: `${dimColor(v)}15` }}>{v}</span>
                 );
+                const trend = assetTrends[a.domain] || { delta: 0, direction: 'flat' as const };
                 return (
                   <tr key={a.id} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))]", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
                     <td className="px-3 py-2 font-mono font-medium">{a.domain}</td>
@@ -56,6 +58,18 @@ const CyberRatingPerAsset = () => (
                         </div>
                         <span className="font-mono font-bold" style={{ color: getQScoreColor(a.qScore) }}>{a.qScore}</span>
                       </div>
+                    </td>
+                    <td className="px-3 py-2">
+                      <span className={cn("font-mono text-[10px] flex items-center gap-0.5",
+                        trend.direction === 'up' ? 'text-[hsl(var(--status-safe))]' :
+                        trend.direction === 'down' ? 'text-[hsl(var(--status-critical))]' :
+                        'text-muted-foreground'
+                      )}>
+                        {trend.direction === 'up' && <TrendingUp className="w-3 h-3" />}
+                        {trend.direction === 'down' && <TrendingDown className="w-3 h-3" />}
+                        {trend.direction === 'flat' && <Minus className="w-3 h-3" />}
+                        {trend.delta > 0 ? `+${trend.delta}` : trend.delta === 0 ? '0' : trend.delta}
+                      </span>
                     </td>
                     <td className="px-3 py-2">{chip(a.dimensionScores.tls_version)}</td>
                     <td className="px-3 py-2">{chip(a.dimensionScores.certificate_algo)}</td>

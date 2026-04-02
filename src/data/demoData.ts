@@ -439,6 +439,110 @@ export const assets: Asset[] = [
   },
 ];
 
+// ========== Scan History ==========
+export interface ScanHistoryEntry {
+  id: string;
+  target: string;
+  started: string;
+  duration: string;
+  assetsFound: number;
+  qScore: number;
+  criticalFindings: number;
+  status: string;
+}
+
+export const scanHistory: ScanHistoryEntry[] = [
+  { id: 'SCN-007', target: 'pnb.co.in', started: 'Apr 1 2026, 09:14', duration: '4m 22s', assetsFound: 21, qScore: 370, criticalFindings: 3, status: 'Completed' },
+  { id: 'SCN-006', target: 'pnb.co.in', started: 'Mar 25 2026, 11:30', duration: '3m 58s', assetsFound: 19, qScore: 325, criticalFindings: 4, status: 'Completed' },
+  { id: 'SCN-005', target: 'netbanking.pnb.co.in', started: 'Mar 18 2026, 08:45', duration: '1m 12s', assetsFound: 6, qScore: 410, criticalFindings: 1, status: 'Completed' },
+  { id: 'SCN-004', target: 'pnb.co.in', started: 'Mar 10 2026, 14:20', duration: '5m 01s', assetsFound: 21, qScore: 295, criticalFindings: 5, status: 'Completed' },
+  { id: 'SCN-003', target: 'vpn.pnb.co.in', started: 'Mar 3 2026, 10:00', duration: '0m 48s', assetsFound: 3, qScore: 24, criticalFindings: 2, status: 'Completed' },
+  { id: 'SCN-002', target: 'pnb.co.in', started: 'Feb 24 2026, 16:15', duration: '4m 33s', assetsFound: 18, qScore: 260, criticalFindings: 6, status: 'Completed' },
+  { id: 'SCN-001', target: 'pnb.co.in', started: 'Feb 14 2026, 09:00', duration: '4m 10s', assetsFound: 17, qScore: 210, criticalFindings: 7, status: 'Completed' },
+];
+
+// ========== CVE Data for Discovery Detail Panels ==========
+export interface CVEEntry {
+  id: string;
+  severity: 'Critical' | 'High' | 'Medium' | 'Low';
+  cvss: number;
+  description: string;
+}
+
+export const cveData: Record<string, CVEEntry[]> = {
+  'OpenSSL 1.1.1w': [
+    { id: 'CVE-2023-0286', severity: 'High', cvss: 7.4, description: 'X.400 address type confusion in X.509 certificate verification' },
+    { id: 'CVE-2023-0215', severity: 'High', cvss: 7.5, description: 'Use-after-free following BIO_new_NDEF' },
+    { id: 'CVE-2022-4304', severity: 'Medium', cvss: 5.9, description: 'Timing Oracle in RSA Decryption' },
+  ],
+  'Apache HTTP Server 2.4.52': [
+    { id: 'CVE-2023-25690', severity: 'Critical', cvss: 9.8, description: 'HTTP request smuggling via mod_proxy' },
+    { id: 'CVE-2023-31122', severity: 'High', cvss: 7.5, description: 'mod_macro out-of-bounds read' },
+  ],
+  'Microsoft IIS 10.0': [
+    { id: 'CVE-2023-36899', severity: 'High', cvss: 7.5, description: 'ASP.NET elevation of privilege' },
+    { id: 'CVE-2022-21907', severity: 'Critical', cvss: 9.8, description: 'HTTP Protocol Stack RCE' },
+  ],
+  'Cisco ASA 9.16.3': [
+    { id: 'CVE-2023-20269', severity: 'Critical', cvss: 9.1, description: 'Unauthorized access via VPN' },
+    { id: 'CVE-2023-20095', severity: 'High', cvss: 8.6, description: 'Remote access VPN DoS' },
+  ],
+  'nginx 1.24.0': [
+    { id: 'CVE-2023-44487', severity: 'High', cvss: 7.5, description: 'HTTP/2 Rapid Reset attack' },
+  ],
+  'Postfix 3.5.6': [
+    { id: 'CVE-2023-51764', severity: 'Medium', cvss: 5.3, description: 'SMTP smuggling vulnerability' },
+  ],
+};
+
+// ========== DNS Records for Discovery Detail ==========
+export interface DNSRecord {
+  type: string;
+  name: string;
+  value: string;
+  ttl: number;
+}
+
+export const dnsRecords: Record<string, DNSRecord[]> = {
+  'pnb.co.in': [
+    { type: 'A', name: 'pnb.co.in', value: '14.140.82.10', ttl: 3600 },
+    { type: 'AAAA', name: 'pnb.co.in', value: '2001:db8::10', ttl: 3600 },
+    { type: 'MX', name: 'pnb.co.in', value: 'mail.pnb.co.in', ttl: 3600 },
+    { type: 'TXT', name: 'pnb.co.in', value: 'v=spf1 include:pnb.co.in ~all', ttl: 3600 },
+    { type: 'NS', name: 'pnb.co.in', value: 'ns1.pnb.co.in', ttl: 86400 },
+  ],
+  'vpn.pnb.co.in': [
+    { type: 'A', name: 'vpn.pnb.co.in', value: '14.140.82.10', ttl: 3600 },
+    { type: 'TXT', name: 'vpn.pnb.co.in', value: 'v=spf1 -all', ttl: 3600 },
+    { type: 'NS', name: 'pnb.co.in', value: 'ns1.pnb.co.in', ttl: 86400 },
+  ],
+};
+
+// ========== Asset Trend Data for Per-Asset Ratings ==========
+export const assetTrends: Record<string, { delta: number; direction: 'up' | 'down' | 'flat' }> = {
+  'vpn.pnb.co.in': { delta: -3, direction: 'down' },
+  'auth.pnb.co.in': { delta: 8, direction: 'up' },
+  'pqc-api.pnb.co.in': { delta: 0, direction: 'flat' },
+  'netbanking.pnb.co.in': { delta: 12, direction: 'up' },
+  'reporting.pnb.co.in': { delta: 3, direction: 'up' },
+  'legacy.pnb.co.in': { delta: -5, direction: 'down' },
+  'staging.pnb.co.in': { delta: 0, direction: 'flat' },
+  'swift.pnb.co.in': { delta: 4, direction: 'up' },
+  'imps.pnb.co.in': { delta: 6, direction: 'up' },
+  'upi.pnb.co.in': { delta: 5, direction: 'up' },
+  'neft.pnb.co.in': { delta: 3, direction: 'up' },
+  'mail.pnb.co.in': { delta: -2, direction: 'down' },
+  'treasury.pnb.co.in': { delta: 4, direction: 'up' },
+  'cards.pnb.co.in': { delta: 7, direction: 'up' },
+  'mobileapi.pnb.co.in': { delta: 5, direction: 'up' },
+  'pqc-gateway.pnb.co.in': { delta: 0, direction: 'flat' },
+  'fx.pnb.co.in': { delta: 2, direction: 'up' },
+  'trade.pnb.co.in': { delta: 3, direction: 'up' },
+  'loans.pnb.co.in': { delta: 4, direction: 'up' },
+  'hr.pnb.co.in': { delta: -2, direction: 'down' },
+  'cdn.pnb.co.in': { delta: 6, direction: 'up' },
+};
+
 // ========== Aggregate Metrics ==========
 export const enterpriseScore = 370;
 export const maxScore = 1000;

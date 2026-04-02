@@ -27,6 +27,7 @@ const DashboardLayout = () => {
     if (pathname.includes('/reporting')) return 'reporting';
     if (pathname.includes('/settings')) return 'settings';
     if (pathname.includes('/scan-console')) return 'scan-console';
+    if (pathname.includes('/history')) return 'history';
     return 'dashboard';
   };
 
@@ -62,6 +63,7 @@ const DashboardLayout = () => {
       'reporting:scheduled reports': '/dashboard/reporting/scheduled',
       'reporting:on-demand builder': '/dashboard/reporting/on-demand',
       'scan-console': '/dashboard/scan-console',
+      'history': '/dashboard/history',
       'settings': '/dashboard/settings/scan-config',
     };
     const route = routeMap[item] || '/dashboard';

@@ -9,6 +9,8 @@ import { Progress } from '@/components/ui/progress';
 import { CheckCircle2, Clock, AlertTriangle, ArrowUpRight, Filter, ClipboardList, Sparkles, Map } from 'lucide-react';
 import { assets } from '@/data/demoData';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import { useScanContext } from '@/contexts/ScanContext';
+import { addDays, format, differenceInDays } from 'date-fns';
 
 const remediationTabs = [
   { id: 'action-plan', label: 'Action Plan', icon: ClipboardList, route: '/dashboard/remediation/action-plan' },
@@ -36,10 +38,15 @@ const effortLabel: Record<string, string> = {
   high: '~2 wks',
 };
 
+const priorityDays: Record<string, number> = { P1: 30, P2: 90, P3: 180, P4: 365 };
+const defaultAssignee: Record<string, string> = { P1: 'IT Security', P2: 'DevOps', P3: 'Infrastructure', P4: 'Infrastructure' };
+const assigneeOptions = ['IT Security', 'DevOps', 'Infrastructure', 'Compliance'];
+
 const RemediationActionPlan = () => {
   const [filterPriority, setFilterPriority] = useState<string>('all');
+  const { rootDomain } = useScanContext();
+  const now = new Date();
 
-  // Flatten all remediation actions with asset context
   const allActions = assets.flatMap(asset =>
     asset.remediation.map((r, i) => ({
       ...r,
@@ -47,8 +54,16 @@ const RemediationActionPlan = () => {
       assetType: asset.type,
       qScore: asset.qScore,
       key: `${asset.id}-${i}`,
+      deadline: addDays(now, priorityDays[r.priority]),
+      assignee: defaultAssignee[r.priority],
     }))
   );
+
+  const [assignees, setAssignees] = useState<Record<string, string>>(() => {
+    const map: Record<string, string> = {};
+    allActions.forEach(a => { map[a.key] = a.assignee; });
+    return map;
+  });
 
   const filtered = filterPriority === 'all' ? allActions : allActions.filter(a => a.priority === filterPriority);
 
@@ -61,11 +76,10 @@ const RemediationActionPlan = () => {
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
       <div>
         <h1 className="font-display text-2xl italic text-brand-primary">Remediation Action Plan</h1>
-        <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions to improve your quantum readiness posture</p>
+        <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions for {rootDomain || 'target'} quantum readiness</p>
       </div>
       <SectionTabBar tabs={remediationTabs} />
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Total Actions', value: totalActions, sub: 'across all assets', color: 'text-foreground' },
@@ -83,7 +97,6 @@ const RemediationActionPlan = () => {
         ))}
       </div>
 
-      {/* Progress */}
       <Card className="bg-surface border-border">
         <CardContent className="pt-4 pb-3">
           <div className="flex items-center justify-between mb-2">
@@ -94,7 +107,6 @@ const RemediationActionPlan = () => {
         </CardContent>
       </Card>
 
-      {/* Filters + Table */}
       <Card className="bg-surface border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
@@ -102,9 +114,7 @@ const RemediationActionPlan = () => {
             <div className="flex items-center gap-2">
               <Filter className="w-3.5 h-3.5 text-muted-foreground" />
               <Select value={filterPriority} onValueChange={setFilterPriority}>
-                <SelectTrigger className="w-28 h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
+                <SelectTrigger className="w-28 h-8 text-xs"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
                   <SelectItem value="P1">P1 Only</SelectItem>
@@ -124,32 +134,43 @@ const RemediationActionPlan = () => {
                 <TableHead className="font-mono text-[10px]">FINDING</TableHead>
                 <TableHead className="font-mono text-[10px]">ACTION</TableHead>
                 <TableHead className="font-mono text-[10px]">EFFORT</TableHead>
+                <TableHead className="font-mono text-[10px]">DEADLINE</TableHead>
+                <TableHead className="font-mono text-[10px]">ASSIGNEE</TableHead>
                 <TableHead className="font-mono text-[10px]">STATUS</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map((action) => (
-                <TableRow key={action.key} className="border-border hover:bg-sunken/50">
-                  <TableCell>
-                    <Badge className={`${priorityColor[action.priority]} text-[10px] font-mono`}>{action.priority}</Badge>
-                  </TableCell>
-                  <TableCell className="font-mono text-xs">{action.assetDomain}</TableCell>
-                  <TableCell className="font-body text-xs max-w-[200px]">
-                    <div className="flex items-center gap-1.5">
-                      <AlertTriangle className="w-3 h-3 text-status-warn flex-shrink-0" />
-                      {action.finding}
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-body text-xs max-w-[250px]">{action.action}</TableCell>
-                  <TableCell className="font-mono text-[10px] text-muted-foreground">{effortLabel[action.effort]}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1.5">
-                      {statusIcon[action.status]}
-                      <span className="font-mono text-[10px] capitalize">{action.status.replace('_', ' ')}</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {filtered.map((action) => {
+                const daysLeft = differenceInDays(action.deadline, now);
+                return (
+                  <TableRow key={action.key} className="border-border hover:bg-sunken/50">
+                    <TableCell><Badge className={`${priorityColor[action.priority]} text-[10px] font-mono`}>{action.priority}</Badge></TableCell>
+                    <TableCell className="font-mono text-xs">{action.assetDomain}</TableCell>
+                    <TableCell className="font-body text-xs max-w-[200px]">
+                      <div className="flex items-center gap-1.5"><AlertTriangle className="w-3 h-3 text-status-warn flex-shrink-0" />{action.finding}</div>
+                    </TableCell>
+                    <TableCell className="font-body text-xs max-w-[250px]">{action.action}</TableCell>
+                    <TableCell className="font-mono text-[10px] text-muted-foreground">{effortLabel[action.effort]}</TableCell>
+                    <TableCell>
+                      <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${daysLeft <= 30 ? 'text-[hsl(var(--status-critical))] bg-[hsl(var(--status-critical)/0.1)]' : daysLeft <= 90 ? 'text-[hsl(var(--accent-amber))] bg-[hsl(var(--accent-amber)/0.1)]' : 'text-muted-foreground bg-[hsl(var(--bg-sunken))]'}`}>
+                        In {daysLeft}d
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <Select value={assignees[action.key] || action.assignee} onValueChange={(v) => setAssignees(prev => ({ ...prev, [action.key]: v }))}>
+                        <SelectTrigger className="h-6 w-28 text-[10px] border-none bg-transparent p-0"><SelectValue /></SelectTrigger>
+                        <SelectContent>{assigneeOptions.map(o => <SelectItem key={o} value={o} className="text-xs">{o}</SelectItem>)}</SelectContent>
+                      </Select>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1.5">
+                        {statusIcon[action.status]}
+                        <span className="font-mono text-[10px] capitalize">{action.status.replace('_', ' ')}</span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </CardContent>

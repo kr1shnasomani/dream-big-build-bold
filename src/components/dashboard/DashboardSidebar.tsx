@@ -12,7 +12,7 @@ import {
   Shield, Home, Search, Package, ClipboardList, ShieldCheck,
   Star, Wrench, BarChart3, Settings,
   Globe, Key, FileText, Server, Cpu, Lock, ChevronRight,
-  Sparkles, Map, Calendar, PenTool, Terminal, Pin,
+  Sparkles, Map, Calendar, PenTool, Terminal, Pin, Clock,
 } from 'lucide-react';
 
 interface SubMenuItem {
@@ -87,6 +87,7 @@ const navItems: NavItem[] = [
     ],
   },
   { id: 'scan-console', icon: Terminal, label: 'Scan Console', pinRoute: '/dashboard/scan-console', pinIcon: 'Terminal' },
+  { id: 'history', icon: Clock, label: 'Scan History', pinRoute: '/dashboard/history', pinIcon: 'Clock' },
 ];
 
 const sidebarVariants = {

@@ -5,52 +5,16 @@ import { usePinnedPages } from "@/contexts/PinnedPagesContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import {
-  Home,
-  Search,
-  Package,
-  ClipboardList,
-  ShieldCheck,
-  Star,
-  Wrench,
-  BarChart3,
-  Settings,
-  Globe,
-  Key,
-  FileText,
-  Server,
-  Cpu,
-  Lock,
-  Sparkles,
-  Map,
-  Calendar,
-  PenTool,
-  Terminal,
-  Shield,
+  Home, Search, Package, ClipboardList, ShieldCheck, Star, Wrench,
+  BarChart3, Settings, Globe, Key, FileText, Server, Cpu, Lock,
+  Sparkles, Map, Calendar, PenTool, Terminal, Shield, Clock,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
-  Home,
-  Search,
-  Package,
-  ClipboardList,
-  ShieldCheck,
-  Star,
-  Wrench,
-  BarChart3,
-  Settings,
-  Globe,
-  Key,
-  FileText,
-  Server,
-  Cpu,
-  Lock,
-  Sparkles,
-  Map,
-  Calendar,
-  PenTool,
-  Terminal,
-  Shield,
+  Home, Search, Package, ClipboardList, ShieldCheck, Star, Wrench,
+  BarChart3, Settings, Globe, Key, FileText, Server, Cpu, Lock,
+  Sparkles, Map, Calendar, PenTool, Terminal, Shield, Clock,
 };
 
 interface GlassTabBarProps {

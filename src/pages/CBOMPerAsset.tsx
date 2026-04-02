@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ChevronDown, ChevronRight, AlertTriangle, Shield, Check } from 'lucide-react';
 import { assets } from '@/data/demoData';
 import { cn } from '@/lib/utils';
-
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 import { FileText, Cpu, Package } from 'lucide-react';
 
@@ -15,8 +15,18 @@ const cbomTabs = [
   { id: 'export', label: 'Export Center', icon: Package, route: '/dashboard/cbom/export' },
 ];
 
+// Generate fake attestation hashes per asset
+const attestationHashes: Record<string, string> = {};
+assets.forEach(a => {
+  const chars = '0123456789abcdef';
+  let hash = '';
+  for (let i = 0; i < 64; i++) hash += chars[Math.floor(Math.random() * 16)];
+  attestationHashes[a.id] = hash;
+});
+
 const CBOMPerAsset = () => {
   const [expanded, setExpanded] = useState<string[]>([]);
+  const [verifyModal, setVerifyModal] = useState<string | null>(null);
   const toggle = (id: string) => setExpanded(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
   return (
@@ -74,12 +84,57 @@ const CBOMPerAsset = () => {
                       {a.tlsVersionsSupported.includes('TLS_1_1') && <p className="ml-4 text-[hsl(var(--status-critical))]">⚠ TLS 1.1 negotiable — should be disabled</p>}
                     </div>
                   </div>
+
+                  {/* Attestation Section */}
+                  <div className="ml-7 mt-4 p-3 rounded-lg bg-[hsl(var(--bg-sunken))] border border-[hsl(var(--border-default))]">
+                    <p className="font-body text-xs font-semibold text-foreground mb-2">Cryptographic Attestation</p>
+                    <div className="space-y-1.5 text-[11px] font-body">
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground">CBOM Hash:</span>
+                        <code className="font-mono text-[10px] text-foreground bg-background px-1.5 py-0.5 rounded">{attestationHashes[a.id]?.substring(0, 32)}...</code>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground">Signed with:</span>
+                        <Badge className="bg-cyan-500/10 text-cyan-600 text-[10px]">Ed25519</Badge>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground">Timestamp:</span>
+                        <span className="font-mono text-[10px]">{a.lastScanned}</span>
+                      </div>
+                    </div>
+                    <Button size="sm" variant="outline" className="mt-2 h-6 text-[10px]" onClick={() => setVerifyModal(a.id)}>Verify Attestation</Button>
+                  </div>
                 </CardContent>
               )}
             </Card>
           );
         })}
       </div>
+
+      {/* Verify Modal */}
+      <Dialog open={!!verifyModal} onOpenChange={() => setVerifyModal(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader><DialogTitle className="font-body text-sm">Attestation Verification</DialogTitle></DialogHeader>
+          {verifyModal && (
+            <div className="space-y-3">
+              <div className="p-3 rounded-lg bg-[hsl(var(--status-safe)/0.1)] border border-[hsl(var(--status-safe)/0.3)] flex items-center gap-2">
+                <Check className="w-5 h-5 text-[hsl(var(--status-safe))]" />
+                <span className="font-body text-sm font-semibold text-[hsl(var(--status-safe))]">SIGNATURE VALID</span>
+              </div>
+              <pre className="bg-[hsl(var(--brand-primary))] text-accent-amber-light font-mono text-[10px] p-4 rounded-lg overflow-x-auto leading-relaxed">
+{`{
+  "cbom_hash": "${attestationHashes[verifyModal]}",
+  "timestamp": "${assets.find(a => a.id === verifyModal)?.lastScanned}",
+  "signing_key_id": "aegis-signing-key-2026-v1",
+  "algorithm": "Ed25519",
+  "signature": "MEUCIQDk...base64...==",
+  "status": "VALID"
+}`}
+              </pre>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
