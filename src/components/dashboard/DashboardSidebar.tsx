@@ -87,6 +87,7 @@ const navItems: NavItem[] = [
     ],
   },
   { id: 'scan-console', icon: Terminal, label: 'Scan Console', pinRoute: '/dashboard/scan-console', pinIcon: 'Terminal' },
+  { id: 'history', icon: Clock, label: 'Scan History', pinRoute: '/dashboard/history', pinIcon: 'Clock' },
 ];
 
 const sidebarVariants = {
