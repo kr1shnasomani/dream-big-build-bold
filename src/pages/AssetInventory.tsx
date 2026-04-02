@@ -96,7 +96,7 @@ const AssetInventory = () => {
               <tbody>
                 {filtered.map((a, i) => (
                   <tr key={a.id} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))] transition-colors cursor-pointer", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
-                    <td className="px-3 py-2 font-mono font-medium text-foreground">{a.domain}</td>
+                    <td className="px-3 py-2 font-mono font-medium text-foreground cursor-pointer hover:text-brand-primary" onClick={() => navigate(`/dashboard/assets/${a.domain.replace(/\./g, '-')}`)}>{a.domain}</td>
                     <td className="px-3 py-2 font-mono text-muted-foreground">{a.ip}</td>
                     <td className="px-3 py-2"><Badge variant="secondary" className="text-[10px]">{a.type}</Badge></td>
                     <td className="px-3 py-2 text-muted-foreground">{a.ownerTeam}</td>
