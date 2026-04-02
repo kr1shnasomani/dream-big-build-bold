@@ -73,12 +73,6 @@ const RemediationAIPatch = () => {
           patches.push(...templates);
         }
       });
-    });
-        if (f.toLowerCase().includes(key.toLowerCase().split(' ')[0]) || key.toLowerCase().includes(f.toLowerCase().split(' ')[0])) {
-          patches.push(...templates);
-        }
-      });
-    });
     // Deduplicate
     return [...new Map(patches.map(p => [p.label, p])).values()];
   }, [assetFindings, selectedFinding]);
