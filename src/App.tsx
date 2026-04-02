@@ -1,15 +1,17 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScanProvider } from "@/contexts/ScanContext";
 import { PinnedPagesProvider } from "@/contexts/PinnedPagesContext";
+import Login from "./pages/Login.tsx";
 import Index from "./pages/Index.tsx";
 import DashboardLayout from "./pages/DashboardLayout.tsx";
 import DashboardHome from "./pages/DashboardHome.tsx";
 import AssetDiscovery from "./pages/AssetDiscovery.tsx";
 import AssetInventory from "./pages/AssetInventory.tsx";
+import AssetDetail from "./pages/AssetDetail.tsx";
 import CBOMOverview from "./pages/CBOMOverview.tsx";
 import CBOMPerAsset from "./pages/CBOMPerAsset.tsx";
 import CBOMExport from "./pages/CBOMExport.tsx";
@@ -26,6 +28,7 @@ import ReportingExecutive from "./pages/ReportingExecutive.tsx";
 import ReportingScheduled from "./pages/ReportingScheduled.tsx";
 import ReportingOnDemand from "./pages/ReportingOnDemand.tsx";
 import ScanConsole from "./pages/ScanConsole.tsx";
+import ScanHistory from "./pages/ScanHistory.tsx";
 import SettingsLayout from "./pages/SettingsLayout.tsx";
 import SettingsScanConfig from "./pages/SettingsScanConfig.tsx";
 import SettingsNotifications from "./pages/SettingsNotifications.tsx";
@@ -33,6 +36,11 @@ import SettingsIntegrations from "./pages/SettingsIntegrations.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAuth = localStorage.getItem('aegis-auth') === 'true';
+  return isAuth ? <>{children}</> : <Navigate to="/login" replace />;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -43,11 +51,14 @@ const App = () => (
         <ScanProvider>
           <PinnedPagesProvider>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/landing" element={<Index />} />
+            <Route path="/" element={<Navigate to={localStorage.getItem('aegis-auth') === 'true' ? '/dashboard' : '/login'} replace />} />
+            <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardHome />} />
               <Route path="discovery" element={<AssetDiscovery />} />
               <Route path="inventory" element={<AssetInventory />} />
+              <Route path="assets/:id" element={<AssetDetail />} />
               <Route path="cbom" element={<CBOMOverview />} />
               <Route path="cbom/per-asset" element={<CBOMPerAsset />} />
               <Route path="cbom/export" element={<CBOMExport />} />
@@ -64,6 +75,7 @@ const App = () => (
               <Route path="reporting/scheduled" element={<ReportingScheduled />} />
               <Route path="reporting/on-demand" element={<ReportingOnDemand />} />
               <Route path="scan-console" element={<ScanConsole />} />
+              <Route path="history" element={<ScanHistory />} />
               <Route path="settings" element={<SettingsLayout />}>
                 <Route index element={<SettingsScanConfig />} />
                 <Route path="scan-config" element={<SettingsScanConfig />} />
