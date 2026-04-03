@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScanProvider } from "@/contexts/ScanContext";
+import { ScanQueueProvider } from "@/contexts/ScanQueueContext";
 import { PinnedPagesProvider } from "@/contexts/PinnedPagesContext";
 import Login from "./pages/Login.tsx";
 import Index from "./pages/Index.tsx";
