@@ -117,7 +117,23 @@ const AssetDetail = () => {
             </div>
           </div>
         </div>
-        <Button className="gap-1.5 text-xs"><Scan className="w-3.5 h-3.5" /> Scan Now</Button>
+        <div className="flex gap-2">
+          {(asset.status === 'elite-pqc' || asset.status === 'safe') ? (
+            <Button variant="outline" className="gap-1.5 text-xs" onClick={() => setCertModalOpen(true)}>
+              <Download className="w-3.5 h-3.5" /> Download Certificate
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" className="gap-1.5 text-xs opacity-50 cursor-not-allowed" disabled>
+                  <Download className="w-3.5 h-3.5" /> Download Certificate
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent><p className="text-xs">Not yet eligible — Q-Score must reach 80+</p></TooltipContent>
+            </Tooltip>
+          )}
+          <Button className="gap-1.5 text-xs"><Scan className="w-3.5 h-3.5" /> Scan Now</Button>
+        </div>
       </div>
 
       {/* Section 1: Identity */}
