@@ -45,6 +45,7 @@ const scoreHistories: Record<string, { scan: string; score: number; event?: stri
 const AssetDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [certModalOpen, setCertModalOpen] = useState(false);
   const asset = assets.find(a => a.domain.replace(/\./g, '-') === id);
 
   if (!asset) {
