@@ -88,6 +88,7 @@ const AssetDetail = () => {
   ];
 
   return (
+    <>
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
       {/* Breadcrumb + Header */}
       <div className="flex items-center gap-1.5 text-xs font-body text-muted-foreground">
