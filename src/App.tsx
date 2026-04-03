@@ -51,6 +51,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScanProvider>
+          <ScanQueueProvider>
           <PinnedPagesProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
