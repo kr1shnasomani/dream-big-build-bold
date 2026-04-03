@@ -152,7 +152,7 @@ const RemediationActionPlan = () => {
                     <TableCell className="font-body text-xs max-w-[250px]">{action.action}</TableCell>
                     <TableCell className="font-mono text-[10px] text-muted-foreground">{effortLabel[action.effort]}</TableCell>
                     <TableCell>
-                      <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${daysLeft <= 30 ? 'text-[hsl(var(--status-critical))] bg-[hsl(var(--status-critical)/0.1)]' : daysLeft <= 90 ? 'text-[hsl(var(--accent-amber))] bg-[hsl(var(--accent-amber)/0.1)]' : 'text-muted-foreground bg-[hsl(var(--bg-sunken))]'}`}>
+                      <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${daysLeft <= 14 ? 'text-[hsl(var(--status-critical))] bg-[hsl(var(--status-critical)/0.1)]' : daysLeft <= 30 ? 'text-[hsl(var(--accent-amber))] bg-[hsl(var(--accent-amber)/0.1)]' : 'text-muted-foreground bg-[hsl(var(--bg-sunken))]'}`}>
                         In {daysLeft}d
                       </span>
                     </TableCell>

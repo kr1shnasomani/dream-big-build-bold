@@ -543,6 +543,17 @@ export const assetTrends: Record<string, { delta: number; direction: 'up' | 'dow
   'cdn.pnb.co.in': { delta: 6, direction: 'up' },
 };
 
+// ========== Scan-to-Asset Mapping ==========
+export const scanAssetMap: Record<string, string[]> = {
+  'SCN-007': ['a1','a2','a3','a4','a5','a6','a7','a8','a9','a10','a11','a12','a13','a14','a15','a16','a17','a18','a19','a20','a21'],
+  'SCN-006': ['a1','a2','a3','a5','a6','a7','a8','a9','a10','a11','a12','a13','a14','a15','a16','a17','a18','a19','a20','a21'],
+  'SCN-005': ['a1','a2','a5','a6','a7','a8','a10','a14','a15'],
+  'SCN-004': ['a1','a5','a6','a14','a15'],
+  'SCN-003': ['a1','a2','a4'],
+  'SCN-002': ['a1','a5','a14'],
+  'SCN-001': ['a1','a14'],
+};
+
 // ========== Aggregate Metrics ==========
 export const enterpriseScore = 370;
 export const maxScore = 1000;

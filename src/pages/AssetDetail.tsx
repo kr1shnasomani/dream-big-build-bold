@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Tooltip as ShadcnTooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { assets, getStatusColor, getStatusLabel, getTierFromAsset, getQScoreColor } from '@/data/demoData';
-import { ChevronRight, Scan, Check, X, Shield, AlertTriangle } from 'lucide-react';
-import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, ReferenceLine, CartesianGrid } from 'recharts';
+import { ChevronRight, Scan, Check, X, Shield, AlertTriangle, Download } from 'lucide-react';
+import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip as RechartTooltip, ReferenceLine, CartesianGrid } from 'recharts';
+import PQCCertificateModal from '@/components/dashboard/PQCCertificateModal';
 
 // Generate score history per asset
 const scoreHistories: Record<string, { scan: string; score: number; event?: string }[]> = {
@@ -42,6 +45,7 @@ const scoreHistories: Record<string, { scan: string; score: number; event?: stri
 const AssetDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [certModalOpen, setCertModalOpen] = useState(false);
   const asset = assets.find(a => a.domain.replace(/\./g, '-') === id);
 
   if (!asset) {
@@ -84,6 +88,7 @@ const AssetDetail = () => {
   ];
 
   return (
+    <>
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
       {/* Breadcrumb + Header */}
       <div className="flex items-center gap-1.5 text-xs font-body text-muted-foreground">
@@ -113,7 +118,23 @@ const AssetDetail = () => {
             </div>
           </div>
         </div>
-        <Button className="gap-1.5 text-xs"><Scan className="w-3.5 h-3.5" /> Scan Now</Button>
+        <div className="flex gap-2">
+          {(asset.status === 'elite-pqc' || asset.status === 'safe') ? (
+            <Button variant="outline" className="gap-1.5 text-xs" onClick={() => setCertModalOpen(true)}>
+              <Download className="w-3.5 h-3.5" /> Download Certificate
+            </Button>
+          ) : (
+            <ShadcnTooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" className="gap-1.5 text-xs opacity-50 cursor-not-allowed" disabled>
+                  <Download className="w-3.5 h-3.5" /> Download Certificate
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent><p className="text-xs">Not yet eligible — Q-Score must reach 80+</p></TooltipContent>
+            </ShadcnTooltip>
+          )}
+          <Button className="gap-1.5 text-xs"><Scan className="w-3.5 h-3.5" /> Scan Now</Button>
+        </div>
       </div>
 
       {/* Section 1: Identity */}
@@ -233,7 +254,7 @@ const AssetDetail = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border-default))" />
               <XAxis dataKey="scan" tick={{ fontSize: 10 }} />
               <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
-              <Tooltip content={({ active, payload }) => {
+              <RechartTooltip content={({ active, payload }: any) => {
                 if (!active || !payload?.length) return null;
                 const d = payload[0].payload;
                 return <div className="bg-popover border border-border rounded-lg p-2 text-xs font-body shadow-lg"><p className="font-mono font-bold">{d.score}</p>{d.event && <p className="text-muted-foreground mt-0.5">{d.event}</p>}</div>;
@@ -252,7 +273,7 @@ const AssetDetail = () => {
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-body">Remediation Actions</CardTitle>
-            <Button size="sm" className="text-xs h-7 gap-1" onClick={() => navigate('/dashboard/remediation/ai-patch')}>Generate Patch</Button>
+            <Button size="sm" className="text-xs h-7 gap-1" onClick={() => navigate(`/dashboard/remediation/ai-patch?asset=${asset.domain.replace(/\./g, '-')}`)}>Generate Patch</Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -275,6 +296,8 @@ const AssetDetail = () => {
         </CardContent>
       </Card>
     </motion.div>
+      {asset && <PQCCertificateModal open={certModalOpen} onOpenChange={setCertModalOpen} asset={asset} />}
+    </>
   );
 };
 

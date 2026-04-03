@@ -1,20 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useScanContext } from '@/contexts/ScanContext';
+import { useScanQueue } from '@/contexts/ScanQueueContext';
 import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import GlassTabBar from '@/components/dashboard/GlassTabBar';
 import CommandPalette from '@/components/dashboard/CommandPalette';
+import OnboardingWizard from '@/components/dashboard/OnboardingWizard';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ScanPromptBox } from '@/components/ui/ai-prompt-box';
 import RainingLetters from '@/components/ui/raining-letters';
 import { GradientText } from '@/components/ui/gradient-text';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { X, Maximize2, Minimize2, CheckCircle2, Loader2, Clock, XCircle } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 const DashboardLayout = () => {
   const [hasScanned, setHasScanned] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { setScannedDomain } = useScanContext();
+  const { queue, isRunning, minimized, setMinimized, toggleMinimize, cancelQueue, startQueue, logs, queueComplete } = useScanQueue();
+  const [cancelConfirm, setCancelConfirm] = useState(false);
 
   const pathname = location.pathname;
   const getActiveNav = () => {
@@ -71,7 +81,6 @@ const DashboardLayout = () => {
   };
 
   const handleScan = (domain: string) => {
-    console.log('Scanning:', domain);
     setScannedDomain(domain);
     setHasScanned(true);
   };
@@ -84,11 +93,18 @@ const DashboardLayout = () => {
   const isHome = pathname === '/dashboard';
   const showPrompt = isHome && !hasScanned;
 
+  const doneCount = queue.filter(q => q.status === 'done').length;
+  const scanningItem = queue.find(q => q.status === 'scanning');
+  const overallProgress = queue.length > 0 ? Math.round((doneCount / queue.length) * 100) : 0;
+
+  const phases = ['Discovery', 'TLS Probing', 'PQC Classification', 'CBOM Generation', 'Certification'];
+
   return (
     <div className="flex flex-col min-h-screen bg-background relative">
       <DashboardTopBar hasScanned={hasScanned || !isHome} />
       <DashboardSidebar activeItem={getActiveNav()} onItemClick={handleNavClick} />
       <CommandPalette />
+      <OnboardingWizard />
 
       <div className="flex-1 overflow-y-auto pb-24 ml-[3.05rem]">
         <AnimatePresence mode="wait">
@@ -123,6 +139,102 @@ const DashboardLayout = () => {
       </div>
 
       <GlassTabBar hasScanned={hasScanned || !isHome} onScan={handleScan} />
+
+      {/* Full-screen scan progress overlay */}
+      {isRunning && !minimized && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center p-8"
+        >
+          <div className="w-full max-w-2xl space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="font-body text-lg font-semibold">Scan Queue Running — {doneCount} of {queue.length} targets complete</h2>
+              <Button variant="ghost" size="sm" onClick={toggleMinimize}><Minimize2 className="w-4 h-4" /></Button>
+            </div>
+
+            <div className="space-y-2">
+              {queue.map((q, i) => (
+                <div key={i} className={`p-3 rounded-lg border ${q.status === 'scanning' ? 'border-[hsl(var(--accent-amber))] bg-[hsl(var(--accent-amber)/0.05)]' : 'border-border'}`}>
+                  <div className="flex items-center gap-3">
+                    {q.status === 'queued' && <Clock className="w-4 h-4 text-muted-foreground" />}
+                    {q.status === 'scanning' && <Loader2 className="w-4 h-4 text-[hsl(var(--accent-amber))] animate-spin" />}
+                    {q.status === 'done' && <CheckCircle2 className="w-4 h-4 text-[hsl(var(--status-safe))]" />}
+                    {q.status === 'failed' && <XCircle className="w-4 h-4 text-[hsl(var(--status-critical))]" />}
+                    <span className="font-mono text-sm flex-1">{q.target}</span>
+                    <span className="text-[10px] font-mono text-muted-foreground capitalize">{q.status}</span>
+                  </div>
+                  {q.status === 'scanning' && (
+                    <div className="mt-3 space-y-2">
+                      <div className="flex gap-1">
+                        {phases.map((p, pi) => (
+                          <div key={p} className={`flex-1 h-1.5 rounded-full ${phases.indexOf(q.currentPhase) >= pi ? 'bg-[hsl(var(--accent-amber))]' : 'bg-[hsl(var(--bg-sunken))]'}`} />
+                        ))}
+                      </div>
+                      <p className="text-[10px] font-mono text-muted-foreground">{q.currentPhase}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Terminal logs */}
+            <div className="bg-[hsl(var(--bg-sunken))] rounded-lg p-3 max-h-48 overflow-y-auto">
+              <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">Live Log</p>
+              {logs.map((l, i) => (
+                <p key={i} className="text-[10px] font-mono text-foreground/80">{l}</p>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Minimized floating widget */}
+      {isRunning && minimized && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed bottom-24 right-6 z-[90] bg-popover border border-border rounded-xl shadow-lg p-3 min-w-[280px]"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Loader2 className="w-3.5 h-3.5 text-[hsl(var(--accent-amber))] animate-spin" />
+            <span className="text-xs font-body">Scanning {doneCount + 1}/{queue.length} · {scanningItem?.target}</span>
+            <div className="flex-1" />
+            <button onClick={toggleMinimize} className="p-0.5"><Maximize2 className="w-3 h-3 text-muted-foreground" /></button>
+            <button onClick={() => setCancelConfirm(true)} className="p-0.5"><X className="w-3 h-3 text-muted-foreground" /></button>
+          </div>
+          <Progress value={overallProgress} className="h-1.5" />
+        </motion.div>
+      )}
+
+      {/* Queue complete flash */}
+      {queueComplete && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          className="fixed bottom-24 right-6 z-[90] bg-[hsl(var(--status-safe)/0.1)] border border-[hsl(var(--status-safe)/0.3)] rounded-xl p-3"
+        >
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[hsl(var(--status-safe))]" />
+            <span className="text-xs font-body font-semibold text-[hsl(var(--status-safe))]">Scan Queue Complete ✓</span>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Cancel confirmation */}
+      <Dialog open={cancelConfirm} onOpenChange={setCancelConfirm}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="font-body">Cancel Scan Queue?</DialogTitle>
+            <DialogDescription className="text-xs">This will stop all remaining scans. Completed scans will be preserved.</DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-2 justify-end">
+            <Button variant="outline" size="sm" onClick={() => setCancelConfirm(false)}>Keep Running</Button>
+            <Button variant="destructive" size="sm" onClick={() => { cancelQueue(); setCancelConfirm(false); }}>Cancel Queue</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

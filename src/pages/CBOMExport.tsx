@@ -47,8 +47,8 @@ const CBOMExport = () => (
     <Card className="shadow-sm">
       <CardHeader><CardTitle className="text-sm font-body">Scheduled Exports</CardTitle></CardHeader>
       <CardContent>
-        <p className="text-xs text-muted-foreground font-body">Configure recurring CBOM exports to email or storage. No scheduled exports configured yet.</p>
-        <Button variant="outline" size="sm" className="mt-3 text-xs">Configure Schedule</Button>
+        <p className="text-xs text-muted-foreground font-body">Configure recurring CBOM exports to email or storage. <a href="/dashboard/reporting/scheduled" className="text-brand-primary hover:underline">No scheduled exports configured yet — set one up →</a></p>
+        <Button variant="outline" size="sm" className="mt-3 text-xs" onClick={() => window.location.href = '/dashboard/reporting/scheduled'}>Configure Schedule</Button>
       </CardContent>
     </Card>
   </div>

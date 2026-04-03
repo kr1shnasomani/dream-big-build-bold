@@ -38,6 +38,7 @@ const searchRoutes: SearchRoute[] = [
   { label: 'Scheduled Reports', path: '/dashboard/reporting/scheduled', icon: Calendar, group: 'Reporting', keywords: ['schedule', 'report', 'automated'] },
   { label: 'On-Demand Builder', path: '/dashboard/reporting/on-demand', icon: PenTool, group: 'Reporting', keywords: ['report', 'custom', 'build'] },
   { label: 'Scan Console', path: '/dashboard/scan-console', icon: Terminal, group: 'Navigation', keywords: ['scan', 'terminal', 'console'] },
+  { label: 'Scan History', path: '/dashboard/history', icon: Home, group: 'Navigation', keywords: ['scan', 'history', 'past', 'previous'] },
   { label: 'Scan Configuration', path: '/dashboard/settings/scan-config', icon: Settings, group: 'Settings', keywords: ['settings', 'config', 'scan'] },
   { label: 'Notifications', path: '/dashboard/settings/notifications', icon: Bell, group: 'Settings', keywords: ['notifications', 'alerts', 'email'] },
   { label: 'Integrations', path: '/dashboard/settings/integrations', icon: Plug, group: 'Settings', keywords: ['integrations', 'jira', 'slack', 'connect'] },

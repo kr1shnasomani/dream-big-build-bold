@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScanProvider } from "@/contexts/ScanContext";
+import { ScanQueueProvider } from "@/contexts/ScanQueueContext";
 import { PinnedPagesProvider } from "@/contexts/PinnedPagesContext";
 import Login from "./pages/Login.tsx";
 import Index from "./pages/Index.tsx";
@@ -33,6 +34,7 @@ import SettingsLayout from "./pages/SettingsLayout.tsx";
 import SettingsScanConfig from "./pages/SettingsScanConfig.tsx";
 import SettingsNotifications from "./pages/SettingsNotifications.tsx";
 import SettingsIntegrations from "./pages/SettingsIntegrations.tsx";
+import ScanReport from "./pages/ScanReport.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -49,11 +51,12 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScanProvider>
+          <ScanQueueProvider>
           <PinnedPagesProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/landing" element={<Index />} />
-            <Route path="/" element={<Navigate to={localStorage.getItem('aegis-auth') === 'true' ? '/dashboard' : '/login'} replace />} />
+            <Route path="/" element={localStorage.getItem('aegis-auth') === 'true' ? <Navigate to="/dashboard" replace /> : <Index />} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardHome />} />
               <Route path="discovery" element={<AssetDiscovery />} />
@@ -76,6 +79,7 @@ const App = () => (
               <Route path="reporting/on-demand" element={<ReportingOnDemand />} />
               <Route path="scan-console" element={<ScanConsole />} />
               <Route path="history" element={<ScanHistory />} />
+              <Route path="scans/:scanId" element={<ScanReport />} />
               <Route path="settings" element={<SettingsLayout />}>
                 <Route index element={<SettingsScanConfig />} />
                 <Route path="scan-config" element={<SettingsScanConfig />} />
@@ -86,6 +90,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </PinnedPagesProvider>
+          </ScanQueueProvider>
         </ScanProvider>
       </BrowserRouter>
     </TooltipProvider>
