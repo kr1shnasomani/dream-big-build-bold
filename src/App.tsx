@@ -34,6 +34,7 @@ import SettingsLayout from "./pages/SettingsLayout.tsx";
 import SettingsScanConfig from "./pages/SettingsScanConfig.tsx";
 import SettingsNotifications from "./pages/SettingsNotifications.tsx";
 import SettingsIntegrations from "./pages/SettingsIntegrations.tsx";
+import ScanReport from "./pages/ScanReport.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
