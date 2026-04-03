@@ -65,8 +65,8 @@ const ScanHistory = () => {
                     <td className="px-3 py-2"><Badge variant="destructive" className="text-[10px]">{s.criticalFindings}</Badge></td>
                     <td className="px-3 py-2"><Badge className="bg-[hsl(var(--status-safe))] text-white text-[10px]">{s.status}</Badge></td>
                     <td className="px-3 py-2 flex gap-1">
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0"><Eye className="w-3.5 h-3.5" /></Button>
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0"><GitCompareArrows className="w-3.5 h-3.5" /></Button>
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => navigate(`/dashboard/scans/${s.id}`)}><Eye className="w-3.5 h-3.5" /></Button>
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => { setScanA(s.id); setShowCompare(true); }}><GitCompareArrows className="w-3.5 h-3.5" /></Button>
                     </td>
                   </tr>
                 ))}
