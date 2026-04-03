@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { assets, getStatusColor, getStatusLabel, getTierFromAsset, getQScoreColor } from '@/data/demoData';
-import { ChevronRight, Scan, Check, X, Shield, AlertTriangle } from 'lucide-react';
-import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, ReferenceLine, CartesianGrid } from 'recharts';
+import { ChevronRight, Scan, Check, X, Shield, AlertTriangle, Download } from 'lucide-react';
+import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip as RTooltip, ReferenceLine, CartesianGrid } from 'recharts';
+import PQCCertificateModal from '@/components/dashboard/PQCCertificateModal';
 
 // Generate score history per asset
 const scoreHistories: Record<string, { scan: string; score: number; event?: string }[]> = {
