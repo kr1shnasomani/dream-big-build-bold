@@ -253,7 +253,7 @@ const AssetDetail = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border-default))" />
               <XAxis dataKey="scan" tick={{ fontSize: 10 }} />
               <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
-              <Tooltip content={({ active, payload }) => {
+              <RechartTooltip content={({ active, payload }: any) => {
                 if (!active || !payload?.length) return null;
                 const d = payload[0].payload;
                 return <div className="bg-popover border border-border rounded-lg p-2 text-xs font-body shadow-lg"><p className="font-mono font-bold">{d.score}</p>{d.event && <p className="text-muted-foreground mt-0.5">{d.event}</p>}</div>;
