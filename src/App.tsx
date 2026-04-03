@@ -90,6 +90,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </PinnedPagesProvider>
+          </ScanQueueProvider>
         </ScanProvider>
       </BrowserRouter>
     </TooltipProvider>
