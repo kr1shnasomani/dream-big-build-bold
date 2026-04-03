@@ -79,6 +79,7 @@ const App = () => (
               <Route path="reporting/on-demand" element={<ReportingOnDemand />} />
               <Route path="scan-console" element={<ScanConsole />} />
               <Route path="history" element={<ScanHistory />} />
+              <Route path="scans/:scanId" element={<ScanReport />} />
               <Route path="settings" element={<SettingsLayout />}>
                 <Route index element={<SettingsScanConfig />} />
                 <Route path="scan-config" element={<SettingsScanConfig />} />
