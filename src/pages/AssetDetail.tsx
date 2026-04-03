@@ -295,6 +295,8 @@ const AssetDetail = () => {
         </CardContent>
       </Card>
     </motion.div>
+      {asset && <PQCCertificateModal open={certModalOpen} onOpenChange={setCertModalOpen} asset={asset} />}
+    </>
   );
 };
 
