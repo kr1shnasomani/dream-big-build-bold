@@ -53,7 +53,7 @@ const App = () => (
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/landing" element={<Index />} />
-            <Route path="/" element={<Navigate to={localStorage.getItem('aegis-auth') === 'true' ? '/dashboard' : '/login'} replace />} />
+            <Route path="/" element={localStorage.getItem('aegis-auth') === 'true' ? <Navigate to="/dashboard" replace /> : <Index />} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardHome />} />
               <Route path="discovery" element={<AssetDiscovery />} />

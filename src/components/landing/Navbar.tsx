@@ -59,10 +59,10 @@ const Navbar = () => {
           Documentation
         </button>
         <Link
-          to="/dashboard"
+          to="/login"
           className="font-body text-sm font-bold bg-accent-amber text-brand-primary px-4 py-2 rounded-lg hover:brightness-105 transition-all"
         >
-          Launch Scanner →
+          Sign In →
         </Link>
       </div>
     </nav>
