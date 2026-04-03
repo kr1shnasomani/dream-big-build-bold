@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tooltip as ShadcnTooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { assets, getStatusColor, getStatusLabel, getTierFromAsset, getQScoreColor } from '@/data/demoData';
 import { ChevronRight, Scan, Check, X, Shield, AlertTriangle, Download } from 'lucide-react';
-import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip as RTooltip, ReferenceLine, CartesianGrid } from 'recharts';
+import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip as RechartTooltip, ReferenceLine, CartesianGrid } from 'recharts';
 import PQCCertificateModal from '@/components/dashboard/PQCCertificateModal';
 
 // Generate score history per asset
