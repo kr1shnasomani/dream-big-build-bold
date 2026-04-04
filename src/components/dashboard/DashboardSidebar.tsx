@@ -423,6 +423,24 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
             )}
           </AnimatePresence>
         </div>
+
+        {/* Sign Out */}
+        <button
+          onClick={() => { localStorage.removeItem('aegis-auth'); navigate('/landing'); }}
+          className={cn(
+            'w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-left transition-colors text-sm text-foreground/70 hover:bg-[hsl(var(--status-critical)/0.08)] hover:text-[hsl(var(--status-critical))]',
+            isCollapsed && 'justify-center'
+          )}
+        >
+          <LogOut className="w-4 h-4 flex-shrink-0" />
+          <AnimatePresence>
+            {!isCollapsed && (
+              <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.15 }} className="font-body whitespace-nowrap">
+                Sign Out
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </button>
       </div>
     </motion.div>
   );
