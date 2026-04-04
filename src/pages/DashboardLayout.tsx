@@ -34,7 +34,8 @@ const DashboardLayout = () => {
   const { setScannedDomain } = useScanContext();
   const { queue, isRunning, minimized, setMinimized, toggleMinimize, cancelQueue, startQueue, logs, queueComplete } = useScanQueue();
   const [cancelConfirm, setCancelConfirm] = useState(false);
-  const [targets, setTargets] = useState('');
+  const [targets, setTargets] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState('');
   const [scanProfile, setScanProfile] = useState<string>('Standard');
   const [fileMsg, setFileMsg] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
