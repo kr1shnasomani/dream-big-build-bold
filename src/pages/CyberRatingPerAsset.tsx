@@ -89,6 +89,6 @@ const CyberRatingPerAsset = () => {
       </CardContent>
     </Card>
   </div>
-);
-
+  );
+};
 export default CyberRatingPerAsset;
