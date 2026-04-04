@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
@@ -12,7 +12,7 @@ import {
   Shield, Home, Search, Package, ClipboardList, ShieldCheck,
   Star, Wrench, BarChart3, Settings,
   Globe, Key, FileText, Server, Cpu, Lock, ChevronRight,
-  Sparkles, Map, Calendar, PenTool, Terminal, Pin, Clock,
+  Sparkles, Map, Calendar, PenTool, Terminal, Pin, Clock, LogOut,
 } from 'lucide-react';
 
 interface SubMenuItem {
