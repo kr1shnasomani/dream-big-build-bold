@@ -18,6 +18,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 const scanProfiles = ['Quick', 'Standard', 'Deep', 'PQC Focus'] as const;
 const exampleChips = ['pnb.co.in', 'vpn.pnb.co.in', 'netbanking.pnb.co.in', 'auth.pnb.co.in'];
 
+const TargetChip = ({ value, onRemove }: { value: string; onRemove: () => void }) => (
+  <span className="group inline-flex items-center gap-1 font-mono text-xs bg-[hsl(var(--bg-sunken))] text-foreground px-2.5 py-1.5 rounded-lg border border-[hsl(var(--border-default))] transition-colors">
+    {value}
+    <button onClick={onRemove} className="opacity-0 group-hover:opacity-100 transition-opacity ml-0.5 p-0.5 rounded hover:bg-[hsl(var(--status-critical)/0.15)]">
+      <X className="w-3 h-3 text-muted-foreground hover:text-[hsl(var(--status-critical))]" />
+    </button>
+  </span>
+);
+
 const DashboardLayout = () => {
   const [hasScanned, setHasScanned] = useState(false);
   const navigate = useNavigate();
