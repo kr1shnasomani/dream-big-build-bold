@@ -76,6 +76,7 @@ const ScanReport = () => {
           <p className="text-xs font-body text-muted-foreground mt-1">{scan.started} · Duration: {scan.duration} · Triggered by: Manual</p>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="text-xs gap-1.5" onClick={() => { setSelectedScanId(scan.id); navigate('/dashboard'); }}><LayoutDashboard className="w-3.5 h-3.5" /> View in Dashboard</Button>
           <Button variant="outline" size="sm" className="text-xs gap-1.5"><Download className="w-3.5 h-3.5" /> Download Report</Button>
           <Button variant="outline" size="sm" className="text-xs gap-1.5"><GitCompareArrows className="w-3.5 h-3.5" /> Compare</Button>
         </div>
