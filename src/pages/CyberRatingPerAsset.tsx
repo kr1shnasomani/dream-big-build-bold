@@ -52,7 +52,7 @@ const CyberRatingPerAsset = () => {
                 const trend = assetTrends[a.domain] || { delta: 0, direction: 'flat' as const };
                 return (
                   <tr key={a.id} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))]", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
-                    <td className="px-3 py-2 font-mono font-medium">{a.domain}</td>
+                    <td className="px-3 py-2 font-mono font-medium cursor-pointer hover:text-brand-primary" onClick={() => navigate(`/dashboard/assets/${a.domain.replace(/\./g, '-')}`)}>{a.domain}</td>
                     <td className="px-3 py-2">
                       <div className="flex items-center gap-1.5">
                         <div className="w-12 h-1.5 rounded-full bg-[hsl(var(--bg-sunken))]">
