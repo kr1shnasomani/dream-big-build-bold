@@ -14,6 +14,7 @@ import { useSelectedScan } from '@/contexts/SelectedScanContext';
 const ScanReport = () => {
   const { scanId } = useParams();
   const navigate = useNavigate();
+  const { setSelectedScanId } = useSelectedScan();
   const scan = scanHistory.find(s => s.id === scanId);
 
   if (!scan) {
