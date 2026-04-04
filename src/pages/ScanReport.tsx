@@ -6,9 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ChevronRight, Download, GitCompareArrows, Shield, AlertTriangle, Wrench, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, Download, GitCompareArrows, Shield, AlertTriangle, Wrench, CheckCircle2, LayoutDashboard } from 'lucide-react';
 import { scanHistory, assets, scanAssetMap, getStatusColor, getStatusLabel, getQScoreColor } from '@/data/demoData';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
 
 const ScanReport = () => {
   const { scanId } = useParams();
