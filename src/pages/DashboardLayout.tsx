@@ -200,14 +200,21 @@ const DashboardLayout = () => {
               </motion.div>
 
               <div className="relative z-10 w-full max-w-2xl space-y-4">
-                {/* Multi-target textarea */}
-                <textarea
-                  value={targets}
-                  onChange={(e) => setTargets(e.target.value)}
-                  rows={4}
-                  placeholder={"Enter targets, one per line:\nvpn.pnb.co.in\nnetbanking.pnb.co.in\npnb.co.in"}
-                  className="w-full font-mono text-sm rounded-xl border border-[hsl(var(--border-default))] bg-background px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--accent-amber))] resize-none"
-                />
+                {/* Chip input */}
+                <div className="w-full rounded-xl border border-[hsl(var(--border-default))] bg-background px-3 py-2.5 focus-within:ring-2 focus-within:ring-[hsl(var(--accent-amber))] transition-shadow">
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {targets.map(t => (
+                      <TargetChip key={t} value={t} onRemove={() => removeChip(t)} />
+                    ))}
+                    <input
+                      value={inputValue}
+                      onChange={handleInputChange}
+                      onKeyDown={handleInputKeyDown}
+                      placeholder={targets.length === 0 ? "Enter targets separated by comma…" : "Add more…"}
+                      className="flex-1 min-w-[160px] bg-transparent font-mono text-sm text-foreground placeholder:text-muted-foreground outline-none py-1"
+                    />
+                  </div>
+                </div>
 
                 {/* Example chips */}
                 <div className="flex flex-wrap items-center gap-2">
@@ -219,17 +226,14 @@ const DashboardLayout = () => {
                   ))}
                 </div>
 
-                {/* File upload */}
-                <div className="flex items-center gap-3">
+                {/* Upload + Profile on same row */}
+                <div className="flex items-center gap-3 flex-wrap">
                   <input ref={fileRef} type="file" accept=".txt,.csv" className="hidden" onChange={handleFileUpload} />
                   <Button variant="outline" size="sm" className="text-xs gap-1.5" onClick={() => fileRef.current?.click()}>
                     <Upload className="w-3 h-3" /> Upload .txt / .csv
                   </Button>
                   {fileMsg && <span className="text-xs font-body text-[hsl(var(--status-safe))] animate-in fade-in">{fileMsg}</span>}
-                </div>
-
-                {/* Scan profile */}
-                <div className="flex items-center gap-2">
+                  <div className="h-4 w-px bg-border mx-1" />
                   <span className="text-xs font-body text-muted-foreground">Profile:</span>
                   <div className="flex gap-1 p-1 rounded-xl bg-[hsl(var(--bg-sunken))]">
                     {scanProfiles.map(p => (
@@ -249,7 +253,7 @@ const DashboardLayout = () => {
                   <Button variant="outline" onClick={handleRunDemo} className="text-sm">
                     Run Demo Scan
                   </Button>
-                  <Button onClick={handleStartQueue} className="flex-1 text-sm" disabled={!targets.trim()}>
+                  <Button onClick={handleStartQueue} className="flex-1 text-sm" disabled={targets.length === 0}>
                     Start Scan Queue
                   </Button>
                 </div>
