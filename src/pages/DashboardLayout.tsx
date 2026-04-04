@@ -105,9 +105,37 @@ const DashboardLayout = () => {
   };
 
   const addChip = (domain: string) => {
-    const lines = targets.split('\n').map(l => l.trim()).filter(Boolean);
-    if (!lines.includes(domain)) {
-      setTargets(prev => (prev.trim() ? prev.trim() + '\n' + domain : domain));
+    const d = domain.trim();
+    if (d && !targets.includes(d)) {
+      setTargets(prev => [...prev, d]);
+    }
+  };
+
+  const removeChip = (domain: string) => {
+    setTargets(prev => prev.filter(t => t !== domain));
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === ',' || e.key === 'Enter') {
+      e.preventDefault();
+      const val = inputValue.replace(/,/g, '').trim();
+      if (val) {
+        addChip(val);
+        setInputValue('');
+      }
+    } else if (e.key === 'Backspace' && !inputValue && targets.length > 0) {
+      setTargets(prev => prev.slice(0, -1));
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (val.includes(',')) {
+      const parts = val.split(',').map(s => s.trim()).filter(Boolean);
+      parts.forEach(p => addChip(p));
+      setInputValue('');
+    } else {
+      setInputValue(val);
     }
   };
 
@@ -117,8 +145,8 @@ const DashboardLayout = () => {
     const reader = new FileReader();
     reader.onload = (ev) => {
       const text = ev.target?.result as string;
-      const lines = text.split(/[\r\n]+/).map(l => l.trim()).filter(Boolean);
-      setTargets(lines.join('\n'));
+      const lines = text.split(/[\r\n,]+/).map(l => l.trim()).filter(Boolean);
+      setTargets(prev => [...new Set([...prev, ...lines])]);
       setFileMsg(`Loaded ${lines.length} targets from file`);
       setTimeout(() => setFileMsg(''), 3000);
     };
@@ -126,20 +154,15 @@ const DashboardLayout = () => {
     e.target.value = '';
   };
 
-  const parseTargets = () => {
-    const lines = targets.split('\n').map(l => l.trim()).filter(Boolean);
-    return [...new Set(lines)];
-  };
-
   const handleStartQueue = () => {
-    const parsed = parseTargets();
+    const parsed = [...new Set(targets)];
     if (parsed.length === 0) return;
     startQueue(parsed, scanProfile);
     handleScan(parsed[0]);
   };
 
   const handleRunDemo = () => {
-    setTargets('pnb.co.in');
+    setTargets(['pnb.co.in']);
     startQueue(['pnb.co.in'], 'Standard');
     handleScan('pnb.co.in');
   };
