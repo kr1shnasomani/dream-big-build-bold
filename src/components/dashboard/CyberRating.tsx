@@ -1,11 +1,26 @@
 import { enterpriseScore, maxScore, getTierLabel } from '@/data/demoData';
 
-const CyberRating = () => {
+const execLabelMap: Record<string, string> = {
+  'Elite-PQC': 'Fully Quantum-Safe',
+  'Cyber Rating': 'Security Rating',
+  'Asset Scores': 'Asset Security Ratings',
+  'Critical': 'Immediate Action',
+  'Legacy': 'Needs Upgrade',
+  'Standard': 'Acceptable',
+};
+
+interface CyberRatingProps {
+  execMode?: boolean;
+}
+
+const CyberRating = ({ execMode = false }: CyberRatingProps) => {
   const score = enterpriseScore;
   const tier = getTierLabel(score);
   const pct = (score / maxScore) * 100;
   const circumference = 2 * Math.PI * 60;
   const offset = circumference - (pct / 100) * circumference;
+
+  const el = (text: string) => execMode && execLabelMap[text] ? execLabelMap[text] : text;
 
   const assetScores = [
     { name: 'auth.pnb.co.in', score: 100, color: 'hsl(var(--status-safe))' },
@@ -17,9 +32,8 @@ const CyberRating = () => {
 
   return (
     <div className="bg-surface rounded-xl border border-[hsl(var(--border-default))] p-5 shadow-[0_18px_42px_-28px_hsl(var(--brand-primary)/0.45)]">
-      <h3 className="font-body font-bold text-sm text-foreground mb-4">Cyber Rating</h3>
+      <h3 className="font-body font-bold text-sm text-foreground mb-4">{el('Cyber Rating')}</h3>
 
-      {/* Score gauge */}
       <div className="flex flex-col items-center mb-6">
         <svg width="150" height="150" viewBox="0 0 150 150">
           <circle cx="75" cy="75" r="60" fill="none" stroke="hsl(var(--border-default))" strokeWidth="8" />
@@ -43,9 +57,8 @@ const CyberRating = () => {
         <span className="font-body text-xs text-muted-foreground">Remediation required</span>
       </div>
 
-      {/* Asset scores */}
       <div className="space-y-2">
-        <span className="font-mono text-[10px] text-muted-foreground uppercase">Asset Scores</span>
+        <span className="font-mono text-[10px] text-muted-foreground uppercase">{el('Asset Scores')}</span>
         {assetScores.map(a => (
           <div key={a.name} className="flex items-center justify-between">
             <span className="font-mono text-xs text-foreground">{a.name}</span>
@@ -54,7 +67,6 @@ const CyberRating = () => {
         ))}
       </div>
 
-      {/* Tier reference */}
       <div className="mt-4 pt-4 border-t border-[hsl(var(--border-default))]">
         <span className="font-mono text-[10px] text-muted-foreground uppercase block mb-2">Tier Reference</span>
         <div className="grid grid-cols-2 gap-1">
@@ -66,7 +78,7 @@ const CyberRating = () => {
           ].map(t => (
             <div key={t.label} className="flex items-center gap-1.5">
               <span className={`w-2 h-2 rounded-full ${t.color}`} />
-              <span className="font-mono text-[10px] text-muted-foreground">{t.label} ({t.range})</span>
+              <span className="font-mono text-[10px] text-muted-foreground">{el(t.label)} ({t.range})</span>
             </div>
           ))}
         </div>

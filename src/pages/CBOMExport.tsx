@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FileJson, FileText, Table, FileCode, Globe, Shield } from 'lucide-react';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 import { FileText as FileTextIcon, Cpu, Package } from 'lucide-react';
@@ -22,6 +23,7 @@ const formats = [
 
 const CBOMExport = () => (
   <div className="space-y-5">
+    <DataContextBadge />
     <h1 className="font-display text-2xl italic text-brand-primary">CBOM Export Center</h1>
     <SectionTabBar tabs={cbomTabs} />
 

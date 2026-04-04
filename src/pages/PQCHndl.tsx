@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { assets } from '@/data/demoData';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -27,7 +28,6 @@ const riskColors: Record<string, string> = {
   critical: 'hsl(var(--status-critical))', high: 'hsl(var(--status-vuln))', medium: 'hsl(var(--accent-amber))', low: 'hsl(var(--status-safe))',
 };
 
-// Heatmap data: rows=sensitivity, cols=vulnerability
 const heatmapData = [
   { label: 'PII/Auth', values: [0, 1, 2, 3] },
   { label: 'Financial', values: [0, 1, 3, 2] },
@@ -50,6 +50,7 @@ const cellTooltip = (sensitivity: string, vulnerability: string, count: number) 
 
 const PQCHndl = () => (
   <div className="space-y-5">
+    <DataContextBadge />
     <h1 className="font-display text-2xl italic text-brand-primary">HNDL Intelligence</h1>
     <SectionTabBar tabs={pqcTabs} />
 
@@ -118,7 +119,6 @@ const PQCHndl = () => (
       </CardContent>
     </Card>
 
-    {/* Exposure Heatmap */}
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-body">HNDL Exposure by Sensitivity × Vulnerability</CardTitle>

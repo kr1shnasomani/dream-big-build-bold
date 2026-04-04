@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { assets } from '@/data/demoData';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, Cell } from 'recharts';
 import { Slider } from '@/components/ui/slider';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
@@ -40,11 +41,11 @@ const PQCQuantumDebt = () => {
 
   return (
     <div className="space-y-5">
+      <DataContextBadge />
       <h1 className="font-display text-2xl italic text-brand-primary">Quantum Debt Tracker</h1>
       <SectionTabBar tabs={pqcTabs} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* Hero gauge */}
         <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)] col-span-1">
           <CardContent className="p-6 flex flex-col items-center justify-center">
             <div className="relative w-36 h-36">
@@ -63,7 +64,6 @@ const PQCQuantumDebt = () => {
           </CardContent>
         </Card>
 
-        {/* Debt by type */}
         <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)] col-span-1">
           <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Debt by Asset Type</CardTitle></CardHeader>
           <CardContent>
@@ -79,7 +79,6 @@ const PQCQuantumDebt = () => {
           </CardContent>
         </Card>
 
-        {/* Migration progress */}
         <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)] col-span-1">
           <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Migration Progress</CardTitle></CardHeader>
           <CardContent className="space-y-4">
@@ -108,7 +107,6 @@ const PQCQuantumDebt = () => {
         </Card>
       </div>
 
-      {/* Debt Reduction Simulator */}
       <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
         <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Debt Reduction Simulator</CardTitle></CardHeader>
         <CardContent className="space-y-4">

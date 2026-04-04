@@ -4,7 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ChevronDown, ChevronRight, AlertTriangle, Shield, Check } from 'lucide-react';
-import { assets } from '@/data/demoData';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import { cn } from '@/lib/utils';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 import { FileText, Cpu, Package } from 'lucide-react';
@@ -17,20 +18,20 @@ const cbomTabs = [
 
 // Generate fake attestation hashes per asset
 const attestationHashes: Record<string, string> = {};
-assets.forEach(a => {
-  const chars = '0123456789abcdef';
-  let hash = '';
-  for (let i = 0; i < 64; i++) hash += chars[Math.floor(Math.random() * 16)];
-  attestationHashes[a.id] = hash;
-});
+const genHash = () => { const chars = '0123456789abcdef'; let hash = ''; for (let i = 0; i < 64; i++) hash += chars[Math.floor(Math.random() * 16)]; return hash; };
 
 const CBOMPerAsset = () => {
+  const { selectedAssets } = useSelectedScan();
   const [expanded, setExpanded] = useState<string[]>([]);
   const [verifyModal, setVerifyModal] = useState<string | null>(null);
   const toggle = (id: string) => setExpanded(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
+  // Ensure hashes exist for all assets
+  selectedAssets.forEach(a => { if (!attestationHashes[a.id]) attestationHashes[a.id] = genHash(); });
+
   return (
     <div className="space-y-5">
+      <DataContextBadge />
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl italic text-brand-primary">Per-Asset CBOM</h1>
         <Button variant="outline" size="sm" className="text-xs">Export All CycloneDX</Button>
@@ -38,7 +39,7 @@ const CBOMPerAsset = () => {
       <SectionTabBar tabs={cbomTabs} />
 
       <div className="space-y-2">
-        {assets.filter(a => a.cipher !== '--').map(a => {
+        {selectedAssets.filter(a => a.cipher !== '--').map(a => {
           const isOpen = expanded.includes(a.id);
           const vulnKex = a.keyExchange === 'RSA' || a.keyExchange === 'ECDHE';
           const vulnCert = a.certInfo.key_type === 'RSA' || a.certInfo.key_type === 'ECDSA';
@@ -124,7 +125,7 @@ const CBOMPerAsset = () => {
               <pre className="bg-[hsl(var(--brand-primary))] text-accent-amber-light font-mono text-[10px] p-4 rounded-lg overflow-x-auto leading-relaxed">
 {`{
   "cbom_hash": "${attestationHashes[verifyModal]}",
-  "timestamp": "${assets.find(a => a.id === verifyModal)?.lastScanned}",
+  "timestamp": "${selectedAssets.find(a => a.id === verifyModal)?.lastScanned}",
   "signing_key_id": "aegis-signing-key-2026-v1",
   "algorithm": "Ed25519",
   "signature": "MEUCIQDk...base64...==",

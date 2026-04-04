@@ -24,6 +24,7 @@ type ViewRole = 'executive' | 'analyst' | 'compliance';
 const DashboardHome = () => {
   const [activeRole, setActiveRole] = useState<ViewRole>('analyst');
   const [complianceModalOpen, setComplianceModalOpen] = useState(false);
+  const isExec = activeRole === 'executive';
 
   return (
     <>
@@ -32,7 +33,7 @@ const DashboardHome = () => {
         <ViewRoleToggle activeRole={activeRole} onRoleChange={setActiveRole} />
       </div>
 
-      <KPIStrip />
+      <KPIStrip execMode={isExec} />
       <SinceLastScanStrip />
 
       {activeRole === 'analyst' && (
@@ -60,13 +61,13 @@ const DashboardHome = () => {
       )}
 
       {activeRole === 'executive' && (
-        <>
+        <div data-role="executive">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-5 mb-5">
-            <CyberRating />
+            <CyberRating execMode />
             <CertExpiryTimeline />
           </div>
-          <RecentActivityFeed />
-        </>
+          <RecentActivityFeed execMode />
+        </div>
       )}
 
       {activeRole === 'compliance' && (

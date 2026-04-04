@@ -35,7 +35,19 @@ const CountUp = ({ end, duration = 800, prefix = '', className = '' }: CountUpPr
   return <span ref={ref} className={className}>{prefix}{value}</span>;
 };
 
-const KPIStrip = () => {
+const execLabelMap: Record<string, string> = {
+  'Fully Quantum Safe': 'Protected Assets',
+  'Critically Vulnerable': 'At Risk',
+  'Unknown': 'Pending Assessment',
+  'PQC Transition': 'Upgrading',
+  'Quantum Vulnerable': 'Needs Upgrade',
+};
+
+interface KPIStripProps {
+  execMode?: boolean;
+}
+
+const KPIStrip = ({ execMode = false }: KPIStripProps) => {
   const kpis = [
     { label: 'Total Assets', value: 21, color: 'text-brand-primary', dotColor: '' },
     { label: 'Fully Quantum Safe', value: 2, color: 'text-status-safe', dotColor: '' },
@@ -47,6 +59,8 @@ const KPIStrip = () => {
     { label: 'High Risk Assets', value: 5, color: 'text-status-critical', dotColor: 'animate-pulse-dot', icon: 'risk' },
   ];
 
+  const getLabel = (label: string) => execMode && execLabelMap[label] ? execLabelMap[label] : label;
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-6">
       {kpis.map((k) => (
@@ -56,7 +70,7 @@ const KPIStrip = () => {
               <span className={`w-2 h-2 rounded-full bg-status-critical ${k.dotColor}`} />
             )}
             {(k as any).icon === 'warn' && <AlertTriangle className="w-3 h-3 text-accent-amber" />}
-            <span className="font-body text-xs font-medium text-muted-foreground uppercase">{k.label}</span>
+            <span className="font-body text-xs font-medium text-muted-foreground uppercase">{getLabel(k.label)}</span>
           </div>
           <CountUp end={k.value} className={`font-mono text-3xl font-bold ${k.color}`} />
         </div>

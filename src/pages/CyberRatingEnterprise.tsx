@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { assets, enterpriseScore, maxScore, getTierLabel } from '@/data/demoData';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, ReferenceLine } from 'recharts';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 import { Star, FileText, HelpCircle, Shield, AlertTriangle, XCircle, ChevronDown, ChevronRight } from 'lucide-react';
@@ -32,7 +33,6 @@ const scoreHistory = [
   { week: 'W10', score: 368 }, { week: 'W11', score: 370 }, { week: 'W12', score: 370 },
 ];
 
-// Projection: ~26 pts/month avg improvement
 const monthlyImprovement = 26;
 const projectionData = [
   ...scoreHistory.map(s => ({ label: s.week, score: s.score, projected: null as number | null })),
@@ -48,7 +48,6 @@ const tierThresholds = [
   { status: '✅ Elite-PQC', range: '700–1000', desc: 'PQC-ready, maintain and monitor', color: 'hsl(var(--status-safe))' },
 ];
 
-// Tier classification data for the slide-over
 const tiers = [
   {
     id: 'elite_pqc', label: 'Tier 1 — Elite-PQC', icon: Shield, color: 'hsl(var(--status-safe))', bgColor: 'hsl(var(--status-safe)/0.08)',
@@ -80,6 +79,7 @@ const CyberRatingEnterprise = () => {
 
   return (
     <div className="space-y-5">
+      <DataContextBadge />
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl italic text-brand-primary">Enterprise Cyber Rating</h1>
         <Sheet open={tierSheetOpen} onOpenChange={setTierSheetOpen}>
@@ -155,7 +155,6 @@ const CyberRatingEnterprise = () => {
         </Card>
       </div>
 
-      {/* Score history */}
       <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
         <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Score History (Last 12 Weeks)</CardTitle></CardHeader>
         <CardContent>
@@ -171,7 +170,6 @@ const CyberRatingEnterprise = () => {
         </CardContent>
       </Card>
 
-      {/* Projected Trajectory */}
       <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
         <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Projected Trajectory (12-Month Forecast)</CardTitle></CardHeader>
         <CardContent>
@@ -194,7 +192,6 @@ const CyberRatingEnterprise = () => {
         </CardContent>
       </Card>
 
-      {/* Tier thresholds */}
       <Card className="shadow-sm">
         <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Tier Thresholds</CardTitle></CardHeader>
         <CardContent className="p-0">
@@ -217,7 +214,6 @@ const CyberRatingEnterprise = () => {
         </CardContent>
       </Card>
 
-      {/* Benchmark */}
       <Card className="shadow-sm">
         <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Benchmark Comparison</CardTitle></CardHeader>
         <CardContent className="space-y-3">
