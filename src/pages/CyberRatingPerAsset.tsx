@@ -12,7 +12,9 @@ const ratingTabs = [
   { id: 'per-asset', label: 'Per-Asset', icon: FileText, route: '/dashboard/rating/per-asset' },
 ];
 
-const CyberRatingPerAsset = () => (
+const CyberRatingPerAsset = () => {
+  const navigate = useNavigate();
+  return (
   <div className="space-y-5">
     <SectionTabBar tabs={ratingTabs} />
     <div className="flex items-center gap-3">
