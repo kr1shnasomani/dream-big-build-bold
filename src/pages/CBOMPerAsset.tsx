@@ -31,11 +31,11 @@ const CBOMPerAsset = () => {
 
   return (
     <div className="space-y-5">
-      <SectionTabBar tabs={cbomTabs} />
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl italic text-brand-primary">Per-Asset CBOM</h1>
         <Button variant="outline" size="sm" className="text-xs">Export All CycloneDX</Button>
       </div>
+      <SectionTabBar tabs={cbomTabs} />
 
       <div className="space-y-2">
         {assets.filter(a => a.cipher !== '--').map(a => {

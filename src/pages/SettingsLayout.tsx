@@ -13,7 +13,7 @@ const SettingsLayout = () => {
   const location = useLocation();
 
   return (
-    <div>
+    <div className="max-w-4xl mx-auto">
       <div className="flex items-center gap-2 mb-6">
         <Settings className="w-5 h-5 text-accent-amber" />
         <h1 className="font-display italic text-2xl text-foreground">Settings</h1>
