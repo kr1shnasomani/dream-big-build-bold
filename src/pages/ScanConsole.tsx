@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Terminal, Play, RotateCcw, CheckCircle2, Loader2, Clock } from 'lucide-react';
+import { Terminal, Play, RotateCcw, CheckCircle2, Loader2, Clock, LayoutDashboard, FileText, Wrench } from 'lucide-react';
 import { useScanContext } from '@/contexts/ScanContext';
 
 interface ScanPhase {
