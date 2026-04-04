@@ -22,8 +22,8 @@ const formats = [
 
 const CBOMExport = () => (
   <div className="space-y-5">
-    <SectionTabBar tabs={cbomTabs} />
     <h1 className="font-display text-2xl italic text-brand-primary">CBOM Export Center</h1>
+    <SectionTabBar tabs={cbomTabs} />
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {formats.map(f => (

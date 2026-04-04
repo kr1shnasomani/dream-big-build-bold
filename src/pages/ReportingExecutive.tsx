@@ -62,7 +62,7 @@ const recentReports = [
 
 const ReportingExecutive = () => {
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+    <div className="space-y-5">
       <div>
         <h1 className="font-display text-2xl italic text-brand-primary">Executive Reports</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Pre-built report templates for stakeholder communication and compliance documentation</p>
@@ -149,7 +149,7 @@ const ReportingExecutive = () => {
           </Table>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 

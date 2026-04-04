@@ -60,7 +60,7 @@ const RemediationRoadmap = () => {
   }, [teamSize, hoursPerWeek]);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+    <div className="space-y-5">
       <div>
         <h1 className="font-display text-2xl italic text-brand-primary">Migration Roadmap</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">5-phase quantum-safe migration plan for {rootDomain || 'target'} infrastructure</p>
@@ -181,7 +181,7 @@ const RemediationRoadmap = () => {
           </div>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 

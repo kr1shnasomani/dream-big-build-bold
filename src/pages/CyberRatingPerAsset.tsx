@@ -16,7 +16,6 @@ const CyberRatingPerAsset = () => {
   const navigate = useNavigate();
   return (
   <div className="space-y-5">
-    <SectionTabBar tabs={ratingTabs} />
     <div className="flex items-center gap-3">
       <h1 className="font-display text-2xl italic text-brand-primary">Per-Asset Ratings</h1>
       <Tooltip>
@@ -26,6 +25,7 @@ const CyberRatingPerAsset = () => {
         </TooltipContent>
       </Tooltip>
     </div>
+    <SectionTabBar tabs={ratingTabs} />
 
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
       <CardContent className="p-0">

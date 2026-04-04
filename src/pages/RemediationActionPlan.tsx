@@ -73,7 +73,7 @@ const RemediationActionPlan = () => {
   const inProgressCount = allActions.filter(a => a.status === 'in_progress').length;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+    <div className="space-y-5">
       <div>
         <h1 className="font-display text-2xl italic text-brand-primary">Remediation Action Plan</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions for {rootDomain || 'target'} quantum readiness</p>
@@ -175,7 +175,7 @@ const RemediationActionPlan = () => {
           </Table>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 
