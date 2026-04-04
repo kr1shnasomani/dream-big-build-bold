@@ -181,7 +181,7 @@ const RemediationRoadmap = () => {
           </div>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 

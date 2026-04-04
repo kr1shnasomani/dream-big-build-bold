@@ -190,7 +190,7 @@ const RemediationAIPatch = () => {
           )}
         </>
       )}
-    </motion.div>
+    </div>
   );
 };
 

@@ -175,7 +175,7 @@ const RemediationActionPlan = () => {
           </Table>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 

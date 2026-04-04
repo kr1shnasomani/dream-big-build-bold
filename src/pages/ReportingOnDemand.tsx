@@ -205,7 +205,7 @@ const ReportingOnDemand = () => {
           </Button>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 };
 

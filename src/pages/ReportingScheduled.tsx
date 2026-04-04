@@ -128,7 +128,7 @@ const ReportingScheduled = () => {
           </Table>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 
