@@ -53,6 +53,7 @@ const App = () => (
       <BrowserRouter>
         <ScanProvider>
           <ScanQueueProvider>
+          <SelectedScanProvider>
           <PinnedPagesProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
