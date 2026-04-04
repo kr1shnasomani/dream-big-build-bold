@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Terminal, Play, RotateCcw, CheckCircle2, Loader2, Clock } from 'lucide-react';
+import { Terminal, Play, RotateCcw, CheckCircle2, Loader2, Clock, LayoutDashboard, FileText, Wrench } from 'lucide-react';
 import { useScanContext } from '@/contexts/ScanContext';
 
 interface ScanPhase {
@@ -116,6 +117,7 @@ function generateScanPhases(domain: string): ScanPhase[] {
 
 const ScanConsole = () => {
   const { rootDomain } = useScanContext();
+  const navigate = useNavigate();
   const scanPhases = generateScanPhases(rootDomain);
   const [isRunning, setIsRunning] = useState(false);
   const [currentPhase, setCurrentPhase] = useState(-1);
@@ -298,6 +300,35 @@ const ScanConsole = () => {
           )}
         </div>
       </Card>
+      {/* What Next Panel */}
+      {completed && (
+        <Card className="bg-surface border-border">
+          <CardContent className="pt-5 pb-4">
+            <h3 className="font-body text-sm font-semibold mb-4">What do you want to do next?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+              <div className="p-4 rounded-lg border border-border hover:border-[hsl(var(--accent-amber)/0.3)] transition-colors">
+                <LayoutDashboard className="w-5 h-5 text-brand-primary mb-2" />
+                <h4 className="font-body text-xs font-semibold">View Full Results</h4>
+                <p className="text-[10px] text-muted-foreground font-body mt-1">See everything this scan found in the dashboard.</p>
+                <Button size="sm" className="mt-3 text-xs h-7" onClick={() => navigate('/dashboard')}>Open in Dashboard →</Button>
+              </div>
+              <div className="p-4 rounded-lg border border-border hover:border-[hsl(var(--accent-amber)/0.3)] transition-colors">
+                <FileText className="w-5 h-5 text-brand-primary mb-2" />
+                <h4 className="font-body text-xs font-semibold">View Scan Report</h4>
+                <p className="text-[10px] text-muted-foreground font-body mt-1">See the detailed per-scan report with findings and CBOM.</p>
+                <Button size="sm" className="mt-3 text-xs h-7" onClick={() => navigate('/dashboard/scans/SCN-007')}>View Scan Report →</Button>
+              </div>
+              <div className="p-4 rounded-lg border border-border hover:border-[hsl(var(--accent-amber)/0.3)] transition-colors">
+                <Wrench className="w-5 h-5 text-brand-primary mb-2" />
+                <h4 className="font-body text-xs font-semibold">Start Remediation</h4>
+                <p className="text-[10px] text-muted-foreground font-body mt-1">Jump directly to the remediation action plan.</p>
+                <Button size="sm" className="mt-3 text-xs h-7" onClick={() => navigate('/dashboard/remediation/action-plan')}>Go to Remediation →</Button>
+              </div>
+            </div>
+            <Button variant="outline" className="text-xs" onClick={resetScan}>Run Another Scan</Button>
+          </CardContent>
+        </Card>
+      )}
     </motion.div>
   );
 };

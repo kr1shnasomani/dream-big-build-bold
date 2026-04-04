@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
@@ -12,7 +12,7 @@ import {
   Shield, Home, Search, Package, ClipboardList, ShieldCheck,
   Star, Wrench, BarChart3, Settings,
   Globe, Key, FileText, Server, Cpu, Lock, ChevronRight,
-  Sparkles, Map, Calendar, PenTool, Terminal, Pin, Clock,
+  Sparkles, Map, Calendar, PenTool, Terminal, Pin, Clock, LogOut,
 } from 'lucide-react';
 
 interface SubMenuItem {
@@ -67,7 +67,6 @@ const navItems: NavItem[] = [
     sub: [
       { label: 'Enterprise Score', icon: Star, pinId: 'rating:enterprise', pinRoute: '/dashboard/rating/enterprise', pinIcon: 'Star' },
       { label: 'Per-Asset', icon: FileText, pinId: 'rating:per-asset', pinRoute: '/dashboard/rating/per-asset', pinIcon: 'FileText' },
-      { label: 'Tier Classification', icon: Shield, pinId: 'rating:tiers', pinRoute: '/dashboard/rating/tiers', pinIcon: 'Shield' },
     ],
   },
   {
@@ -108,6 +107,7 @@ interface DashboardSidebarProps {
 
 const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) => {
   const { rootDomain } = useScanContext();
+  const navigate = useNavigate();
   const { isPinned, togglePin } = usePinnedPages();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
@@ -423,6 +423,24 @@ const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) =>
             )}
           </AnimatePresence>
         </div>
+
+        {/* Sign Out */}
+        <button
+          onClick={() => { localStorage.removeItem('aegis-auth'); navigate('/landing'); }}
+          className={cn(
+            'w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-left transition-colors text-sm text-foreground/70 hover:bg-[hsl(var(--status-critical)/0.08)] hover:text-[hsl(var(--status-critical))]',
+            isCollapsed && 'justify-center'
+          )}
+        >
+          <LogOut className="w-4 h-4 flex-shrink-0" />
+          <AnimatePresence>
+            {!isCollapsed && (
+              <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.15 }} className="font-body whitespace-nowrap">
+                Sign Out
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </button>
       </div>
     </motion.div>
   );

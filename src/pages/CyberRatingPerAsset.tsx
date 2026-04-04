@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { assets, getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset, assetTrends } from '@/data/demoData';
@@ -9,10 +10,11 @@ import SectionTabBar from '@/components/dashboard/SectionTabBar';
 const ratingTabs = [
   { id: 'enterprise', label: 'Enterprise Score', icon: Star, route: '/dashboard/rating/enterprise' },
   { id: 'per-asset', label: 'Per-Asset', icon: FileText, route: '/dashboard/rating/per-asset' },
-  { id: 'tiers', label: 'Tier Classification', icon: Shield, route: '/dashboard/rating/tiers' },
 ];
 
-const CyberRatingPerAsset = () => (
+const CyberRatingPerAsset = () => {
+  const navigate = useNavigate();
+  return (
   <div className="space-y-5">
     <SectionTabBar tabs={ratingTabs} />
     <div className="flex items-center gap-3">
@@ -50,7 +52,7 @@ const CyberRatingPerAsset = () => (
                 const trend = assetTrends[a.domain] || { delta: 0, direction: 'flat' as const };
                 return (
                   <tr key={a.id} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))]", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
-                    <td className="px-3 py-2 font-mono font-medium">{a.domain}</td>
+                    <td className="px-3 py-2 font-mono font-medium cursor-pointer hover:text-brand-primary" onClick={() => navigate(`/dashboard/assets/${a.domain.replace(/\./g, '-')}`)}>{a.domain}</td>
                     <td className="px-3 py-2">
                       <div className="flex items-center gap-1.5">
                         <div className="w-12 h-1.5 rounded-full bg-[hsl(var(--bg-sunken))]">
@@ -87,6 +89,6 @@ const CyberRatingPerAsset = () => (
       </CardContent>
     </Card>
   </div>
-);
-
+  );
+};
 export default CyberRatingPerAsset;

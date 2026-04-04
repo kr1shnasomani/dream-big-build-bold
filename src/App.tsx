@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScanProvider } from "@/contexts/ScanContext";
 import { ScanQueueProvider } from "@/contexts/ScanQueueContext";
 import { PinnedPagesProvider } from "@/contexts/PinnedPagesContext";
+import { SelectedScanProvider } from "@/contexts/SelectedScanContext";
 import Login from "./pages/Login.tsx";
 import Index from "./pages/Index.tsx";
 import DashboardLayout from "./pages/DashboardLayout.tsx";
@@ -52,6 +53,7 @@ const App = () => (
       <BrowserRouter>
         <ScanProvider>
           <ScanQueueProvider>
+          <SelectedScanProvider>
           <PinnedPagesProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -70,7 +72,7 @@ const App = () => (
               <Route path="pqc/quantum-debt" element={<PQCQuantumDebt />} />
               <Route path="rating/enterprise" element={<CyberRatingEnterprise />} />
               <Route path="rating/per-asset" element={<CyberRatingPerAsset />} />
-              <Route path="rating/tiers" element={<CyberRatingTiers />} />
+              <Route path="rating/tiers" element={<Navigate to="/dashboard/rating/enterprise" replace />} />
               <Route path="remediation/action-plan" element={<RemediationActionPlan />} />
               <Route path="remediation/ai-patch" element={<RemediationAIPatch />} />
               <Route path="remediation/roadmap" element={<RemediationRoadmap />} />
@@ -90,6 +92,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </PinnedPagesProvider>
+          </SelectedScanProvider>
           </ScanQueueProvider>
         </ScanProvider>
       </BrowserRouter>

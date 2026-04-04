@@ -6,13 +6,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ChevronRight, Download, GitCompareArrows, Shield, AlertTriangle, Wrench, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, Download, GitCompareArrows, Shield, AlertTriangle, Wrench, CheckCircle2, LayoutDashboard } from 'lucide-react';
 import { scanHistory, assets, scanAssetMap, getStatusColor, getStatusLabel, getQScoreColor } from '@/data/demoData';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
 
 const ScanReport = () => {
   const { scanId } = useParams();
   const navigate = useNavigate();
+  const { setSelectedScanId } = useSelectedScan();
   const scan = scanHistory.find(s => s.id === scanId);
 
   if (!scan) {
@@ -74,6 +76,7 @@ const ScanReport = () => {
           <p className="text-xs font-body text-muted-foreground mt-1">{scan.started} · Duration: {scan.duration} · Triggered by: Manual</p>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="text-xs gap-1.5" onClick={() => { setSelectedScanId(scan.id); navigate('/dashboard'); }}><LayoutDashboard className="w-3.5 h-3.5" /> View in Dashboard</Button>
           <Button variant="outline" size="sm" className="text-xs gap-1.5"><Download className="w-3.5 h-3.5" /> Download Report</Button>
           <Button variant="outline" size="sm" className="text-xs gap-1.5"><GitCompareArrows className="w-3.5 h-3.5" /> Compare</Button>
         </div>
