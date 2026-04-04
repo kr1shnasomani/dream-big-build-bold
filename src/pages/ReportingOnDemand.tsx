@@ -59,7 +59,7 @@ const ReportingOnDemand = () => {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+    <div className="space-y-5">
       <div>
         <h1 className="font-display text-2xl italic text-brand-primary">On-Demand Report Builder</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Create custom reports by selecting templates, sections, and output format</p>
