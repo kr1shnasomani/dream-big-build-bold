@@ -67,7 +67,6 @@ const navItems: NavItem[] = [
     sub: [
       { label: 'Enterprise Score', icon: Star, pinId: 'rating:enterprise', pinRoute: '/dashboard/rating/enterprise', pinIcon: 'Star' },
       { label: 'Per-Asset', icon: FileText, pinId: 'rating:per-asset', pinRoute: '/dashboard/rating/per-asset', pinIcon: 'FileText' },
-      { label: 'Tier Classification', icon: Shield, pinId: 'rating:tiers', pinRoute: '/dashboard/rating/tiers', pinIcon: 'Shield' },
     ],
   },
   {
