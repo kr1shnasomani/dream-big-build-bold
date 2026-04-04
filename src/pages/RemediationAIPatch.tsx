@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Copy, Check, Terminal, Server, Globe, Shield, ClipboardList, Sparkles, Map as MapIcon, CheckCircle2 } from 'lucide-react';
 import { useScanContext } from '@/contexts/ScanContext';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import { assets } from '@/data/demoData';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 
@@ -51,7 +51,6 @@ const RemediationAIPatch = () => {
     return asset.remediation.map(r => r.finding);
   }, [asset]);
 
-  // Auto-detect server type from software
   const detectedServer = useMemo(() => {
     if (!asset.software) return 'nginx';
     const p = asset.software.product.toLowerCase();
@@ -74,7 +73,6 @@ const RemediationAIPatch = () => {
         }
       });
     });
-    // Deduplicate
     return [...new Map(patches.map(p => [p.label, p])).values()];
   }, [assetFindings, selectedFinding]);
 
@@ -88,13 +86,13 @@ const RemediationAIPatch = () => {
 
   return (
     <div className="space-y-5">
+      <DataContextBadge />
       <div>
         <h1 className="font-display text-2xl italic text-brand-primary">AI Patch Generator</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Auto-generated configuration patches for PQC migration</p>
       </div>
       <SectionTabBar tabs={remediationTabs} />
 
-      {/* Asset / Finding / Server dropdowns */}
       <Card className="bg-surface border-border">
         <CardContent className="pt-4 pb-3">
           <div className="flex items-center gap-3 flex-wrap">
@@ -126,7 +124,6 @@ const RemediationAIPatch = () => {
         </CardContent>
       </Card>
 
-      {/* PQC Safe state */}
       {isPqcSafe ? (
         <Card className="bg-surface border-border">
           <CardContent className="py-12 text-center">
@@ -177,7 +174,6 @@ const RemediationAIPatch = () => {
             </div>
           )}
 
-          {/* Cumulative impact */}
           {relevantPatches.length > 0 && (
             <Card className="bg-[hsl(var(--status-safe)/0.05)] border-[hsl(var(--status-safe)/0.2)]">
               <CardContent className="py-3 flex items-center gap-3">

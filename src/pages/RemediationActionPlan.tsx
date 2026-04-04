@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle2, Clock, AlertTriangle, ArrowUpRight, Filter, ClipboardList, Sparkles, Map } from 'lucide-react';
-import { assets } from '@/data/demoData';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 import { useScanContext } from '@/contexts/ScanContext';
 import { addDays, format, differenceInDays } from 'date-fns';
@@ -45,9 +45,10 @@ const assigneeOptions = ['IT Security', 'DevOps', 'Infrastructure', 'Compliance'
 const RemediationActionPlan = () => {
   const [filterPriority, setFilterPriority] = useState<string>('all');
   const { rootDomain } = useScanContext();
+  const { selectedAssets } = useSelectedScan();
   const now = new Date();
 
-  const allActions = assets.flatMap(asset =>
+  const allActions = selectedAssets.flatMap(asset =>
     asset.remediation.map((r, i) => ({
       ...r,
       assetDomain: asset.domain,
@@ -74,6 +75,7 @@ const RemediationActionPlan = () => {
 
   return (
     <div className="space-y-5">
+      <DataContextBadge />
       <div>
         <h1 className="font-display text-2xl italic text-brand-primary">Remediation Action Plan</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions for {rootDomain || 'target'} quantum readiness</p>
@@ -85,7 +87,7 @@ const RemediationActionPlan = () => {
           { label: 'Total Actions', value: totalActions, sub: 'across all assets', color: 'text-foreground' },
           { label: 'P1 Critical', value: p1Count, sub: 'require immediate action', color: 'text-status-critical' },
           { label: 'In Progress', value: inProgressCount, sub: 'currently being addressed', color: 'text-status-warn' },
-          { label: 'Completed', value: completedActions, sub: `${Math.round((completedActions / totalActions) * 100)}% completion rate`, color: 'text-status-safe' },
+          { label: 'Completed', value: completedActions, sub: `${totalActions > 0 ? Math.round((completedActions / totalActions) * 100) : 0}% completion rate`, color: 'text-status-safe' },
         ].map((kpi) => (
           <Card key={kpi.label} className="bg-surface border-border">
             <CardContent className="pt-4 pb-3">
@@ -101,9 +103,9 @@ const RemediationActionPlan = () => {
         <CardContent className="pt-4 pb-3">
           <div className="flex items-center justify-between mb-2">
             <span className="font-mono text-xs text-muted-foreground">OVERALL REMEDIATION PROGRESS</span>
-            <span className="font-mono text-xs text-foreground font-bold">{Math.round((completedActions / totalActions) * 100)}%</span>
+            <span className="font-mono text-xs text-foreground font-bold">{totalActions > 0 ? Math.round((completedActions / totalActions) * 100) : 0}%</span>
           </div>
-          <Progress value={(completedActions / totalActions) * 100} className="h-2" />
+          <Progress value={totalActions > 0 ? (completedActions / totalActions) * 100 : 0} className="h-2" />
         </CardContent>
       </Card>
 

@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useScanContext } from '@/contexts/ScanContext';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import { Globe, Key, Server, Cpu, Share2, AlertTriangle, Search, Filter, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { domainRecords, ipRecords, softwareRecords, shadowITAlerts, assets } from '@/data/demoData';
+import { domainRecords, ipRecords, softwareRecords, shadowITAlerts } from '@/data/demoData';
 import NetworkGraph from '@/components/dashboard/NetworkGraph';
 
 const tabDefs = [
@@ -31,12 +33,14 @@ const AssetDiscovery = () => {
   const activeTab = searchParams.get('tab') || 'domains';
   const [search, setSearch] = useState('');
   const { rootDomain } = useScanContext();
+  const { selectedAssets } = useSelectedScan();
   const d = rootDomain || 'target.com';
 
   const setTab = (tab: string) => setSearchParams({ tab });
 
   return (
     <div className="space-y-5">
+      <DataContextBadge />
       <h1 className="font-display text-2xl italic text-brand-primary">Asset Discovery</h1>
 
       {/* Tab strip + search/filter on same row */}
@@ -130,7 +134,7 @@ const AssetDiscovery = () => {
                   <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Days Left</th>
                 </tr></thead>
                 <tbody>
-                  {assets.filter(a => a.certInfo.subject_cn !== 'staging.pnb.co.in').map((a, i) => (
+                  {selectedAssets.filter(a => a.certInfo.subject_cn !== 'staging.pnb.co.in').map((a, i) => (
                     <tr key={a.id} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))] transition-colors", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
                       <td className="px-3 py-2 font-mono font-medium">{a.certInfo.subject_cn}</td>
                       <td className="px-3 py-2 text-muted-foreground max-w-[120px] truncate">{a.certInfo.subject_alt_names.join(', ')}</td>

@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CheckCircle2, Circle, Clock, ArrowRight, ClipboardList, Sparkles, Map } from 'lucide-react';
 import { useScanContext } from '@/contexts/ScanContext';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 import { addMonths, format } from 'date-fns';
 
@@ -61,6 +62,7 @@ const RemediationRoadmap = () => {
 
   return (
     <div className="space-y-5">
+      <DataContextBadge />
       <div>
         <h1 className="font-display text-2xl italic text-brand-primary">Migration Roadmap</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">5-phase quantum-safe migration plan for {rootDomain || 'target'} infrastructure</p>
@@ -83,7 +85,6 @@ const RemediationRoadmap = () => {
         </CardContent>
       </Card>
 
-      {/* Timeline */}
       <div className="hidden lg:block">
         <Card className="bg-surface border-border">
           <CardHeader className="pb-2"><CardTitle className="font-body text-base">Timeline View</CardTitle></CardHeader>
@@ -107,7 +108,6 @@ const RemediationRoadmap = () => {
         </Card>
       </div>
 
-      {/* Phase Cards */}
       <div className="space-y-4">
         {phases.map((phase, idx) => (
           <motion.div key={phase.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.08 }}>
@@ -134,7 +134,6 @@ const RemediationRoadmap = () => {
         ))}
       </div>
 
-      {/* Quick Wins Matrix */}
       <Card className="bg-surface border-border">
         <CardHeader className="pb-2">
           <CardTitle className="font-body text-base">Effort vs. Impact Matrix</CardTitle>
@@ -156,7 +155,6 @@ const RemediationRoadmap = () => {
         </CardContent>
       </Card>
 
-      {/* Resource Estimator */}
       <Card className="bg-surface border-border">
         <CardHeader className="pb-2"><CardTitle className="font-body text-base">Resource Estimator</CardTitle></CardHeader>
         <CardContent>

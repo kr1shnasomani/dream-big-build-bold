@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { assets, getStatusColor, getTierFromAsset } from '@/data/demoData';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
 import { FileText, Lock, BarChart3 } from 'lucide-react';
 
@@ -51,6 +52,7 @@ const tierCriteria = [
 
 const PQCCompliance = () => (
   <div className="space-y-5">
+    <DataContextBadge />
     <h1 className="font-display text-2xl italic text-brand-primary">PQC Compliance Dashboard</h1>
     <SectionTabBar tabs={pqcTabs} />
 
@@ -68,7 +70,6 @@ const PQCCompliance = () => (
     </div>
 
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-      {/* Classification bar chart */}
       <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
         <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Assets by Classification</CardTitle></CardHeader>
         <CardContent>
@@ -78,7 +79,6 @@ const PQCCompliance = () => (
         </CardContent>
       </Card>
 
-      {/* Application status pie */}
       <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
         <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Application Status</CardTitle></CardHeader>
         <CardContent>
@@ -88,7 +88,6 @@ const PQCCompliance = () => (
         </CardContent>
       </Card>
 
-      {/* Risk heatmap */}
       <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
         <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Risk Overview Heatmap</CardTitle></CardHeader>
         <CardContent>
@@ -113,7 +112,6 @@ const PQCCompliance = () => (
       </Card>
     </div>
 
-    {/* Recommendations */}
     <Card className="shadow-sm">
       <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Improvement Recommendations</CardTitle></CardHeader>
       <CardContent className="space-y-2">
@@ -129,7 +127,6 @@ const PQCCompliance = () => (
       </CardContent>
     </Card>
 
-    {/* Tier criteria table */}
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
       <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Tier Compliance Criteria</CardTitle></CardHeader>
       <CardContent className="p-0">

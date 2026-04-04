@@ -6,7 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, Plus, Package, Globe, Server, Key, Mail } from 'lucide-react';
-import { assets, getStatusColor, getStatusLabel } from '@/data/demoData';
+import { getStatusColor, getStatusLabel } from '@/data/demoData';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 const typeIcons: Record<string, React.ElementType> = { vpn: Key, web: Globe, api: Server, mail: Mail, iot: Cpu, server: Server, load_balancer: Server };
@@ -14,17 +16,18 @@ import { Cpu } from 'lucide-react';
 
 const AssetInventory = () => {
   const navigate = useNavigate();
+  const { selectedAssets } = useSelectedScan();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
-  const filtered = assets.filter(a => {
+  const filtered = selectedAssets.filter(a => {
     if (search && !a.domain.includes(search) && !a.ip.includes(search)) return false;
     if (filter !== 'all' && a.type !== filter) return false;
     return true;
   });
 
-  const typeCount = (t: string) => assets.filter(a => a.type === t).length;
+  const typeCount = (t: string) => selectedAssets.filter(a => a.type === t).length;
   const filters = [
-    { id: 'all', label: 'All', count: assets.length },
+    { id: 'all', label: 'All', count: selectedAssets.length },
     { id: 'web', label: 'Web Apps', count: typeCount('web') },
     { id: 'api', label: 'APIs', count: typeCount('api') },
     { id: 'vpn', label: 'VPNs', count: typeCount('vpn') },
@@ -33,12 +36,13 @@ const AssetInventory = () => {
 
   return (
     <div className="space-y-5">
+      <DataContextBadge />
       <h1 className="font-display text-2xl italic text-brand-primary">Asset Inventory</h1>
 
       {/* Filters + search/add on same row */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="text-sm font-body"><span className="font-semibold text-foreground">{assets.length}</span> <span className="text-muted-foreground">total assets</span></div>
+          <div className="text-sm font-body"><span className="font-semibold text-foreground">{selectedAssets.length}</span> <span className="text-muted-foreground">total assets</span></div>
           <div className="h-4 w-px bg-border" />
           <div className="flex gap-1.5">
             {filters.map(f => (
