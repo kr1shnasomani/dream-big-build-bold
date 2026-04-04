@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useScanContext } from '@/contexts/ScanContext';
 import { useScanQueue } from '@/contexts/ScanQueueContext';
@@ -8,15 +8,15 @@ import GlassTabBar from '@/components/dashboard/GlassTabBar';
 import CommandPalette from '@/components/dashboard/CommandPalette';
 import OnboardingWizard from '@/components/dashboard/OnboardingWizard';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ScanPromptBox } from '@/components/ui/ai-prompt-box';
 import RainingLetters from '@/components/ui/raining-letters';
 import { GradientText } from '@/components/ui/gradient-text';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { X, Maximize2, Minimize2, CheckCircle2, Loader2, Clock, XCircle } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { X, Maximize2, Minimize2, CheckCircle2, Loader2, Clock, XCircle, Upload } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+
+const scanProfiles = ['Quick', 'Standard', 'Deep', 'PQC Focus'] as const;
+const exampleChips = ['pnb.co.in', 'vpn.pnb.co.in', 'netbanking.pnb.co.in', 'auth.pnb.co.in'];
 
 const DashboardLayout = () => {
   const [hasScanned, setHasScanned] = useState(false);
@@ -25,6 +25,10 @@ const DashboardLayout = () => {
   const { setScannedDomain } = useScanContext();
   const { queue, isRunning, minimized, setMinimized, toggleMinimize, cancelQueue, startQueue, logs, queueComplete } = useScanQueue();
   const [cancelConfirm, setCancelConfirm] = useState(false);
+  const [targets, setTargets] = useState('');
+  const [scanProfile, setScanProfile] = useState<string>('Standard');
+  const [fileMsg, setFileMsg] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const pathname = location.pathname;
   const getActiveNav = () => {
@@ -90,6 +94,46 @@ const DashboardLayout = () => {
     setHasScanned(true);
   };
 
+  const addChip = (domain: string) => {
+    const lines = targets.split('\n').map(l => l.trim()).filter(Boolean);
+    if (!lines.includes(domain)) {
+      setTargets(prev => (prev.trim() ? prev.trim() + '\n' + domain : domain));
+    }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const text = ev.target?.result as string;
+      const lines = text.split(/[\r\n]+/).map(l => l.trim()).filter(Boolean);
+      setTargets(lines.join('\n'));
+      setFileMsg(`Loaded ${lines.length} targets from file`);
+      setTimeout(() => setFileMsg(''), 3000);
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
+  const parseTargets = () => {
+    const lines = targets.split('\n').map(l => l.trim()).filter(Boolean);
+    return [...new Set(lines)];
+  };
+
+  const handleStartQueue = () => {
+    const parsed = parseTargets();
+    if (parsed.length === 0) return;
+    startQueue(parsed, scanProfile);
+    handleScan(parsed[0]);
+  };
+
+  const handleRunDemo = () => {
+    setTargets('pnb.co.in');
+    startQueue(['pnb.co.in'], 'Standard');
+    handleScan('pnb.co.in');
+  };
+
   const isHome = pathname === '/dashboard';
   const showPrompt = isHome && !hasScanned;
 
@@ -119,16 +163,64 @@ const DashboardLayout = () => {
               <RainingLetters />
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="relative z-10 text-center mb-8 bg-background px-6 py-4 rounded-xl">
                 <GradientText as="h1" className="font-body font-bold text-3xl lg:text-5xl mb-4">Quantum Readiness Scanner</GradientText>
-                <p className="font-body text-base text-muted-foreground max-w-md mx-auto">Enter any domain to generate a complete Cryptographic Bill of Materials and quantum risk assessment.</p>
+                <p className="font-body text-base text-muted-foreground max-w-md mx-auto">Enter target domains to generate a complete Cryptographic Bill of Materials and quantum risk assessment.</p>
               </motion.div>
-              <div className="relative z-10 w-full max-w-2xl">
-                <ScanPromptBox onScan={handleScan} onDemoScan={handleDemoScan} placeholder="Enter domain to scan (e.g. pnb.co.in)" />
+
+              <div className="relative z-10 w-full max-w-2xl space-y-4">
+                {/* Multi-target textarea */}
+                <textarea
+                  value={targets}
+                  onChange={(e) => setTargets(e.target.value)}
+                  rows={4}
+                  placeholder={"Enter targets, one per line:\nvpn.pnb.co.in\nnetbanking.pnb.co.in\npnb.co.in"}
+                  className="w-full font-mono text-sm rounded-xl border border-[hsl(var(--border-default))] bg-background px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--accent-amber))] resize-none"
+                />
+
+                {/* Example chips */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[10px] font-body text-muted-foreground">Examples:</span>
+                  {exampleChips.map(d => (
+                    <button key={d} onClick={() => addChip(d)} className="font-mono text-xs text-muted-foreground px-3 py-1.5 rounded-lg border border-[hsl(var(--border-default))] hover:border-[hsl(var(--border-strong))] hover:text-foreground transition-colors">
+                      {d}
+                    </button>
+                  ))}
+                </div>
+
+                {/* File upload */}
+                <div className="flex items-center gap-3">
+                  <input ref={fileRef} type="file" accept=".txt,.csv" className="hidden" onChange={handleFileUpload} />
+                  <Button variant="outline" size="sm" className="text-xs gap-1.5" onClick={() => fileRef.current?.click()}>
+                    <Upload className="w-3 h-3" /> Upload .txt / .csv
+                  </Button>
+                  {fileMsg && <span className="text-xs font-body text-[hsl(var(--status-safe))] animate-in fade-in">{fileMsg}</span>}
+                </div>
+
+                {/* Scan profile */}
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-body text-muted-foreground">Profile:</span>
+                  <div className="flex gap-1 p-1 rounded-xl bg-[hsl(var(--bg-sunken))]">
+                    {scanProfiles.map(p => (
+                      <button
+                        key={p}
+                        onClick={() => setScanProfile(p)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-body transition-all ${scanProfile === p ? 'bg-[hsl(var(--accent-amber))] text-white font-semibold shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="flex gap-3 pt-2">
+                  <Button variant="outline" onClick={handleRunDemo} className="text-sm">
+                    Run Demo Scan
+                  </Button>
+                  <Button onClick={handleStartQueue} className="flex-1 text-sm" disabled={!targets.trim()}>
+                    Start Scan Queue
+                  </Button>
+                </div>
               </div>
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4">
-                {['vpn.pnb.co.in', 'netbanking.pnb.co.in', 'auth.pnb.co.in'].map((domain) => (
-                  <button key={domain} onClick={() => handleScan(domain)} className="font-mono text-xs text-muted-foreground px-3 py-1.5 rounded-lg border border-[hsl(var(--border-default))] hover:border-[hsl(var(--border-strong))] hover:text-foreground transition-colors">{domain}</button>
-                ))}
-              </motion.div>
             </motion.div>
           ) : (
             <motion.div key="content" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="p-5 pt-14">
@@ -142,17 +234,12 @@ const DashboardLayout = () => {
 
       {/* Full-screen scan progress overlay */}
       {isRunning && !minimized && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center p-8"
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center p-8">
           <div className="w-full max-w-2xl space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="font-body text-lg font-semibold">Scan Queue Running — {doneCount} of {queue.length} targets complete</h2>
               <Button variant="ghost" size="sm" onClick={toggleMinimize}><Minimize2 className="w-4 h-4" /></Button>
             </div>
-
             <div className="space-y-2">
               {queue.map((q, i) => (
                 <div key={i} className={`p-3 rounded-lg border ${q.status === 'scanning' ? 'border-[hsl(var(--accent-amber))] bg-[hsl(var(--accent-amber)/0.05)]' : 'border-border'}`}>
@@ -177,8 +264,6 @@ const DashboardLayout = () => {
                 </div>
               ))}
             </div>
-
-            {/* Terminal logs */}
             <div className="bg-[hsl(var(--bg-sunken))] rounded-lg p-3 max-h-48 overflow-y-auto">
               <p className="text-[10px] font-mono text-muted-foreground uppercase mb-2">Live Log</p>
               {logs.map((l, i) => (
@@ -189,13 +274,8 @@ const DashboardLayout = () => {
         </motion.div>
       )}
 
-      {/* Minimized floating widget */}
       {isRunning && minimized && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-24 right-6 z-[9999] bg-popover border border-border rounded-xl shadow-lg p-3 min-w-[280px]"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="fixed bottom-24 right-6 z-[9999] bg-popover border border-border rounded-xl shadow-lg p-3 min-w-[280px]">
           <div className="flex items-center gap-2 mb-2">
             <Loader2 className="w-3.5 h-3.5 text-[hsl(var(--accent-amber))] animate-spin" />
             <span className="text-xs font-body">Scanning {doneCount + 1}/{queue.length} · {scanningItem?.target}</span>
@@ -207,14 +287,8 @@ const DashboardLayout = () => {
         </motion.div>
       )}
 
-      {/* Queue complete flash */}
       {queueComplete && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          className="fixed bottom-24 right-6 z-[90] bg-[hsl(var(--status-safe)/0.1)] border border-[hsl(var(--status-safe)/0.3)] rounded-xl p-3"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="fixed bottom-24 right-6 z-[90] bg-[hsl(var(--status-safe)/0.1)] border border-[hsl(var(--status-safe)/0.3)] rounded-xl p-3">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-[hsl(var(--status-safe))]" />
             <span className="text-xs font-body font-semibold text-[hsl(var(--status-safe))]">Scan Queue Complete ✓</span>
@@ -222,7 +296,6 @@ const DashboardLayout = () => {
         </motion.div>
       )}
 
-      {/* Cancel confirmation */}
       <Dialog open={cancelConfirm} onOpenChange={setCancelConfirm}>
         <DialogContent className="max-w-sm">
           <DialogHeader>

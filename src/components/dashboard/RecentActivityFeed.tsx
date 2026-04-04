@@ -2,7 +2,17 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useScanContext } from '@/contexts/ScanContext';
 
-const RecentActivityFeed = () => {
+const execSubstitutions: [string, string][] = [
+  ['Weak cipher', 'Weak encryption method'],
+  ['PQC label', 'Security certification'],
+  ['Fully Quantum Safe', 'Fully Quantum-Safe'],
+];
+
+interface RecentActivityFeedProps {
+  execMode?: boolean;
+}
+
+const RecentActivityFeed = ({ execMode = false }: RecentActivityFeedProps) => {
   const navigate = useNavigate();
   const { rootDomain } = useScanContext();
   const d = rootDomain || 'pnb.co.in';
@@ -15,6 +25,15 @@ const RecentActivityFeed = () => {
     { icon: '🔒', text: 'CBOM generated: aegis-cbom-20260401.json', time: '9 min ago', route: '/dashboard/cbom' },
     { icon: '📋', text: `PQC label issued: pqc-api.${d} — Fully Quantum Safe`, time: '8 min ago', route: '' },
   ];
+
+  const applyExecLabels = (text: string) => {
+    if (!execMode) return text;
+    let result = text;
+    execSubstitutions.forEach(([from, to]) => {
+      result = result.replace(from, to);
+    });
+    return result;
+  };
 
   return (
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
@@ -29,7 +48,7 @@ const RecentActivityFeed = () => {
             >
               <span className="text-sm flex-shrink-0 mt-0.5">{e.icon}</span>
               <div className="flex-1 min-w-0">
-                <p className="font-body text-xs text-foreground leading-relaxed">{e.text}</p>
+                <p className="font-body text-xs text-foreground leading-relaxed">{applyExecLabels(e.text)}</p>
                 <p className="font-mono text-[10px] text-muted-foreground mt-0.5">{e.time}</p>
               </div>
             </button>
