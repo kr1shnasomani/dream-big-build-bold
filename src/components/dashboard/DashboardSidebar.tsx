@@ -107,6 +107,7 @@ interface DashboardSidebarProps {
 
 const DashboardSidebar = ({ activeItem, onItemClick }: DashboardSidebarProps) => {
   const { rootDomain } = useScanContext();
+  const navigate = useNavigate();
   const { isPinned, togglePin } = usePinnedPages();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
