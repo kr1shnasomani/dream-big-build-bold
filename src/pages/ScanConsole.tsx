@@ -117,6 +117,7 @@ function generateScanPhases(domain: string): ScanPhase[] {
 
 const ScanConsole = () => {
   const { rootDomain } = useScanContext();
+  const navigate = useNavigate();
   const scanPhases = generateScanPhases(rootDomain);
   const [isRunning, setIsRunning] = useState(false);
   const [currentPhase, setCurrentPhase] = useState(-1);
