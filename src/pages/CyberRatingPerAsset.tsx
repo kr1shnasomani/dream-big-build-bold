@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { assets, getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset, assetTrends } from '@/data/demoData';
@@ -9,7 +10,6 @@ import SectionTabBar from '@/components/dashboard/SectionTabBar';
 const ratingTabs = [
   { id: 'enterprise', label: 'Enterprise Score', icon: Star, route: '/dashboard/rating/enterprise' },
   { id: 'per-asset', label: 'Per-Asset', icon: FileText, route: '/dashboard/rating/per-asset' },
-  { id: 'tiers', label: 'Tier Classification', icon: Shield, route: '/dashboard/rating/tiers' },
 ];
 
 const CyberRatingPerAsset = () => (
