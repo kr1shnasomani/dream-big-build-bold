@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ScanProvider } from "@/contexts/ScanContext";
 import { ScanQueueProvider } from "@/contexts/ScanQueueContext";
 import { PinnedPagesProvider } from "@/contexts/PinnedPagesContext";
+import { SelectedScanProvider } from "@/contexts/SelectedScanContext";
 import Login from "./pages/Login.tsx";
 import Index from "./pages/Index.tsx";
 import DashboardLayout from "./pages/DashboardLayout.tsx";
