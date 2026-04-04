@@ -72,7 +72,7 @@ const App = () => (
               <Route path="pqc/quantum-debt" element={<PQCQuantumDebt />} />
               <Route path="rating/enterprise" element={<CyberRatingEnterprise />} />
               <Route path="rating/per-asset" element={<CyberRatingPerAsset />} />
-              <Route path="rating/tiers" element={<CyberRatingTiers />} />
+              <Route path="rating/tiers" element={<Navigate to="/dashboard/rating/enterprise" replace />} />
               <Route path="remediation/action-plan" element={<RemediationActionPlan />} />
               <Route path="remediation/ai-patch" element={<RemediationAIPatch />} />
               <Route path="remediation/roadmap" element={<RemediationRoadmap />} />
