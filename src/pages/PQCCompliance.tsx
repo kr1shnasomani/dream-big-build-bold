@@ -92,7 +92,7 @@ const PQCCompliance = () => (
         <CardHeader className="pb-2"><CardTitle className="text-sm font-body">Risk Overview Heatmap</CardTitle></CardHeader>
         <CardContent>
           <div className="space-y-1">
-            <div className="flex justify-end gap-1 text-[9px] text-muted-foreground mb-1">
+            <div className="flex gap-1 text-[9px] text-muted-foreground mb-1 pl-[calc(2.5rem+0.25rem)]">
               <span className="w-16 text-center">Weak</span>
               <span className="w-16 text-center">Standard</span>
               <span className="w-16 text-center">Strong</span>
