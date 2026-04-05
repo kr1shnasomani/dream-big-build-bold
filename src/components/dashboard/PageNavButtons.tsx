@@ -52,7 +52,7 @@ const PageNavButtons = () => {
 
   return (
     <div
-      style={{ position: 'fixed', top: '14px', left: '52px', zIndex: 50 }}
+      style={{ position: 'fixed', top: '14px', left: '68px', zIndex: 50 }}
       className="flex items-center gap-0.5 bg-[hsl(var(--bg-sunken))] rounded-full p-0.5 border border-border"
     >
       <button
