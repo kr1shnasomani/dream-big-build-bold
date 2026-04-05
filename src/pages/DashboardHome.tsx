@@ -5,7 +5,7 @@ import NetworkGraph from '@/components/dashboard/NetworkGraph';
 import CyberRating from '@/components/dashboard/CyberRating';
 import AssetTable from '@/components/dashboard/AssetTable';
 import QScoreOverview from '@/components/dashboard/QScoreOverview';
-import EnterpriseIntel from '@/components/dashboard/EnterpriseIntel';
+import IntelligencePanel from '@/components/dashboard/IntelligencePanel';
 import CertExpiryTimeline from '@/components/dashboard/CertExpiryTimeline';
 import AssetRiskDistribution from '@/components/dashboard/AssetRiskDistribution';
 import CryptoSecurityOverview from '@/components/dashboard/CryptoSecurityOverview';
@@ -74,7 +74,7 @@ const DashboardHome = () => {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             <QScoreOverview />
-            <EnterpriseIntel />
+            <IntelligencePanel assets={selectedAssets} />
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
             <CertExpiryTimeline />

@@ -6,6 +6,7 @@ import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import GlassTabBar from '@/components/dashboard/GlassTabBar';
 import CommandPalette from '@/components/dashboard/CommandPalette';
+import PageNavButtons from '@/components/dashboard/PageNavButtons';
 import OnboardingWizard from '@/components/dashboard/OnboardingWizard';
 import { AnimatePresence, motion } from 'framer-motion';
 import RainingLetters from '@/components/ui/raining-letters';
@@ -182,6 +183,7 @@ const DashboardLayout = () => {
       <DashboardSidebar activeItem={getActiveNav()} onItemClick={handleNavClick} />
       <CommandPalette />
       <OnboardingWizard />
+      <PageNavButtons />
 
       <div className="flex-1 overflow-y-auto pb-24 ml-[3.05rem]">
         <AnimatePresence mode="wait">

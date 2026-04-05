@@ -6,6 +6,8 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveCo
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import IntelligencePanel from '@/components/dashboard/IntelligencePanel';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
 import { FileText, Lock, BarChart3 } from 'lucide-react';
 
 const pqcTabs = [
@@ -48,11 +50,14 @@ const cellTooltip = (sensitivity: string, vulnerability: string, count: number) 
   return `${count} asset${count > 1 ? 's' : ''}: ${sensitivity} sensitivity + ${vulnerability} — ${vulnerability === 'Critical' ? 'Immediate PQC migration required' : 'Monitor and plan migration'}`;
 };
 
-const PQCHndl = () => (
+const PQCHndl = () => {
+  const { selectedAssets } = useSelectedScan();
+  return (
   <div className="space-y-5">
     <DataContextBadge />
     <h1 className="font-display text-2xl italic text-brand-primary">HNDL Intelligence</h1>
     <SectionTabBar tabs={pqcTabs} />
+    <IntelligencePanel assets={selectedAssets} collapsed />
 
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)] border-l-4 border-l-[hsl(var(--status-critical))]">
       <CardContent className="p-5">
@@ -169,6 +174,7 @@ const PQCHndl = () => (
       </CardContent>
     </Card>
   </div>
-);
+  );
+};
 
 export default PQCHndl;
