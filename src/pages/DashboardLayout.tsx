@@ -6,6 +6,7 @@ import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import GlassTabBar from '@/components/dashboard/GlassTabBar';
 import CommandPalette from '@/components/dashboard/CommandPalette';
+import PageNavButtons from '@/components/dashboard/PageNavButtons';
 import OnboardingWizard from '@/components/dashboard/OnboardingWizard';
 import { AnimatePresence, motion } from 'framer-motion';
 import RainingLetters from '@/components/ui/raining-letters';
