@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
@@ -34,6 +35,7 @@ const initialNotifications: Notification[] = [
 ];
 
 function NotificationInboxPopover() {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState(initialNotifications);
   const unreadCount = notifications.filter((n) => n.unread).length;
   const [tab, setTab] = useState("all");
@@ -109,7 +111,7 @@ function NotificationInboxPopover() {
         </div>
 
         <div className="border-t border-border p-2">
-          <Button variant="ghost" className="w-full text-xs text-muted-foreground h-8">
+          <Button variant="ghost" className="w-full text-xs text-muted-foreground h-8" onClick={() => navigate('/dashboard/history')}>
             View all notifications
           </Button>
         </div>

@@ -4,12 +4,14 @@ import { cn } from '@/lib/utils';
 import { useScanContext } from '@/contexts/ScanContext';
 import { useSelectedScan } from '@/contexts/SelectedScanContext';
 import DataContextBadge from '@/components/dashboard/DataContextBadge';
+import DiscoveryDetailPanel from '@/components/dashboard/DiscoveryDetailPanel';
 import { Globe, Key, Server, Cpu, Share2, AlertTriangle, Search, Filter, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { domainRecords, ipRecords, softwareRecords, shadowITAlerts } from '@/data/demoData';
+import { domainRecords, ipRecords, softwareRecords, shadowITAlerts, assets } from '@/data/demoData';
+import type { DomainRecord, IPRecord, SoftwareRecord, Asset } from '@/data/demoData';
 import NetworkGraph from '@/components/dashboard/NetworkGraph';
 
 const tabDefs = [
@@ -33,8 +35,20 @@ const AssetDiscovery = () => {
   const activeTab = searchParams.get('tab') || 'domains';
   const [search, setSearch] = useState('');
   const { rootDomain } = useScanContext();
-  const { selectedAssets } = useSelectedScan();
+  const { selectedAssets, selectedScanId, selectedScan } = useSelectedScan();
   const d = rootDomain || 'target.com';
+
+  // Scope toggle state
+  const [scopeMode, setScopeMode] = useState<'this-scan' | 'all-time'>('this-scan');
+  const displayAssets = scopeMode === 'this-scan' ? selectedAssets : assets;
+
+  // Discovery detail panel state
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelType, setPanelType] = useState<'domain' | 'ssl' | 'ip' | 'software'>('domain');
+  const [selectedDomain, setSelectedDomain] = useState<DomainRecord | undefined>();
+  const [selectedAssetForPanel, setSelectedAssetForPanel] = useState<Asset | undefined>();
+  const [selectedIP, setSelectedIP] = useState<IPRecord | undefined>();
+  const [selectedSoftware, setSelectedSoftware] = useState<SoftwareRecord | undefined>();
 
   const setTab = (tab: string) => setSearchParams({ tab });
 
@@ -42,6 +56,32 @@ const AssetDiscovery = () => {
     <div className="space-y-5">
       <DataContextBadge />
       <h1 className="font-display text-2xl italic text-brand-primary">Asset Discovery</h1>
+
+      {/* Scope toggle */}
+      <div className="flex items-center gap-2">
+        <div className="flex gap-0 p-0.5 rounded-lg bg-[hsl(var(--bg-sunken))] border border-border w-fit">
+          <button
+            onClick={() => setScopeMode('this-scan')}
+            className={cn(
+              "px-3 py-1.5 rounded-md text-xs font-body transition-all",
+              scopeMode === 'this-scan' ? "bg-white shadow-sm text-brand-primary font-semibold" : "text-muted-foreground hover:text-foreground"
+            )}
+          >📡 This Scan</button>
+          <button
+            onClick={() => setScopeMode('all-time')}
+            className={cn(
+              "px-3 py-1.5 rounded-md text-xs font-body transition-all",
+              scopeMode === 'all-time' ? "bg-white shadow-sm text-brand-primary font-semibold" : "text-muted-foreground hover:text-foreground"
+            )}
+          >🕐 All Time</button>
+        </div>
+      </div>
+
+      {scopeMode === 'this-scan' && selectedScan && (
+        <p className="text-[11px] font-body text-muted-foreground">
+          Showing results from <span className="font-mono font-semibold text-foreground">{selectedScanId}</span> · {selectedScan.target} · <button onClick={() => setScopeMode('all-time')} className="text-brand-primary hover:underline">Switch to All Time</button> for full history.
+        </p>
+      )}
 
       {/* Tab strip + search/filter on same row */}
       <div className="flex items-center justify-between">
@@ -65,6 +105,7 @@ const AssetDiscovery = () => {
       </div>
 
       {/* Tab content */}
+      {/* Domains tab — uses domainRecords (always all-time, own dataset) */}
       {activeTab === 'domains' && (
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5">
           <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
@@ -82,7 +123,11 @@ const AssetDiscovery = () => {
                   </tr></thead>
                   <tbody>
                     {domainRecords.filter(d => !search || d.domain.includes(search)).map((d, i) => (
-                      <tr key={d.domain} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))] transition-colors", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
+                      <tr
+                        key={d.domain}
+                        onClick={() => { setSelectedDomain(d); setPanelType('domain'); setPanelOpen(true); }}
+                        className={cn("border-b border-border/50 cursor-pointer hover:bg-[hsl(var(--bg-sunken))] transition-colors", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}
+                      >
                         <td className="px-3 py-2 font-mono text-muted-foreground">{d.detectionDate}</td>
                         <td className="px-3 py-2 font-mono font-medium text-foreground">{d.domain}</td>
                         <td className="px-3 py-2 font-mono text-muted-foreground">{d.registrationDate}</td>
@@ -134,8 +179,12 @@ const AssetDiscovery = () => {
                   <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Days Left</th>
                 </tr></thead>
                 <tbody>
-                  {selectedAssets.filter(a => a.certInfo.subject_cn !== 'staging.pnb.co.in').map((a, i) => (
-                    <tr key={a.id} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))] transition-colors", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
+                  {displayAssets.filter(a => a.certInfo.subject_cn !== 'staging.pnb.co.in').map((a, i) => (
+                    <tr
+                      key={a.id}
+                      onClick={() => { setSelectedAssetForPanel(a); setPanelType('ssl'); setPanelOpen(true); }}
+                      className={cn("border-b border-border/50 cursor-pointer hover:bg-[hsl(var(--bg-sunken))] transition-colors", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}
+                    >
                       <td className="px-3 py-2 font-mono font-medium">{a.certInfo.subject_cn}</td>
                       <td className="px-3 py-2 text-muted-foreground max-w-[120px] truncate">{a.certInfo.subject_alt_names.join(', ')}</td>
                       <td className="px-3 py-2 text-muted-foreground">{a.certInfo.certificate_authority}</td>
@@ -162,6 +211,7 @@ const AssetDiscovery = () => {
         </Card>
       )}
 
+      {/* IP/Subnets tab — uses ipRecords (always all-time, own dataset) */}
       {activeTab === 'ip' && (
         <div className="space-y-4">
           <div className="flex gap-3">
@@ -183,7 +233,11 @@ const AssetDiscovery = () => {
                   </tr></thead>
                   <tbody>
                     {ipRecords.map((r, i) => (
-                      <tr key={r.ip} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))]", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
+                      <tr
+                        key={r.ip}
+                        onClick={() => { setSelectedIP(r); setPanelType('ip'); setPanelOpen(true); }}
+                        className={cn("border-b border-border/50 cursor-pointer hover:bg-[hsl(var(--bg-sunken))]", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}
+                      >
                         <td className="px-3 py-2 font-mono font-medium">{r.ip}</td>
                         <td className="px-3 py-2 font-mono text-muted-foreground">{r.portsOpen.join(', ')}</td>
                         <td className="px-3 py-2 font-mono text-muted-foreground">{r.subnet}</td>
@@ -201,6 +255,7 @@ const AssetDiscovery = () => {
         </div>
       )}
 
+      {/* Software tab — uses softwareRecords (always all-time, own dataset) */}
       {activeTab === 'software' && (
         <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
           <CardContent className="p-0">
@@ -217,7 +272,11 @@ const AssetDiscovery = () => {
                 </tr></thead>
                 <tbody>
                   {softwareRecords.map((s, i) => (
-                    <tr key={`${s.product}-${s.hostIp}`} className={cn("border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))]", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}>
+                    <tr
+                      key={`${s.product}-${s.hostIp}`}
+                      onClick={() => { setSelectedSoftware(s); setPanelType('software'); setPanelOpen(true); }}
+                      className={cn("border-b border-border/50 cursor-pointer hover:bg-[hsl(var(--bg-sunken))]", i % 2 === 0 && "bg-[hsl(var(--bg-sunken)/0.3)]")}
+                    >
                       <td className="px-3 py-2 font-medium">{s.product}</td>
                       <td className="px-3 py-2 font-mono text-muted-foreground">{s.version}</td>
                       <td className="px-3 py-2 text-muted-foreground">{s.type}</td>
@@ -280,6 +339,16 @@ const AssetDiscovery = () => {
           </Card>
         </div>
       )}
+
+      <DiscoveryDetailPanel
+        open={panelOpen}
+        onOpenChange={setPanelOpen}
+        type={panelType}
+        domainRecord={selectedDomain}
+        asset={selectedAssetForPanel}
+        ipRecord={selectedIP}
+        softwareRecord={selectedSoftware}
+      />
     </div>
   );
 };

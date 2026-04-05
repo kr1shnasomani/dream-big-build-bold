@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { assets, getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset, assetTrends } from '@/data/demoData';
+import { getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset, assetTrends } from '@/data/demoData';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Info, Star, FileText, Shield, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
 
 const ratingTabs = [
   { id: 'enterprise', label: 'Enterprise Score', icon: Star, route: '/dashboard/rating/enterprise' },
@@ -14,8 +16,10 @@ const ratingTabs = [
 
 const CyberRatingPerAsset = () => {
   const navigate = useNavigate();
+  const { selectedAssets } = useSelectedScan();
   return (
   <div className="space-y-5">
+    <DataContextBadge />
     <div className="flex items-center gap-3">
       <h1 className="font-display text-2xl italic text-brand-primary">Per-Asset Ratings</h1>
       <Tooltip>
@@ -44,7 +48,7 @@ const CyberRatingPerAsset = () => {
               <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Label</th>
             </tr></thead>
             <tbody>
-              {assets.map((a, i) => {
+              {selectedAssets.map((a, i) => {
                 const dimColor = (v: number) => v >= 80 ? 'hsl(var(--status-safe))' : v >= 50 ? 'hsl(var(--accent-amber))' : 'hsl(var(--status-critical))';
                 const chip = (v: number) => (
                   <span className="font-mono text-[10px] px-1.5 py-0.5 rounded" style={{ color: dimColor(v), backgroundColor: `${dimColor(v)}15` }}>{v}</span>
