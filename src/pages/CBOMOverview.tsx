@@ -7,6 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import { cn } from '@/lib/utils';
 
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import IntelligencePanel from '@/components/dashboard/IntelligencePanel';
 import { FileText, Cpu, Package } from 'lucide-react';
 
 const cbomTabs = [
@@ -38,6 +39,8 @@ const CBOMOverview = () => {
       <DataContextBadge />
       <h1 className="font-display text-2xl italic text-brand-primary">Cryptographic Bill of Materials</h1>
       <SectionTabBar tabs={cbomTabs} />
+
+      <IntelligencePanel assets={selectedAssets} collapsed />
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">

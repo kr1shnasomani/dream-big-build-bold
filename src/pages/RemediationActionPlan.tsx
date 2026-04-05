@@ -9,6 +9,7 @@ import { CheckCircle2, Clock, AlertTriangle, ArrowUpRight, Filter, ClipboardList
 import { useSelectedScan } from '@/contexts/SelectedScanContext';
 import DataContextBadge from '@/components/dashboard/DataContextBadge';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import IntelligencePanel from '@/components/dashboard/IntelligencePanel';
 import { useScanContext } from '@/contexts/ScanContext';
 import { addDays, format, differenceInDays } from 'date-fns';
 
@@ -81,6 +82,8 @@ const RemediationActionPlan = () => {
         <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions for {rootDomain || 'target'} quantum readiness</p>
       </div>
       <SectionTabBar tabs={remediationTabs} />
+
+      <IntelligencePanel assets={selectedAssets} collapsed />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
