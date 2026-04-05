@@ -35,6 +35,7 @@ const initialNotifications: Notification[] = [
 ];
 
 function NotificationInboxPopover() {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState(initialNotifications);
   const unreadCount = notifications.filter((n) => n.unread).length;
   const [tab, setTab] = useState("all");
