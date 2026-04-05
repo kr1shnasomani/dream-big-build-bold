@@ -56,11 +56,11 @@ const PQCCompliance = () => {
   return (
   <div className="space-y-5">
     <DataContextBadge />
+    <h1 className="font-display text-2xl italic text-brand-primary">PQC Compliance Dashboard</h1>
+    <SectionTabBar tabs={pqcTabs} />
     <p className="text-xs font-body text-muted-foreground italic">
       PQC readiness across {assets.length} assets: {eliteCount} Elite-PQC, {critCount} Critical. {critCount > 0 ? `${critCount} assets require immediate remediation.` : 'No critical assets detected.'}
     </p>
-    <h1 className="font-display text-2xl italic text-brand-primary">PQC Compliance Dashboard</h1>
-    <SectionTabBar tabs={pqcTabs} />
 
     {/* Top bar */}
     <div className="flex gap-3">

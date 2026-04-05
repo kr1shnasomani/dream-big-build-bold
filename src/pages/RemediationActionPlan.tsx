@@ -77,6 +77,11 @@ const RemediationActionPlan = () => {
   return (
     <div className="space-y-5">
       <DataContextBadge />
+      <div>
+        <h1 className="font-display text-2xl italic text-brand-primary">Remediation Action Plan</h1>
+        <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions for {rootDomain || 'target'} quantum readiness</p>
+      </div>
+      <SectionTabBar tabs={remediationTabs} />
       {(() => {
         const p1NotStarted = allActions.filter(a => a.priority === 'P1' && a.status === 'not_started').length;
         const assetsWithP1 = new Set(allActions.filter(a => a.priority === 'P1' && a.status === 'not_started').map(a => a.assetDomain)).size;
@@ -86,11 +91,6 @@ const RemediationActionPlan = () => {
           </p>
         ) : null;
       })()}
-      <div>
-        <h1 className="font-display text-2xl italic text-brand-primary">Remediation Action Plan</h1>
-        <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions for {rootDomain || 'target'} quantum readiness</p>
-      </div>
-      <SectionTabBar tabs={remediationTabs} />
 
       <IntelligencePanel assets={selectedAssets} collapsed />
 

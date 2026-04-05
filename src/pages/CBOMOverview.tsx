@@ -39,11 +39,11 @@ const CBOMOverview = () => {
   return (
     <div className="space-y-5">
       <DataContextBadge />
+      <h1 className="font-display text-2xl italic text-brand-primary">Cryptographic Bill of Materials</h1>
+      <SectionTabBar tabs={cbomTabs} />
       <p className="text-xs font-body text-muted-foreground italic">
         Showing cryptographic inventory for {selectedAssets.length} assets. {weakCount} asset{weakCount !== 1 ? 's' : ''} use weak cryptography requiring immediate attention.
       </p>
-      <h1 className="font-display text-2xl italic text-brand-primary">Cryptographic Bill of Materials</h1>
-      <SectionTabBar tabs={cbomTabs} />
 
       <IntelligencePanel assets={selectedAssets} collapsed />
 
