@@ -77,6 +77,15 @@ const RemediationActionPlan = () => {
   return (
     <div className="space-y-5">
       <DataContextBadge />
+      {(() => {
+        const p1NotStarted = allActions.filter(a => a.priority === 'P1' && a.status === 'not_started').length;
+        const assetsWithP1 = new Set(allActions.filter(a => a.priority === 'P1' && a.status === 'not_started').map(a => a.assetDomain)).size;
+        return p1NotStarted > 0 ? (
+          <p className="text-xs font-body text-muted-foreground italic">
+            Active remediation backlog: {p1NotStarted} P1 critical items requiring action within 30 days across {assetsWithP1} asset{assetsWithP1 !== 1 ? 's' : ''}.
+          </p>
+        ) : null;
+      })()}
       <div>
         <h1 className="font-display text-2xl italic text-brand-primary">Remediation Action Plan</h1>
         <p className="font-body text-sm text-muted-foreground mt-1">Prioritized actions for {rootDomain || 'target'} quantum readiness</p>

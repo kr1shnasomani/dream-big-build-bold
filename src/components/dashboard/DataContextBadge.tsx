@@ -1,4 +1,5 @@
 import { RefreshCw, ChevronDown, AlertTriangle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { scanHistory } from '@/data/demoData';
 import { useSelectedScan } from '@/contexts/SelectedScanContext';
 import {
@@ -6,6 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const DataContextBadge = () => {
+  const navigate = useNavigate();
   const { selectedScanId, setSelectedScanId, selectedScan, isHistorical } = useSelectedScan();
   if (!selectedScan) return null;
 
@@ -36,8 +38,11 @@ const DataContextBadge = () => {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <button className="text-[11px] text-brand-primary hover:underline flex items-center gap-1 font-body">
-          <RefreshCw className="w-3 h-3" /> Refresh
+        <button
+          onClick={() => navigate('/dashboard/scan-console')}
+          className="text-[11px] text-brand-primary hover:underline flex items-center gap-1 font-body"
+        >
+          <RefreshCw className="w-3 h-3" /> {isHistorical ? 'Re-scan this target' : 'Refresh'}
         </button>
       </div>
       {isHistorical && (

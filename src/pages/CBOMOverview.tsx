@@ -34,9 +34,14 @@ const CBOMOverview = () => {
     { label: 'PQC-Ready (%)', value: `${selectedAssets.length > 0 ? Math.round((selectedAssets.filter(a => a.status === 'elite-pqc' || a.status === 'safe').length / selectedAssets.length) * 100) : 0}%`, color: 'var(--status-safe)' },
   ];
 
+  const weakCount = selectedAssets.filter(a => a.qScore <= 40).length;
+
   return (
     <div className="space-y-5">
       <DataContextBadge />
+      <p className="text-xs font-body text-muted-foreground italic">
+        Showing cryptographic inventory for {selectedAssets.length} assets. {weakCount} asset{weakCount !== 1 ? 's' : ''} use weak cryptography requiring immediate attention.
+      </p>
       <h1 className="font-display text-2xl italic text-brand-primary">Cryptographic Bill of Materials</h1>
       <SectionTabBar tabs={cbomTabs} />
 

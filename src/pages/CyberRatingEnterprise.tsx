@@ -80,6 +80,9 @@ const CyberRatingEnterprise = () => {
   return (
     <div className="space-y-5">
       <DataContextBadge />
+      <p className="text-xs font-body text-muted-foreground italic">
+        Enterprise score: {enterpriseScore}/{maxScore} ({tierLabel}). At current improvement rate of ~{monthlyImprovement} points/month, Standard tier projected by June 2026.
+      </p>
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl italic text-brand-primary">Enterprise Cyber Rating</h1>
         <Sheet open={tierSheetOpen} onOpenChange={setTierSheetOpen}>

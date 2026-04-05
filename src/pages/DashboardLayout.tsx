@@ -317,7 +317,7 @@ const DashboardLayout = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="fixed bottom-24 right-6 z-[9999] bg-popover border border-border rounded-xl shadow-lg p-3 min-w-[280px]">
           <div className="flex items-center gap-2 mb-2">
             <Loader2 className="w-3.5 h-3.5 text-[hsl(var(--accent-amber))] animate-spin" />
-            <span className="text-xs font-body">Scanning {doneCount + 1}/{queue.length} · {scanningItem?.target}</span>
+            <span className="text-xs font-body">Scanning {doneCount + 1}/{queue.length} · {scanningItem?.target} · {scanningItem?.currentPhase}…</span>
             <div className="flex-1" />
             <button onClick={toggleMinimize} className="p-0.5"><Maximize2 className="w-3 h-3 text-muted-foreground" /></button>
             <button onClick={() => setCancelConfirm(true)} className="p-0.5"><X className="w-3 h-3 text-muted-foreground" /></button>

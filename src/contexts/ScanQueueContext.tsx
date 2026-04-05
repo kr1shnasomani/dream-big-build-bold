@@ -129,7 +129,7 @@ export const ScanQueueProvider = ({ children }: { children: ReactNode }) => {
         });
         addLog(`${phases[phaseIdx]}: ${items[currentIdx].target}`);
       }
-    }, 2000);
+    }, 5000);
   }, [isRunning, addLog]);
 
   const cancelQueue = useCallback(() => {

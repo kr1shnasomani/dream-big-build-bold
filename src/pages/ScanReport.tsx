@@ -81,6 +81,7 @@ const ScanReport = () => {
           <p className="text-xs font-body text-muted-foreground mt-1">Formal scan report for download and regulatory reference · {scan.started} · Duration: {scan.duration}</p>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="text-xs gap-1.5" onClick={() => navigate('/dashboard/history')}>← Back to Scan History</Button>
           <Button variant="outline" size="sm" className="text-xs gap-1.5"><Download className="w-3.5 h-3.5" /> Download Report</Button>
           <Button variant="outline" size="sm" className="text-xs gap-1.5"><GitCompareArrows className="w-3.5 h-3.5" /> Compare</Button>
         </div>
