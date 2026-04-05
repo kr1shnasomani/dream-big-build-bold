@@ -55,11 +55,11 @@ const PQCHndl = () => {
   return (
   <div className="space-y-5">
     <DataContextBadge />
+    <h1 className="font-display text-2xl italic text-brand-primary">HNDL Intelligence</h1>
+    <SectionTabBar tabs={pqcTabs} />
     <p className="text-xs font-body text-muted-foreground italic">
       HNDL exposure analysis: {selectedAssets.filter(a => a.hndlBreakYear && a.hndlBreakYear <= 2033).length} assets estimated decryptable before 2033 based on IBM/Google quantum computing roadmaps.
     </p>
-    <h1 className="font-display text-2xl italic text-brand-primary">HNDL Intelligence</h1>
-    <SectionTabBar tabs={pqcTabs} />
     <IntelligencePanel assets={selectedAssets} collapsed />
 
     <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)] border-l-4 border-l-[hsl(var(--status-critical))]">
