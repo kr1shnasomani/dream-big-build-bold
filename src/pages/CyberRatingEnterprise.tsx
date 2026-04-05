@@ -119,7 +119,9 @@ const CyberRatingEnterprise = () => {
         </Sheet>
       </div>
       <SectionTabBar tabs={ratingTabs} />
-
+      <p className="text-xs font-body text-muted-foreground italic">
+        Enterprise score: {enterpriseScore}/{maxScore} ({tierLabel}). At current improvement rate of ~{monthlyImprovement} points/month, Standard tier projected by June 2026.
+      </p>
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-5">
         <Card className="shadow-[0_8px_30px_-12px_hsl(var(--brand-primary)/0.15)]">
           <CardContent className="p-8 flex flex-col items-center justify-center">
