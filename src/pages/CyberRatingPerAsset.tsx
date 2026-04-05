@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { assets, getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset, assetTrends } from '@/data/demoData';
+import { getStatusColor, getStatusLabel, getQScoreColor, getTierFromAsset, assetTrends } from '@/data/demoData';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Info, Star, FileText, Shield, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import SectionTabBar from '@/components/dashboard/SectionTabBar';
+import DataContextBadge from '@/components/dashboard/DataContextBadge';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
 
 const ratingTabs = [
   { id: 'enterprise', label: 'Enterprise Score', icon: Star, route: '/dashboard/rating/enterprise' },
@@ -14,8 +16,10 @@ const ratingTabs = [
 
 const CyberRatingPerAsset = () => {
   const navigate = useNavigate();
+  const { selectedAssets } = useSelectedScan();
   return (
   <div className="space-y-5">
+    <DataContextBadge />
     <div className="flex items-center gap-3">
       <h1 className="font-display text-2xl italic text-brand-primary">Per-Asset Ratings</h1>
       <Tooltip>
