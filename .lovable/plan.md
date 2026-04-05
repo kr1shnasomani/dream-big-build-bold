@@ -1,68 +1,58 @@
 
 
-# AEGIS — 3 Fixes Implementation Plan
+# 5 Fixes Implementation Plan
 
-## FIX 1 — DataContextBadge on All Data Pages
+## FIX 1 — Wire DiscoveryDetailPanel into AssetDiscovery
 
-Add `import DataContextBadge from '@/components/dashboard/DataContextBadge'` and `import { useSelectedScan } from '@/contexts/SelectedScanContext'` to 13 pages. Insert `<DataContextBadge />` as the first child inside the root wrapper div, before the page title.
+**File:** `src/pages/AssetDiscovery.tsx`
 
-For pages with per-asset tables, replace direct `assets` import usage with `const { selectedAssets } = useSelectedScan()` for table rendering:
+- Import `DiscoveryDetailPanel` from `@/components/dashboard/DiscoveryDetailPanel`
+- Import types `DomainRecord, IPRecord, SoftwareRecord, Asset` from `@/data/demoData` (Asset already available via selectedAssets; DomainRecord/IPRecord/SoftwareRecord need importing)
+- Add state: `panelOpen`, `panelType`, `selectedDomain`, `selectedAssetForPanel`, `selectedIP`, `selectedSoftware`
+- Add `onClick` + `cursor-pointer` to each `<tr>` in domains (line 85), SSL (line 138), IP (line 186), software (line 220) tabs
+- Render `<DiscoveryDetailPanel ... />` before closing `</div>` at line 283
 
-**Pages getting badge + selectedAssets for tables:**
-- `AssetDiscovery.tsx` — badge before `<h1>`, use `selectedAssets` for domain/SSL/IP/software table rows
-- `AssetInventory.tsx` — badge before `<h1>`, use `selectedAssets` for filtered table + type counts
-- `CBOMOverview.tsx` — badge before `<h1>`, keep `assets` for charts, use `selectedAssets` for KPI card counts
-- `CBOMPerAsset.tsx` — badge before `<h1>`, use `selectedAssets` for accordion list
-- `RemediationActionPlan.tsx` — badge before `<h1>`, use `selectedAssets` for action items filtering
+## FIX 2 — Fix scanAssetMap in demoData.ts
 
-**Pages getting badge only (charts/aggregate use full dataset):**
-- `CBOMExport.tsx` — badge before `<h1>`
-- `PQCCompliance.tsx` — badge before `<h1>`
-- `PQCHndl.tsx` — badge before `<h1>`
-- `PQCQuantumDebt.tsx` — badge before `<h1>`
-- `CyberRatingEnterprise.tsx` — badge before `<h1>`
-- `CyberRatingPerAsset.tsx` — badge before `<h1>`
-- `RemediationAIPatch.tsx` — badge before `<h1>`
-- `RemediationRoadmap.tsx` — badge before `<h1>`
+**File:** `src/data/demoData.ts` (lines 547-555)
 
----
+Replace with corrected values:
+- SCN-007: all 21 (unchanged)
+- SCN-006: all 21 (add a4)
+- SCN-005: 9 assets (unchanged)
+- SCN-004: all 21
+- SCN-003: `['a1','a5','a6']`
+- SCN-002: 18 assets (all except a4, a20, a21)
+- SCN-001: 17 assets (all except a4, a19, a20, a21)
 
-## FIX 2 — Multi-Target Scan Input
+## FIX 3 — DataContextBadge on CyberRatingPerAsset
 
-Replace lines 111-131 in `DashboardLayout.tsx` (the prompt content inside `showPrompt` block). Keep the `RainingLetters`, headline, and `motion.div` wrapper. Replace the `ScanPromptBox` and chip buttons with:
+**File:** `src/pages/CyberRatingPerAsset.tsx`
 
-- `targets` state (string), `scanProfile` state (default `'Standard'`), `fileMsg` state for upload feedback
-- `<textarea>` with monospace font, 4 rows, placeholder for multi-domain input
-- Row of 4 example chips (`pnb.co.in`, `vpn.pnb.co.in`, `netbanking.pnb.co.in`, `auth.pnb.co.in`) — click appends to textarea (skip duplicates)
-- Hidden `<input type="file">` with styled label trigger for .txt/.csv upload — FileReader reads text, splits by newline, populates textarea, shows "Loaded N targets" for 3s
-- 4-option scan profile segmented control (Quick/Standard/Deep/PQC Focus) with amber accent on active
-- "Run Demo Scan" outline button → sets `pnb.co.in`, calls `startQueue(['pnb.co.in'], 'Standard')` + `handleScan('pnb.co.in')`
-- "Start Scan Queue" primary button → parses textarea, deduplicates, calls `startQueue(parsed, scanProfile)` + `handleScan(parsed[0])`
+- Import `DataContextBadge` and `useSelectedScan`
+- Add `const { selectedAssets } = useSelectedScan()`
+- Replace `assets.map(...)` in table body with `selectedAssets.map(...)`
+- Add `<DataContextBadge />` before the `<h1>` title
 
-No changes to `handleScan`, `handleDemoScan`, sidebar, topbar, or any other part of the layout.
+## FIX 4 — Discovery scope toggle
 
----
+**File:** `src/pages/AssetDiscovery.tsx`
 
-## FIX 3 — Executive View Language Substitutions
+- Add `scopeMode` state (`'this-scan' | 'all-time'`, default `'this-scan'`)
+- Import `assets` from demoData (for all-time mode)
+- Add segmented control between `<DataContextBadge />` and tab strip: two buttons "📡 This Scan" / "🕐 All Time"
+- Derive `displayAssets = scopeMode === 'this-scan' ? selectedAssets : assets`
+- Replace `selectedAssets` usage in SSL tab with `displayAssets`
+- Domain/IP/Software tabs use their own record arrays (always all-time) — add comments noting this
+- Show scoping label below tab strip when `scopeMode === 'this-scan'`
 
-**KPIStrip.tsx:** Add optional `execMode?: boolean` prop. When true, relabel KPI items:
-- "Fully Quantum Safe" → "Protected Assets"
-- "Critically Vulnerable" → "At Risk"
-- "Unknown" → "Pending Assessment"
-- "PQC Transition" → "Upgrading"
-- "Quantum Vulnerable" → "Needs Upgrade"
+## FIX 5 — Wire "View all notifications"
 
-**CyberRating.tsx:** Add optional `execMode?: boolean` prop. When true, substitute label strings in the tier reference and header:
-- "Elite-PQC" → "Fully Quantum-Safe"
-- "Cyber Rating" → "Security Rating"
-- "Asset Scores" → "Asset Security Ratings"
+**File:** `src/components/ui/notification-inbox-popover.tsx`
 
-**RecentActivityFeed.tsx:** Add optional `execMode?: boolean` prop. When true, apply string substitutions to entry text:
-- "Fully Quantum Safe" → "Fully Quantum-Safe"
-- "Weak cipher" → "Weak encryption method"
-- "PQC label" → "Security certification"
-
-**DashboardHome.tsx:** In the executive view block (lines 62-69), pass `execMode={true}` to `CyberRating` and `RecentActivityFeed`. Pass `execMode={activeRole === 'executive'}` to `KPIStrip` (line 35).
+- Import `useNavigate` from `react-router-dom`
+- Add `const navigate = useNavigate()` inside component
+- Add `onClick={() => navigate('/dashboard/history')}` to the "View all notifications" button (line 112)
 
 ---
 
@@ -70,9 +60,10 @@ No changes to `handleScan`, `handleDemoScan`, sidebar, topbar, or any other part
 
 | File | Fix |
 |------|-----|
-| 13 page files (AssetDiscovery, AssetInventory, CBOMOverview, CBOMPerAsset, CBOMExport, PQCCompliance, PQCHndl, PQCQuantumDebt, CyberRatingEnterprise, CyberRatingPerAsset, RemediationActionPlan, RemediationAIPatch, RemediationRoadmap) | FIX 1 |
-| DashboardLayout.tsx | FIX 2 |
-| KPIStrip.tsx, CyberRating.tsx, RecentActivityFeed.tsx, DashboardHome.tsx | FIX 3 |
+| `src/pages/AssetDiscovery.tsx` | FIX 1, FIX 4 |
+| `src/data/demoData.ts` | FIX 2 |
+| `src/pages/CyberRatingPerAsset.tsx` | FIX 3 |
+| `src/components/ui/notification-inbox-popover.tsx` | FIX 5 |
 
-No new files created. No visual or color changes. All changes backward compatible.
+No new files. No visual changes.
 
