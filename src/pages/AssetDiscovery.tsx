@@ -86,14 +86,25 @@ const AssetDiscovery = () => {
       {/* Tab strip + search/filter on same row */}
       <div className="flex items-center justify-between">
         <div className="flex gap-1 p-1 rounded-xl bg-[hsl(var(--bg-sunken))] w-fit">
-          {tabDefs.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)} className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body transition-all",
-              activeTab === t.id ? "bg-white shadow-sm text-brand-primary font-semibold" : "text-muted-foreground hover:text-foreground"
-            )}>
-              <t.icon className="w-3.5 h-3.5" />{t.label}
-            </button>
-          ))}
+          {tabDefs.map(t => {
+            const countMap: Record<string, number> = {
+              domains: domainRecords.length,
+              ssl: displayAssets.filter(a => a.certInfo.subject_cn !== 'staging.pnb.co.in').length,
+              ip: ipRecords.length,
+              software: softwareRecords.length,
+              network: 0,
+              shadow: shadowITAlerts.length,
+            };
+            const count = countMap[t.id];
+            return (
+              <button key={t.id} onClick={() => setTab(t.id)} className={cn(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body transition-all",
+                activeTab === t.id ? "bg-white shadow-sm text-brand-primary font-semibold" : "text-muted-foreground hover:text-foreground"
+              )}>
+                <t.icon className="w-3.5 h-3.5" />{t.label}{count > 0 ? ` (${count})` : ''}
+              </button>
+            );
+          })}
         </div>
         <div className="flex items-center gap-2">
           <div className="relative">

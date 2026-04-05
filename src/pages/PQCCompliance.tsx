@@ -50,9 +50,15 @@ const tierCriteria = [
   { tier: 'Critical', criteria: 'SSLv2/v3 + DES + <1024-bit + known CVEs', action: 'Immediate action', color: 'hsl(var(--status-critical))' },
 ];
 
-const PQCCompliance = () => (
+const PQCCompliance = () => {
+  const eliteCount = assets.filter(a => a.status === 'elite-pqc').length;
+  const critCount = assets.filter(a => a.tier === 'critical').length;
+  return (
   <div className="space-y-5">
     <DataContextBadge />
+    <p className="text-xs font-body text-muted-foreground italic">
+      PQC readiness across {assets.length} assets: {eliteCount} Elite-PQC, {critCount} Critical. {critCount > 0 ? `${critCount} assets require immediate remediation.` : 'No critical assets detected.'}
+    </p>
     <h1 className="font-display text-2xl italic text-brand-primary">PQC Compliance Dashboard</h1>
     <SectionTabBar tabs={pqcTabs} />
 
@@ -149,6 +155,7 @@ const PQCCompliance = () => (
       </CardContent>
     </Card>
   </div>
-);
+  );
+};
 
 export default PQCCompliance;
