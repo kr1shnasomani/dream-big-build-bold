@@ -48,7 +48,7 @@ const CyberRatingPerAsset = () => {
               <th className="text-left px-3 py-2.5 font-medium text-muted-foreground">Label</th>
             </tr></thead>
             <tbody>
-              {assets.map((a, i) => {
+              {selectedAssets.map((a, i) => {
                 const dimColor = (v: number) => v >= 80 ? 'hsl(var(--status-safe))' : v >= 50 ? 'hsl(var(--accent-amber))' : 'hsl(var(--status-critical))';
                 const chip = (v: number) => (
                   <span className="font-mono text-[10px] px-1.5 py-0.5 rounded" style={{ color: dimColor(v), backgroundColor: `${dimColor(v)}15` }}>{v}</span>

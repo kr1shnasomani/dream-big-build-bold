@@ -111,7 +111,7 @@ function NotificationInboxPopover() {
         </div>
 
         <div className="border-t border-border p-2">
-          <Button variant="ghost" className="w-full text-xs text-muted-foreground h-8">
+          <Button variant="ghost" className="w-full text-xs text-muted-foreground h-8" onClick={() => navigate('/dashboard/history')}>
             View all notifications
           </Button>
         </div>
