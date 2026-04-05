@@ -5,14 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Eye, GitCompareArrows, Plus, History, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { GitCompareArrows, Plus, LayoutDashboard } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from 'recharts';
 import { scanHistory } from '@/data/demoData';
 import { useScanContext } from '@/contexts/ScanContext';
+import { useSelectedScan } from '@/contexts/SelectedScanContext';
 
 const ScanHistory = () => {
   const navigate = useNavigate();
   const { rootDomain } = useScanContext();
+  const { setSelectedScanId } = useSelectedScan();
   const [scanA, setScanA] = useState('SCN-007');
   const [scanB, setScanB] = useState('SCN-006');
   const [showCompare, setShowCompare] = useState(false);
@@ -25,12 +27,17 @@ const ScanHistory = () => {
   const a = scanHistory.find(s => s.id === scanA);
   const b = scanHistory.find(s => s.id === scanB);
 
+  const openInDashboard = (scanId: string) => {
+    setSelectedScanId(scanId);
+    navigate('/dashboard');
+  };
+
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl italic text-brand-primary">Scan History</h1>
-          <p className="font-body text-sm text-muted-foreground mt-1">All past scans for {rootDomain || 'target'} infrastructure</p>
+          <p className="font-body text-sm text-muted-foreground mt-1">All past scans for {rootDomain || 'target'} infrastructure. Click any row to view in Dashboard.</p>
         </div>
         <Button onClick={() => navigate('/dashboard/scan-console')} className="gap-1.5 text-xs">
           <Plus className="w-3.5 h-3.5" /> Run New Scan
@@ -55,7 +62,11 @@ const ScanHistory = () => {
               </tr></thead>
               <tbody>
                 {scanHistory.map((s, i) => (
-                  <tr key={s.id} className={`border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))] ${i % 2 === 0 ? 'bg-[hsl(var(--bg-sunken)/0.3)]' : ''}`}>
+                  <tr
+                    key={s.id}
+                    className={`border-b border-border/50 hover:bg-[hsl(var(--bg-sunken))] cursor-pointer ${i % 2 === 0 ? 'bg-[hsl(var(--bg-sunken)/0.3)]' : ''}`}
+                    onClick={() => openInDashboard(s.id)}
+                  >
                     <td className="px-3 py-2 font-mono font-semibold text-brand-primary">{s.id}</td>
                     <td className="px-3 py-2 font-mono">{s.target}</td>
                     <td className="px-3 py-2 text-muted-foreground">{s.started}</td>
@@ -64,8 +75,8 @@ const ScanHistory = () => {
                     <td className="px-3 py-2 font-mono font-bold">{s.qScore}</td>
                     <td className="px-3 py-2"><Badge variant="destructive" className="text-[10px]">{s.criticalFindings}</Badge></td>
                     <td className="px-3 py-2"><Badge className="bg-[hsl(var(--status-safe))] text-white text-[10px]">{s.status}</Badge></td>
-                    <td className="px-3 py-2 flex gap-1">
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => navigate(`/dashboard/scans/${s.id}`)}><Eye className="w-3.5 h-3.5" /></Button>
+                    <td className="px-3 py-2 flex gap-1" onClick={e => e.stopPropagation()}>
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0" title="Open in Dashboard" onClick={() => openInDashboard(s.id)}><LayoutDashboard className="w-3.5 h-3.5" /></Button>
                       <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => { setScanA(s.id); setShowCompare(true); }}><GitCompareArrows className="w-3.5 h-3.5" /></Button>
                     </td>
                   </tr>

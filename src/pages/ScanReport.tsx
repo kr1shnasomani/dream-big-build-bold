@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ChevronRight, Download, GitCompareArrows, Shield, AlertTriangle, Wrench, CheckCircle2, LayoutDashboard } from 'lucide-react';
+import { ChevronRight, Download, GitCompareArrows, Shield, AlertTriangle, Wrench, CheckCircle2, Info } from 'lucide-react';
 import { scanHistory, assets, scanAssetMap, getStatusColor, getStatusLabel, getQScoreColor } from '@/data/demoData';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import { useSelectedScan } from '@/contexts/SelectedScanContext';
@@ -40,7 +40,6 @@ const ScanReport = () => {
 
   const statusColor = scan.status === 'Completed' ? 'bg-[hsl(var(--status-safe))]' : scan.status === 'Failed' ? 'bg-[hsl(var(--status-critical))]' : 'bg-[hsl(var(--accent-amber))]';
 
-  // CBOM data scoped to this scan
   const keyLengthData = scanAssets.reduce((acc, a) => {
     const label = a.certInfo.key_type === 'ML-DSA' ? 'ML-DSA-65' : a.certInfo.key_type === 'ECDSA' ? `EC-${a.certInfo.key_size}` : `RSA-${a.certInfo.key_size}`;
     if (label !== 'RSA-0') acc[label] = (acc[label] || 0) + 1;
@@ -62,7 +61,13 @@ const ScanReport = () => {
         <ChevronRight className="w-3 h-3" />
         <Link to="/dashboard/history" className="hover:text-foreground">Scan History</Link>
         <ChevronRight className="w-3 h-3" />
-        <span className="text-foreground font-medium">{scan.id}</span>
+        <span className="text-foreground font-medium">{scan.id} — Report</span>
+      </div>
+
+      {/* Interactive note */}
+      <div className="flex items-center gap-2 p-3 rounded-lg bg-[hsl(var(--bg-sunken))] border border-border text-xs font-body text-muted-foreground">
+        <Info className="w-4 h-4 text-brand-primary flex-shrink-0" />
+        <span>This is a formal scan report for download and regulatory reference. To interactively explore this scan, use the <button className="text-brand-primary underline cursor-pointer" onClick={() => { setSelectedScanId(scan.id); navigate('/dashboard'); }}>Dashboard scan selector</button>.</span>
       </div>
 
       {/* Header */}
@@ -72,11 +77,10 @@ const ScanReport = () => {
             <Badge variant="outline" className="font-mono text-sm">{scan.id}</Badge>
             <Badge className={`${statusColor} text-white text-[10px]`}>{scan.status}</Badge>
           </div>
-          <h1 className="font-display text-2xl italic text-brand-primary mt-2">{scan.target}</h1>
-          <p className="text-xs font-body text-muted-foreground mt-1">{scan.started} · Duration: {scan.duration} · Triggered by: Manual</p>
+          <h1 className="font-display text-2xl italic text-brand-primary mt-2">Scan Report — {scan.id}</h1>
+          <p className="text-xs font-body text-muted-foreground mt-1">Formal scan report for download and regulatory reference · {scan.started} · Duration: {scan.duration}</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="text-xs gap-1.5" onClick={() => { setSelectedScanId(scan.id); navigate('/dashboard'); }}><LayoutDashboard className="w-3.5 h-3.5" /> View in Dashboard</Button>
           <Button variant="outline" size="sm" className="text-xs gap-1.5"><Download className="w-3.5 h-3.5" /> Download Report</Button>
           <Button variant="outline" size="sm" className="text-xs gap-1.5"><GitCompareArrows className="w-3.5 h-3.5" /> Compare</Button>
         </div>
@@ -128,7 +132,7 @@ const ScanReport = () => {
                 </TableHeader>
                 <TableBody>
                   {scanAssets.map(a => (
-                    <TableRow key={a.id} className="border-border hover:bg-sunken/50 cursor-pointer" onClick={() => navigate(`/dashboard/assets/${a.domain.replace(/\./g, '-')}`)}>
+                    <TableRow key={a.id} className="border-border">
                       <TableCell className="font-mono text-xs text-brand-primary">{a.domain}</TableCell>
                       <TableCell className="font-mono text-xs text-muted-foreground">{a.ip}</TableCell>
                       <TableCell><Badge variant="secondary" className="text-[10px]">{a.type}</Badge></TableCell>
@@ -216,7 +220,6 @@ const ScanReport = () => {
               </Card>
             </div>
 
-            {/* Attestation */}
             <Card className="border-[hsl(var(--status-safe)/0.3)]">
               <CardContent className="p-5">
                 <div className="flex items-center gap-2 mb-3">
