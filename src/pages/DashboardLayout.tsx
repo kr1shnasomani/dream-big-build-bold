@@ -183,6 +183,7 @@ const DashboardLayout = () => {
       <DashboardSidebar activeItem={getActiveNav()} onItemClick={handleNavClick} />
       <CommandPalette />
       <OnboardingWizard />
+      <PageNavButtons />
 
       <div className="flex-1 overflow-y-auto pb-24 ml-[3.05rem]">
         <AnimatePresence mode="wait">
